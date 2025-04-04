@@ -1,8 +1,9 @@
 #+title: Coalescent-based inference of coevolution
 
 
-* TODO Create dokument and summarize points from meeting with Aurelien
-- connection of coevolution to coalescence trees. Can we predeict coevolutionary interactions from coalescent tree geneoalogies.
+* Outline
+
+We want to investigate the joint behaviour of genealogies in coevolving species of host-parasite interactions. Describing the dynamics of coevolution at the level of genomic coalescence trees, our aims is to better understand the sigantures coevolution leaves in the genomes of interacting species to improve inference of both functional, quantitative GxG interactions, as well as population genetic information such as demographic and reproductive life-histories of both species.
 
 - First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
 
