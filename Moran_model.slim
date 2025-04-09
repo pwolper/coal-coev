@@ -1,0 +1,37 @@
+// set up a simple neutral simulation
+initialize() {
+	initializeSLiMModelType("nonWF");
+	//initializeMutationRate(0);
+	//initializeMutationType("m1", 0.5, "f", 0.0);
+	//initializeGenomicElementType("g1", m1, 1.0);
+	//initializeGenomicElement(g1, 0, 1);
+	//initializeRecombinationRate(0);
+}
+
+
+reproduction() {
+	// Moran reproduction. Sample one individual to reproduce
+	//catn(p1.individuals.tag);
+	parent = sample(p1.individuals, 1);
+	//catn("Parent sampled: "+ parent.tag);
+	offspring = subpop.addCloned(parent);
+	offspring.tag = parent.tag;
+	
+	self.active = 0;
+}
+
+1 early() {
+	sim.addSubpop("p1", 100, haploid = T);
+	p1.individuals.tag =seqLen(p1.individualCount);
+	catn(p1.individuals.tag);
+}
+
+2: late() {
+	victim = sample(p1.individuals, 1);
+	//catn("Victim chosen: " + victim.tag);
+	sim.killIndividuals(victim);
+}
+
+10000 late() {
+	catn(p1.individuals.tag);
+}
