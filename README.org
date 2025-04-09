@@ -6,8 +6,9 @@
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
 
 
-We want to investigate the joint behaviour of genealogies in coevolving species of host-parasite interactions. Describing the dynamics of coevolution at the level of genomic coalescence trees, our aims is to better understand the sigantures coevolution leaves in the genomes of interacting species to improve inference of both functional, quantitative GxG interactions, as well as population genetic information such as demographic and reproductive life-histories of both species.\\
 
+** Questions and Aims
+We want to investigate the joint behaviour of genealogies in coevolving species of host-parasite interactions. Describing the dynamics of coevolution at the level of genomic coalescence trees, our aims is to better understand the sigantures coevolution leaves in the genomes of interacting species to improve inference of both functional, quantitative GxG interactions, as well as population genetic information such as demographic and reproductive life-histories of both species.\\
 *** How can we describe the co-dependence of host and pathogen genealogies?
 As we know the pairings of hosts and pathogens (through time), can find a measure of correlations between the 'aligned' host and pathogen genealogies?  Above average appearance of host and parasite types together in pairwise nodes of the co-dependent genealogies? How will different statistical measures of the trees (eg. TMRCA and tree topology) be correlated in various co-evolutionary scenarios?  Relative importance of TMRCA vs. topology? Significant deviations from neutral 'co-evolutionary' signatures between indicate co-evolution (what does 'neutral' co-evolution mean?). The 'neutral' co-evolutionary model needs account for neutrality, linkage disequilibrium, life-history traits as well as demographic history.
 
