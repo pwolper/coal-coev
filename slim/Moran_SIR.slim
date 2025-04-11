@@ -1,0 +1,120 @@
+// set up a simple neutral simulation
+initialize() {
+	initializeSLiMModelType("nonWF");
+	//initializeMutationRate(0);
+	//initializeMutationType("m1", 0.5, "f", 0.0);
+	//initializeGenomicElementType("g1", m1, 1.0);
+	//initializeGenomicElement(g1, 0, 1);
+	//initializeRecombinationRate(0);
+	defineConstant("SUSCEPTIBLE", 0);
+	defineConstant("RESISTANT", 1);
+	defineConstant("INFECTED", 2);
+	
+	defineConstant("S_s", 0.1); //Reproductive advantage of susceptible (vs. infected)
+	defineConstant("S_r", 0.05); //Reproductive advantage of resistant (vs. infected)
+
+}
+
+
+reproduction() {
+	// Moran reproduction. Sample one individual to reproduce
+	
+	catn("\n	-- reproduction --");
+	fitness = p1.cachedFitness(NULL);
+	catn("Cached Fitness at reproduction: ");
+	catn(fitness);
+	parent = sample(p1.individuals, 1, weights=fitness);
+	catn("Parent sampled: "+ asInteger(parent.tagF));
+	offspring = subpop.addCloned(parent);
+	offspring.tagF = parent.tagF;
+	offspring.tag = parent.tag;
+	offspring.color = parent.color;
+	self.active = 0;
+	
+	
+}
+
+1 first() {
+	sim.addSubpop("p1", 10, haploid = T);
+	p1.individuals.tagF = asFloat(seqLen(p1.individualCount));
+	p1.individuals.tag = SUSCEPTIBLE;
+	p1.individuals.color = colors(p1.individualCount, "turbo");
+
+}
+
+1: first() {
+	catn("\n\n---- Tick" + community.tick + " ----");
+	catn("Ind. IDs:");
+	catn(asInteger(p1.individuals.tagF));
+	catn("SIR status:");
+	catn(p1.individuals.tag);
+}
+
+1: early() {
+	catn("\n	-- early(): --");
+	catn("Ind. IDs:");
+	catn(asInteger(p1.individuals.tagF));
+	catn("SIR status:");
+	catn(p1.individuals.tag);
+	//catn("\n");
+	
+	inds = p1.individuals;
+
+	//Infection with rate c
+	
+		
+	//mutation susceptible->resistant
+	
+		
+	
+	//fitness recalculations
+	catn("		-- fitnessScaling by SIR status --");
+	sus = inds[inds.tag == SUSCEPTIBLE];
+	res = inds[inds.tag == RESISTANT];
+	
+	sus.fitnessScaling = 1 + S_s;
+	res.fitnessScaling = 1 + S_r;
+	
+	catn("fitness scaling factors: ");
+	catn(p1.individuals.fitnessScaling);
+	fitness = p1.cachedFitness(NULL);
+	catn("fitness values: ");
+	catn(fitness);
+
+}
+
+1: late() {
+	catn("\n	-- late() --");
+	victim = sample(p1.individuals, 1);
+	catn("Victim chosen: " + asInteger(victim.tagF));
+	sim.killIndividuals(victim);
+	catn("Individual IDs:");
+	catn(asInteger(p1.individuals.tagF));
+	catn("SIR status:");
+	catn(p1.individuals.tag);
+	fitness = p1.cachedFitness(NULL);
+	catn("fitness values: ");
+	catn(fitness);
+}
+
+2 early() {
+	//initial resistance
+	resistant = p1.sampleIndividuals(1, tag=SUSCEPTIBLE);
+	resistant.tag = RESISTANT;
+	catn("Resistance introduced in Individual " + asInteger(resistant.tagF));
+
+	//initial infection
+	infected = p1.sampleIndividuals(1, tag=SUSCEPTIBLE);
+	infected.tag = INFECTED;
+	catn("Infection introduced in Individual " + asInteger(infected.tagF));
+
+}
+
+100 late() {
+	catn("\n---- end of sim ----");
+	catn("Surviving: ");
+	catn(asInteger(p1.individuals.tagF));
+	catn("Status:");
+	catn(p1.individuals.tag);
+
+}
