@@ -1,0 +1,787 @@
+// Define functions
+
+function (+)repartition_parasites(integer x) // here integer x provided but not used (imüpossible to define a function without arguments in Eidos...
+{	// Function that returns the number of parasites of genotype j infecting hosts of genotype i, for each class of genotype
+	parasiteSubpops = parasite.subpopulations; // All parasites subpopulations
+
+	Infected_H1 = p1.individuals[p1.individuals.tag==1 & p1.individuals.genome1.countOfMutationsOfType(m4)==0]; // All infected hosts of genotype 1
+	Infected_H2 = p1.individuals[p1.individuals.tag==1 & p1.individuals.genome1.countOfMutationsOfType(m4)==1]; // All infected hosts of genotype 2
+
+	parasiteSubpopsH1 = c(); // list of parasites subpops infecting hosts H1
+	parasiteSubpopsH2 = c(); // list of parasites subpops infecting hosts H2
+	for ( i in 0:(length(parasiteSubpops)-1))
+	{
+		// if parasiteSubpops.tag[i] is in Infected_H1.pedigreeID
+		if(sum(parasiteSubpops.tag[i]== Infected_H1.pedigreeID)==1) {parasiteSubpopsH1 = c(parasiteSubpopsH1, parasiteSubpops[i]);} // add the subpop to the list of parasites subpops infecting hosts H1
+		// if parasiteSubpops.tag[i] is in Infected_H2.pedigreeID
+		else if (sum(parasiteSubpops.tag[i]== Infected_H2.pedigreeID)==1){parasiteSubpopsH2 = c(parasiteSubpopsH2, parasiteSubpops[i]);} // add the subpop to the list of parasites subpops infecting hosts H2
+		else{stop("error: parasite infecting no host genotype");}
+	}
+
+	if(length(parasiteSubpopsH1)>0)
+	{
+		allParasites_H1 = parasiteSubpopsH1.individuals; // All parasites infecting hosts of genotype 1
+		nb_P1_H1 = sum(allParasites_H1.genome1.countOfMutationsOfType(m2)==0); // Number of parasites of genotype 1 infecting hosts of genotype 1
+		nb_P2_H1 = sum(allParasites_H1.genome1.countOfMutationsOfType(m2)==1); // Number of parasites of genotype 2 infecting hosts of genotype 1
+	}
+	else if(length(parasiteSubpopsH1)==0)
+	{
+		nb_P1_H1 = 0;
+		nb_P2_H1 = 0;
+	}
+
+	if(length(parasiteSubpopsH2)>0)
+	{
+		allParasites_H2 = parasiteSubpopsH2.individuals; // All parasites infecting hosts of genotype 2
+		nb_P1_H2 = sum(allParasites_H2.genome1.countOfMutationsOfType(m2)==0); // Number of parasites of genotype 1 infecting hosts of genotype 2
+		nb_P2_H2 = sum(allParasites_H2.genome1.countOfMutationsOfType(m2)==1); // Number of parasites of genotype 2 infecting hosts of genotype 2
+	}
+	else if(length(parasiteSubpopsH2)==0)
+	{
+		nb_P1_H2 = 0;
+		nb_P2_H2 = 0;
+	}
+
+	return c(nb_P1_H1, nb_P1_H2, nb_P2_H1, nb_P2_H2);
+}
+
+//function (+)indices(integer nb_P1_H1, integer nb_P1_H2, integer nb_P2_H1, integer nb_P2_H2)
+//{	// Function that returns the four indices CSA, HS, PI and HP used later for the ABC analyses and the discrimination of alpha
+//	nb_Infected = p1.individuals[p1.individuals.tag==1].size(); //number of Infected hosts
+//	N_H = p1.individualCount;
+//	nb_Healthy_H1 = p1.individuals[p1.individuals.tag==0 & p1.individuals.genome1.countOfMutationsOfType(m4)==0].size();
+//	nb_Healthy_H2 = p1.individuals[p1.individuals.tag==0 & p1.individuals.genome1.countOfMutationsOfType(m4)==1].size();
+//
+//	if(nb_Infected!=(nb_P1_H1+nb_P1_H2+nb_P2_H1+nb_P2_H2)){stop("error: wrong number of infected hosts, conflict");}
+//
+//	// Calculate frequencies f_tilde_ij of hosts of genotype i infected by parasites of genotype j among all infected individuals
+//	if(nb_Infected>0)
+//	{
+//		f_tilde_11 = nb_P1_H1/nb_Infected;
+//		f_tilde_12 = nb_P2_H1/nb_Infected;
+//		f_tilde_21 = nb_P1_H2/nb_Infected;
+//		f_tilde_22 = nb_P2_H2/nb_Infected;
+//	}
+//	else if (nb_Infected==0)
+//	{
+//		f_tilde_11= NAN;
+//		f_tilde_12= NAN;
+//		f_tilde_21= NAN;
+//		f_tilde_22= NAN;
+//	}
+//
+//
+//	if(N_H>0)
+//	{
+//		// Calculate frequencies f_ij of hosts of genotype i infected by parasites of genotype j among all individuals
+//		f_11 = nb_P1_H1/N_H;
+//		f_12 = nb_P2_H1/N_H;
+//		f_21 = nb_P1_H2/N_H;
+//		f_22 = nb_P2_H2/N_H;
+//
+//		// Calculate frequencies f_iz: frequency of hosts of genotype i uninfected
+//		f_1z = nb_Healthy_H1/N_H;
+//		f_2z = nb_Healthy_H2/N_H;
+//	}
+//	else if (N_H==0)
+//	{
+//		f_11 = NAN;
+//		f_12 = NAN;
+//		f_21 = NAN;
+//		f_22 = NAN;
+//		f_1z = NAN;
+//		f_2z = NAN;
+//	}
+//
+//	// Calculate the four indices CSA, HS, PI (denoted P_I to avoid confusion with pi number 3.14) and HP
+//	numeratorCSA = f_tilde_11*f_tilde_22-f_tilde_12*f_tilde_21;
+//	deominatorCSA = sqrt((f_tilde_11+f_tilde_12)*(f_tilde_21+f_tilde_22)*(f_tilde_11+f_tilde_21)*(f_tilde_12+f_tilde_22));
+//	CSA = abs(numeratorCSA/deominatorCSA);
+//
+//	numeratorHS = (f_11+f_12)*f_2z-(f_21+f_22)*f_1z;
+//	denominatorHS_P_I_HP = (f_11+f_12+f_1z)*(f_21+f_22+f_2z);
+//	HS = abs(numeratorHS/denominatorHS_P_I_HP);
+//
+//	numeratorP_I = f_12*f_22-f_11*f_21;
+//	P_I = abs(numeratorP_I/denominatorHS_P_I_HP);
+//
+//	numeratorHP = f_12*f_2z - f_21*f_1z;
+//	HP = abs(numeratorHP/denominatorHS_P_I_HP);
+//
+//	return c(CSA,HS,P_I,HP);
+//}
+
+// parameters to enter in comand lines (-d option)
+
+// repID
+
+// Start of the simulation
+species all initialize() {
+	initializeSLiMModelType("nonWF");
+	//	defineConstant("mu_neutral", 500);	// mutation rate of neutral loci
+	//defineConstant("H_init", 9960); // Initial number of hosts
+	//defineConstant("P_init", 1660); // Initial number of parasites (and thus of infected hosts, one parasite per host)
+	defineConstant("HealthyInit", c(4150,4150)); // Vector, HealthyInit[i] initial number of hosts of genotype i
+	defineConstant("InfectedInit", matrix(c(415, 415, 415, 415), nrow=2)); //  Matrix, InfectedInit[i][j] initial number of hosts of genotype i infected by parasites of genotype j
+	defineConstant("G_host", 1); // Relative generation time scale for hosts (compared to parasite which is 1)
+	defineConstant("b", 2.); // Host birth rate
+	defineConstant("d", 0.5); // Host death rate
+	defineConstant("K", 10000); // Host carrying capacity for the reproduction
+	defineConstant("cH", c(0.05, 0)); // Vector of Fitness cost of host genotypes
+	defineConstant("cP", c(0, 0.05)); // Vector of Fitness cost of pathogen genotypes
+	// defineConstant("S", matrix(c(0.1,0.1,0.1,0.1), nrow=2)); // Fitness disavantage of infected hosts (birth rate 1-S)
+	defineConstant("S", 1); // Fitness disavantage of infected hosts (birth rate 1-S)
+	// defineConstant("B", matrix(c(0.1,0.1,0.1,0.1), nrow=2)); // transmission rate
+	defineConstant("B", 0.00037); // transmission rate
+	//defineConstant("D", matrix(c(0.1,0.1,0.1,0.1), nrow=2)); // Extra death rate due to infection
+	defineConstant("D", 0.01); // Extra death rate due to infection
+	//defineConstant("alpha", matrix(c(1,0,0,1), nrow=2)); // Matrix alpha of infection, hosts in rows and pathogens in columns (Matrices are filled column by column in SLiM)
+	defineConstant("alpha_threshold", 0.1); // Threshold to moduate the infection matrix coefficients
+	defineConstant("matrix","MA"); // Character, "GFG" for an infection matrix following the gene-for-gene model or "MA" for the matching allele model
+	defineConstant("PositionSNP", 50); // Position of the selected locus on the first chromosome
+	defineConstant("SizeChromosome", 100); // Size of each chromosome
+	defineConstant("NutationRate", 1e-3); // Mutation rate for each neutral locus
+	defineConstant("generations",40); // Number of generations (ticks) to simulate
+
+	// Definition of Matrix alpha of infection, hosts in rows and pathogens in columns (Matrices are filled column by column in SLiM)
+	//if(matrix=="GFG"){defineConstant("alpha", matrix(c(runif(n=1,min=1-alpha_threshold,max=1),runif(n=1,min=0,max=0+alpha_threshold),runif(n=1,min=1-alpha_threshold,max=1),runif(n=1,min=1-alpha_threshold,max=1)), nrow=2));}
+	//else if(matrix=="MA"){defineConstant("alpha", matrix(c(runif(n=1,min=1-alpha_threshold,max=1),runif(n=1,min=0,max=0+alpha_threshold),runif(n=1,min=0,max=0+alpha_threshold),runif(n=1,min=1-alpha_threshold,max=1)), nrow=2));}
+	//else if(matrix=="neutral"){defineConstant("alpha", matrix(c(runif(n=1,min=1-alpha_threshold,max=1),runif(n=1,min=1-alpha_threshold,max=1),runif(n=1,min=1-alpha_threshold,max=1),runif(n=1,min=1-alpha_threshold,max=1)), nrow=2));}
+	//else{stop("Infection matrix is not defined");}
+	//TO DELETE
+	defineConstant("alpha", matrix(c(1.0,0.0,0.0,1.0), nrow=2));
+
+	// Check if the position of the SNP is in the simulated genome
+	if(PositionSNP>SizeChromosome){stop("Error: Position of the SNP out of the simulated chromosome");}
+}
+
+species parasite initialize() {
+	// The order in which you define species (here first parasite then host), rules also the order of the reproduction events
+	// Here, the parasite must be defined soon, because the number of parasite offspring depends on the number of hosts, so if the host reproduces first, it changes the parasite offsprings
+	// The parasite reproduces first, and as they stay in the same host (which was already infected) until the migration step in early(), it does not change the number of host offspring
+	initializeSpecies(avatar="🍄", color="red");
+
+	// initializeMutationRate(1e-6); // Uncomment only if we want a fix mutation rate for all mutations, included the non-neutral SNP
+	initializeSLiMOptions(keepPedigrees=T, nucleotideBased=T);
+	initializeAncestralNucleotides(randomNucleotides(2*SizeChromosome));
+	initializeMutationTypeNuc("m1", 1.0, "f", 0.0); // neutral mutations.
+	initializeMutationTypeNuc("m2", 1.0, "f", 0.0); // SNP: initialised as neutral mutation, but selected, see the rest of the code
+	m1.convertToSubstitution = T;  //removal of fixed mutations
+	m2.convertToSubstitution = F;
+	initializeGenomicElementType("g1", m1, 1.0, mmJukesCantor(NutationRate)); // mmJukesCantor: matrix determining the mutation rate for each transition between nucleotide
+	initializeGenomicElementType("g2", m2, 1.0, mmJukesCantor(0.0));
+	initializeGenomicElement(g1, 0, PositionSNP-1);
+	initializeGenomicElement(g2, PositionSNP, PositionSNP); // SNP in the middle of the first chromosome
+	initializeGenomicElement(g1, PositionSNP+1, 2*SizeChromosome-1);
+	rates = c(1e-3, 0.5, 1e-3);
+	ends = c(SizeChromosome-1, SizeChromosome, 2*SizeChromosome-1);
+	initializeRecombinationRate(rates, ends);
+
+	// Use the mutation rate map to vary the mutation rate depending on the genomic region (no mutation for the non-neutral SNP)
+	//	ends = c(PositionSNP-1, PositionSNP, 2*SizeChromosome-1);
+	//	mutationRates = c(1e-6, 0, 1e-6);
+	//	initializeMutationRate(mutationRates, ends);
+}
+
+species host initialize() {
+	initializeSpecies(tickModulo=G_host, avatar="🌱", color="green");
+	initializeSLiMOptions(keepPedigrees=T, nucleotideBased=T); // pedigree IDs are used to identify host-parasite matches: each host has a unique pedigreeID value.
+	// For each host, there will exist a separate pathogen subpopulation containing all of the pathogens that are living in that host
+	// For a given host with a particular pedigreeID , the corresponding pathogen subpopulation’s tag value will be equal to the host’s pedigreeID
+
+	// host.tag corresponds to the number of parasites on each host
+
+	// initializeMutationRate(1e-6); // Uncomment only if we want a fix mutation rate for all mutations, included the non-neutral SNP
+	initializeAncestralNucleotides(randomNucleotides(2*SizeChromosome));
+	initializeMutationTypeNuc("m3", 1.0, "f", 0.0); // neutral mutations.
+	initializeMutationTypeNuc("m4", 1.0, "f", 0.0); // SNP: initialised as neutral mutation, but selected, see the rest of the code
+	m3.convertToSubstitution = T;
+	m4.convertToSubstitution = F;
+	initializeGenomicElementType("g3", m3, 1.0, mmJukesCantor(NutationRate)); // mmJukesCantor: matrix determining the mutation rate for each transition between nucleotide state
+	initializeGenomicElementType("g4", m4, 1.0, mmJukesCantor(0.0));
+	initializeGenomicElement(g3, 0, PositionSNP-1);
+	initializeGenomicElement(g4, PositionSNP, PositionSNP); // SNP in the middle of the first chromosome
+	initializeGenomicElement(g3, PositionSNP+1, 2*SizeChromosome-1);
+	rates = c(1e-3, 0.5, 1e-3);
+	ends = c(SizeChromosome-1, SizeChromosome, 2*SizeChromosome-1);
+	initializeRecombinationRate(rates, ends);
+
+	// Use the mutation rate map to vary the mutation rate depending on the genomic region (no mutation for the non-neutral SNP)
+	//	ends = c(PositionSNP-1, PositionSNP, 2*SizeChromosome-1);
+	//	mutationRates = c(1e-6, 0, 1e-6);
+	//	initializeMutationRate(mutationRates, ends);
+}
+
+// create initial populations
+ticks all 1 first() {
+	host.addSubpop("p1", sum(HealthyInit)+sum(InfectedInit), haploid=T);
+
+	// tag with the number of parasites in each host
+	p1.individuals.tag = 0;
+
+	// sample one individual to get the nucleotide at the SNP position (ancestral state)
+	targetIndiv = sample(p1.individuals,1);
+	ancestralState_host = targetIndiv.genome1.nucleotides(PositionSNP,PositionSNP);
+
+	// Set the mutated nucleotide
+	if(ancestralState_host == "A"){mutatedState_host = "T";}
+	else if(ancestralState_host == "T"){mutatedState_host = "A";}
+	else if(ancestralState_host == "C"){mutatedState_host = "G";}
+	else if(ancestralState_host == "G"){mutatedState_host = "C";}
+
+	// Choose initial hosts carrying the mutated SNP (genotype 2)
+	targetH = sample(p1.individuals.genome1,HealthyInit[1] + InfectedInit[1,0]+InfectedInit[1,1]);
+	targetH.addNewDrawnMutation(mutationType = m4, position = PositionSNP, nucleotide = mutatedState_host);
+
+	// choose initial hosts carrying the infection, for each host genotype, from matrix InfectedInit
+	initial_inf_hosts_1 = sample(p1.individuals[p1.individuals.genome1.countOfMutationsOfType(m4)==0],InfectedInit[0,0]+InfectedInit[0,1],replace=F); // Works only if there is one parasite per infected host, otherwise, consider different values for P_init and the initial number of infected hosts
+	initial_inf_hosts_2 = sample(p1.individuals[p1.individuals.genome1.countOfMutationsOfType(m4)>0],InfectedInit[1,0]+InfectedInit[1,1],replace=F); // Works only if there is one parasite per infected host, otherwise, consider different values for P_init and the initial number of infected hosts
+
+	initial_inf_hosts_1.tag=1; // theses hosts are infected
+	initial_inf_hosts_2.tag=1; // theses hosts are infected
+	parasite.tag = 3;
+
+	initial_inf_hosts = matrix(c(initial_inf_hosts_1,initial_inf_hosts_2),ncol=2); // matrix of the initial infected hosts, heach host genotype is a column (column for genotype 1 and for genotype 2)
+
+	for (i in 0:(dim(initial_inf_hosts)[1]-1)) // Loop on the number of columns (the number of host genotypes i)
+	{
+		for (initial_inf_host in initial_inf_hosts[0:(InfectedInit[i,0][0]-1),i]) // Loop on all selected hosts individuals to be infected by parasites of genotype 1
+		{
+			// make a parasite subpop for the host
+			parasite_subpop = parasite.addSubpop(parasite.tag, 1, haploid=T); // Each new parasite subpopulation gets a new id – p3 , p4 , p5 , etc. – based upon the value of the tag value on the parasite species;
+			parasite_subpop.tag = initial_inf_host.pedigreeID; // tag value for the subpopulation equal to the target host's pedigreeID . This establishes the correspondence between the hosts and the parasites infecting them.
+			parasite.tag = parasite.tag + 1; // that tag value gets incremented after each new subpopulation is created, providing unique identifier values
+
+			// for the first parasite only :
+			if (parasite.tag == 4)
+			{
+				// get the ancestral nucleotide of parasites (nucleotide drawn for genotype 1) : sample one individual to get the nucleotide at the SNP position (ancestral state)
+				targetIndiv_parasite = sample(parasite.subpopulations.individuals,1)	;
+				ancestralState_parasite = targetIndiv_parasite.genome1.nucleotides(PositionSNP,PositionSNP);
+
+				// Set the mutated nucleotide
+				if(ancestralState_parasite == "A"){mutatedState_parasite = "T";}
+				else if(ancestralState_parasite == "T"){mutatedState_parasite = "A";}
+				else if(ancestralState_parasite == "C"){mutatedState_parasite = "G";}
+				else if(ancestralState_parasite == "G"){mutatedState_parasite = "C";}
+			}
+		}
+
+		for (initial_inf_host in initial_inf_hosts[InfectedInit[i,0][0]:(dim(initial_inf_hosts)[0]-1),i]) // Loop on all selected hosts individuals to be infected by parasites of genotype 2
+		{
+			// make a parasite subpop for the host
+			parasite_subpop = parasite.addSubpop(parasite.tag, 1, haploid=T); // Each new parasite subpopulation gets a new id – p3 , p4 , p5 , etc. – based upon the value of the tag value on the parasite species;
+			parasite_subpop.tag = initial_inf_host.pedigreeID; // tag value for the subpopulation equal to the target host's pedigreeID . This establishes the correspondence between the hosts and the parasites infecting them.
+			// Add a mutation
+			parasite_subpop.individuals.genome1.addNewDrawnMutation(mutationType = m2, position = PositionSNP, nucleotide = mutatedState_parasite);
+
+			parasite.tag = parasite.tag + 1; // that tag value gets incremented after each new subpopulation is created, providing unique identifier values
+		}
+	}
+
+	// Preparation of the output file
+
+	//defineConstant("simID", getSeed()); // COnstant to name each output file for each replicate
+
+	// Fixed parameters to print as header of the log output file
+	fixed_parameters = "#matrix=" + matrix + "\n"+"#alpha_threshold="+alpha_threshold+"\n"+ "#alpha11=" + alpha[0,0] + "\n"+ "#alpha21=" + alpha[1,0] + "\n"+ "#alpha12=" + alpha[0,1] + "\n"+ "#alpha22=" + alpha[1,1] + "\n"+"#HealthyInit1=" + HealthyInit[0] + "\n"+"#HealthyInit2=" + HealthyInit[1] + "\n"+"#InfectedInit11=" + InfectedInit[0,0] + "\n"+"#InfectedInit21=" + InfectedInit[1,0] + "\n"+"#InfectedInit12=" + InfectedInit[0,1] + "\n"+"#InfectedInit22=" + InfectedInit[1,1] + "\n"+"#b=" + b + "\n"+"#d=" + d + "\n"+"#K=" + K + "\n"+"#cH1=" + cH[0] + "\n"+"#cH2=" + cH[1]+ "\n"+"#cP1=" + cP[0] +"\n"+"#cP2=" + cP[1] + "\n"+"#S=" + S + "\n"+"#B=" + B + "\n"+"#D=" + D;
+
+	// log = community.createLogFile(filePath = "sim_log_WF_" + repID + ".txt", initialContents= fixed_parameters, logInterval=1);
+	log = community.createLogFile(filePath = "sim_log_WF_" + matrix + "_" + repID+ ".txt", initialContents= fixed_parameters, compress=T, logInterval=1, flushInterval = generations);
+	//	log = community.createLogFile(filePath = "sim_log_WF_" + matrix + ".txt", initialContents= fixed_parameters, compress=T, logInterval=1, flushInterval = generations);
+
+	//	vector_repartition_parasites = repartition_parasites(x=0); // vector of the nb of parasites i infecting hosts j: c(nb_P1_H1, nb_P1_H2, nb_P2_H1, nb_P2_H2) (argument x is useless here, bet needed to defined a function in Eidos language
+	//	vector_indices = indices(vector_repartition_parasites[0],vector_repartition_parasites[1],vector_repartition_parasites[2],vector_repartition_parasites[3]); // Vector of indices CSA, HS, P_I and HP
+	//
+	log.addCycle(host);
+	log.addCycle(parasite);
+	log.addCustomColumn("N_H", "p1.individualCount;"); // host population size
+	log.addCustomColumn("N_P", "parasite.subpopulations.individuals.size();"); // parasite population size
+	log.addCustomColumn("nbSNP_H", "p1.individuals.genome1.mutationsOfType(m4).size();"); // Frequency of host genotype mutation (genotype 2) in the population
+	log.addCustomColumn("nbSNP_P", "parasite.subpopulations.individuals.genome1.mutationsOfType(m2).size();"); // Frequency of parasite genotype mutation (genotype 2) in the population
+	//	log.addCustomColumn("CSA", "indices(repartition_parasites(x=0)[0],repartition_parasites(x=0)[1],repartition_parasites(x=0)[2],repartition_parasites(x=0)[3])[0];");
+	//	log.addCustomColumn("HS", "indices(repartition_parasites(x=0)[0],repartition_parasites(x=0)[1],repartition_parasites(x=0)[2],repartition_parasites(x=0)[3])[1];");
+	//	log.addCustomColumn("PI", "indices(repartition_parasites(x=0)[0],repartition_parasites(x=0)[1],repartition_parasites(x=0)[2],repartition_parasites(x=0)[3])[2];");
+	//	log.addCustomColumn("HP", "indices(repartition_parasites(x=0)[0],repartition_parasites(x=0)[1],repartition_parasites(x=0)[2],repartition_parasites(x=0)[3])[3];");
+	log.addCustomColumn("F_1z", "sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4)==0);"); // Number of healthy hosts of genotype 1
+	log.addCustomColumn("F_2z", "sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4));"); // Number of healthy hosts of genotype 2
+	log.addCustomColumn("F_11", "repartition_parasites(x=0)[0];"); // Number of hosts 1 infected by parasites 1
+	log.addCustomColumn("F_12", "repartition_parasites(x=0)[2];"); // Number of hosts 1 infected by parasites 2
+	log.addCustomColumn("F_21", "repartition_parasites(x=0)[1];"); // Number of hosts 2 infected by parasites 1
+	log.addCustomColumn("F_22", "repartition_parasites(x=0)[3];"); // Number of hosts 2 infected by parasites 2
+
+	community.rescheduleScriptBlock(s1, start=generations, end=generations); // Reschedule the late event s1 that will stop the simulation after the chosen amount of time (parameter generations here), there are no better way to do it unfortunately, see in SLiM documentation
+}
+
+//ticks all 1 first() {
+//	// Introduce mutated SNP in one hosts and parasites at the selected locus
+//	targetH = sample(p1.individuals.genome1,1);
+//	targetH.addNewDrawnMutation(m4, PositionSNP);
+//
+//	parasiteSubpops = parasite.subpopulations;
+//	allParasites = parasiteSubpops.individuals;
+//	targetP = sample(allParasites.genome1,1);
+//	targetP.addNewDrawnMutation(m2, PositionSNP);
+//}
+
+//ticks all first() {
+//	// We need to store the parasite and host population sizes before the reproduction event, to get them at the time of death
+//	nb_Healthy = p1.individuals[p1.individuals.tag==0].size(); //number of healthy hosts
+//	nb_Infected = p1.individuals[p1.individuals.tag>0].size(); // number of infected hosts
+//	host.setValue("nb_host_offspring",asInteger(round(b*(nb_Healthy+(1-S)*nb_Infected)))); // count the number of offspring to generate, reinitialized at each new tick cycle
+//	host.setValue("offspring_generated",0); // count the number of offspring already generated, reinitialized at each new tick cycle
+//
+//	parasiteSubpops = parasite.subpopulations;
+//	allParasites = parasiteSubpops.individuals;
+//	parasite.setValue("nb_parasite_offspring",asInteger(round(allParasites.size() * p1.individuals.size() * B))); // count the number of offspring to generate, reinitialized at each new tick cycle
+//	parasite.setValue("offspring_generated",0); // count the number of offspring already generated, reinitialized at each new tick cycle
+//
+//}
+
+ticks all first() {
+	// We need to store the parasite destination of migration before the reproduction event: 0: no migration; 1: towards hosts of genotype 1; 2: towards hosts of genotype 2
+	parasiteSubpops = parasite.subpopulations;
+	allParasites = parasiteSubpops.individuals;
+	allParasites.setValue("migration_towards",0); // All individuals before reproduction are staying on their host: only new individuals will migrate to a new host
+}
+
+species parasite reproduction() {
+
+	nb_Healthy = p1.individuals[p1.individuals.tag==0].size(); //number of healthy hosts
+	parasiteSubpops = parasite.subpopulations;
+	allParasites = parasiteSubpops.individuals;
+
+	nb_Healthy_H2 = sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4)); // Number of mutations at the selected SNP m4 for the healthy host population --> number of healthy hosts of genotype 2
+	nb_Healthy_H1 = sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4)==0); // Number of healthy hosts with no mutation at the selected SNP m4 --> number of healthy hosts of genotype 1
+
+	nb_P2 = sum(allParasites.genome1.countOfMutationsOfType(m2)); // Number of mutations at the selected SNP m2 for the parasite population --> number of parasites of genotype 2
+	nb_P1 = sum(allParasites.genome1.countOfMutationsOfType(m2)==0); // Number of parasite individuals with no mutation at the selected SNP m2 --> number of parasites of genotype 1
+
+	// count the number of offspring to generate for each genotype class
+	nb_parasite_offspring_P1H1 = asInteger(round(nb_P1 * nb_Healthy_H1 * B * alpha[0,0] * (1-cP[0]))); // nb of offspring P1 that will migrate on hosts H1
+	nb_parasite_offspring_P1H2 = asInteger(round(nb_P1 * nb_Healthy_H2 * B * alpha[1,0] * (1-cP[0]))); // nb of offspring P1 that will migrate on hosts H2
+	nb_parasite_offspring_P2H1 = asInteger(round(nb_P2 * nb_Healthy_H1 * B * alpha[0,1] * (1-cP[1]))); // nb of offspring P2 that will migrate on hosts H1
+	nb_parasite_offspring_P2H2 = asInteger(round(nb_P2 * nb_Healthy_H2 * B * alpha[1,1] * (1-cP[1]))); // nb of offspring P2 that will migrate on hosts H2
+	// nb_parasite_offspring = asInteger(round(allParasites.size() * nb_Healthy * B)); // if no selection
+
+	count_P1H1 = 0 ;
+	count_P1H2 = 0 ;
+	count_P2H1 = 0 ;
+	count_P2H2 = 0 ;
+
+	while	(count_P1H1<nb_parasite_offspring_P1H1 | count_P1H2<nb_parasite_offspring_P1H2 | count_P2H1<nb_parasite_offspring_P2H1 | count_P2H2<nb_parasite_offspring_P2H2)
+	{
+		// Sample two parents for each offspring, selfing allowed
+		parent1 = sample(allParasites,1);
+		parent2 = sample(allParasites,1);
+
+		breaks = parasite.chromosome.drawBreakpoints(parent1);
+
+		// Check which allele is drawn for the offspring SNP
+		polarity = sum(breaks <= PositionSNP) % 2; // 0 for the same allele than parent1, 1 for the same allele than parent2
+
+		// Allele 0 for genotype 1 and 1 for genotype 2
+		if (polarity==0){allele = parent1.genome1.countOfMutationsOfType(m2);}
+		else {allele = parent2.genome1.countOfMutationsOfType(m2);}
+
+		// Depending of the offspring allele, put it in the good subpopulation
+		if (allele == 0)
+		{
+			if(count_P1H1<nb_parasite_offspring_P1H1) // Create offspring on parent 1 that will migrate to a host of genotype 1
+			{
+				Subpop = parasiteSubpops[parasiteSubpops.individuals == parent1];
+				// Add the new parasite to the subpopulation, and indicates towards which host type it will migrate next
+				Subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL).setValue("migration_towards",1);
+				count_P1H1 = count_P1H1+1 ;
+			}
+			else if (count_P1H2<nb_parasite_offspring_P1H2) // Create offspring on parent 1 that will migrate to a host of genotype 2
+			{
+				Subpop = parasiteSubpops[parasiteSubpops.individuals == parent1];
+				// Add the new parasite to the subpopulation, and indicates towards which host type it will migrate next
+				Subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL).setValue("migration_towards",2);
+				count_P1H2 = count_P1H2+1 ;
+			}
+		}
+		else if (allele == 1)
+		{
+			if(count_P2H1<nb_parasite_offspring_P2H1) // Create offspring on parent 1 that will migrate to a host of genotype 1
+			{
+				Subpop = parasiteSubpops[parasiteSubpops.individuals == parent1];
+				// Add the new parasite to the subpopulation, and indicates towards which host type it will migrate next
+				Subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL).setValue("migration_towards",1);
+				count_P2H1 = count_P2H1+1 ;
+			}
+			else if (count_P2H2<nb_parasite_offspring_P2H2) // Create offspring on parent 1 that will migrate to a host of genotype 2
+			{
+				Subpop = parasiteSubpops[parasiteSubpops.individuals == parent1];
+				// Add the new parasite to the subpopulation, and indicates towards which host type it will migrate next
+				Subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL).setValue("migration_towards",2);
+				count_P2H2 = count_P2H2+1 ;
+			}
+		}
+	}
+	self.active = 0; // This reproduction callback will be applied only once, and all offspring are generated
+}
+
+species host reproduction() {
+
+	// Number of host for each category of genotype and infection
+	nb_Healthy_H1 = sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4)==0); // Number of healthy hosts with no mutation at the selected SNP m4 --> number of healthy hosts of genotype 1
+	nb_Healthy_H2 = sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4)); // Number of mutations at the selected SNP m4 for the healthy host population --> number of healthy hosts of genotype 2
+	nb_Infected_H1 = sum(p1.individuals[p1.individuals.tag>0].genome1.countOfMutationsOfType(m4)==0); // Number of infected hosts of genotype 2
+	nb_Infected_H2 = sum(p1.individuals[p1.individuals.tag>0].genome1.countOfMutationsOfType(m4)); // Number of infected hosts of genotype 2
+
+	// Proportions of healthy and infected host, depending on the genotype
+	prop_Healthy_fromH1 = nb_Healthy_H1/(nb_Healthy_H1+nb_Infected_H1);
+	prop_Healthy_fromH2 = nb_Healthy_H2/(nb_Healthy_H2+nb_Infected_H2);
+	prop_Infected_fromH1 = nb_Infected_H1/(nb_Healthy_H1+nb_Infected_H1);
+	prop_Infected_fromH2 = nb_Infected_H2/(nb_Healthy_H2+nb_Infected_H2);
+
+
+	// Number of offspring for each host category
+	nb_healthy_offspring_H1 = b*(1-cH[0])*nb_Healthy_H1*(1-((nb_Healthy_H1+nb_Healthy_H2+nb_Infected_H1+nb_Infected_H2)/(K/(1-d)))); // Number of offspring of genotype 1, with a healthy parent
+	nb_infected_offspring_H1 = b*(1-cH[0])*(1-S)*nb_Infected_H1*(1-((nb_Healthy_H1+nb_Healthy_H2+nb_Infected_H1+nb_Infected_H2)/(K/(1-d))));	// Number of offspring of genotype 1, with an infected parent
+	nb_healthy_offspring_H2 = b*(1-cH[1])*nb_Healthy_H2*(1-((nb_Healthy_H1+nb_Healthy_H2+nb_Infected_H1+nb_Infected_H2)/(K/(1-d)))); // Number of offspring of genotype 2, with a healthy parent
+	nb_infected_offspring_H2 = b*(1-cH[1])*(1-S)*nb_Infected_H2*(1-((nb_Healthy_H1+nb_Healthy_H2+nb_Infected_H1+nb_Infected_H2)/(K/(1-d)))); // Number of offspring of genotype 2, with an infected parent
+
+	// For each offspring, calculate the proportion coming from each cross of parents (HealthyHealthy HH - HealthyInfected HI, InfectedInfected II), taking into account the fitness cost of the infection
+
+	// for p the proportion of healthy parent and q the proportion of healty parent, we will have a the following relativeproportions of offspring: HH: p**2, HI: 2pq*(1-(s/2)), II: Q**2*(1-s)
+	// that we weight by x= 1-pqs-sq**2 to obtain absolute proportions such that (HH+HI+II)/x = 1 (correction with the fitness cost)
+
+	// Genotype H1
+	x_H1 = 1-prop_Healthy_fromH1*prop_Infected_fromH1*S-S*prop_Infected_fromH1*prop_Infected_fromH1;
+	if(isNAN(x_H1))
+	{
+		prop_offspring_HH_H1 = 0;
+		prop_offspring_HI_H1 = 0;
+		prop_offspring_II_H1 = 0;
+	}
+	else
+	{
+		prop_offspring_HH_H1 = (prop_Healthy_fromH1*prop_Healthy_fromH1)/x_H1;
+		prop_offspring_HI_H1 = (2*prop_Healthy_fromH1*prop_Infected_fromH1*(1-(S/2)))/x_H1;
+		prop_offspring_II_H1 = (prop_Infected_fromH1*prop_Infected_fromH1*(1-S))/x_H1;
+	}
+
+	// Genotype H2
+	x_H2 = 1-prop_Healthy_fromH2*prop_Infected_fromH2*S-S*prop_Infected_fromH2*prop_Infected_fromH2;
+	if(isNAN(x_H2))
+	{
+		prop_offspring_HH_H2 = 0;
+		prop_offspring_HI_H2 = 0;
+		prop_offspring_II_H2 = 0;
+	}
+	else{
+		prop_offspring_HH_H2 = (prop_Healthy_fromH2*prop_Healthy_fromH2)/x_H2;
+		prop_offspring_HI_H2 = (2*prop_Healthy_fromH2*prop_Infected_fromH2*(1-(S/2)))/x_H2;
+		prop_offspring_II_H2 = (prop_Infected_fromH2*prop_Infected_fromH2*(1-S))/x_H2;
+	}
+
+	// Calculate the number of offspring for each parent crossing: apply the round at this step to obtain entire values
+	nb_offspring_HH_H1 = asInteger(round(prop_offspring_HH_H1*(nb_healthy_offspring_H1+nb_infected_offspring_H1)));
+	nb_offspring_HI_H1 = asInteger(round(prop_offspring_HI_H1*(nb_healthy_offspring_H1+nb_infected_offspring_H1)));
+	nb_offspring_II_H1 = asInteger(round(prop_offspring_II_H1*(nb_healthy_offspring_H1+nb_infected_offspring_H1)));
+	nb_offspring_HH_H2 = asInteger(round(prop_offspring_HH_H2*(nb_healthy_offspring_H2+nb_infected_offspring_H2)));
+	nb_offspring_HI_H2 = asInteger(round(prop_offspring_HI_H2*(nb_healthy_offspring_H2+nb_infected_offspring_H2)));
+	nb_offspring_II_H2 = asInteger(round(prop_offspring_II_H2*(nb_healthy_offspring_H2+nb_infected_offspring_H2)));
+
+
+	count_HH_H1 = 0 ;
+	count_HI_H1 = 0 ;
+	count_II_H1 = 0 ;
+	count_HH_H2 = 0 ;
+	count_HI_H2 = 0 ;
+	count_II_H2 = 0 ;
+
+	// Generate offspring from Healthy-Healty parents
+	while	(count_HH_H1<nb_offspring_HH_H1 | count_HH_H2<nb_offspring_HH_H2)
+	{
+		// Sample two parents for each offspring, selfing allowed
+		parent1 = sample(p1.individuals[p1.individuals.tag==0],1);
+		parent2 = sample(p1.individuals[p1.individuals.tag==0],1);
+
+		breaks = host.chromosome.drawBreakpoints(parent1);
+
+		// Check which allele is drawn for the offspring SNP
+		polarity = sum(breaks <= PositionSNP) % 2; // 0 for the same allele than parent1, 1 for the same allele than parent2
+
+		// Allele 0 for genotype 1 and 1 for genotype 2
+		if (polarity==0){allele = parent1.genome1.countOfMutationsOfType(m4);}
+		else {allele = parent2.genome1.countOfMutationsOfType(m4);}
+
+		// Depending of the offspring allele, put it in the good subpopulation
+		if (allele == 0 & count_HH_H1<nb_offspring_HH_H1)
+		{ // Create offspring of genotype 1 from two healthy parents
+			subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL);
+			count_HH_H1 = count_HH_H1+1 ;
+		}
+		else if (allele == 1 & count_HH_H2<nb_offspring_HH_H2)
+		{ // Create offspring of genotype 1 from two healthy parents
+			subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL);
+			count_HH_H2 = count_HH_H2+1 ;
+		}
+	}
+
+	// Generate offspring from Healthy-Infected parents
+	while	(count_HI_H1<nb_offspring_HI_H1 | count_HI_H2<nb_offspring_HI_H2)
+	{
+		// Sample two parents for each offspring, selfing allowed
+		infection_status = sample(c(0,1),2,replace=F) ; // random generator to define the infection status of the parents (vector of two different infection tags O and 1)
+		parent1 = sample(p1.individuals[p1.individuals.tag==infection_status[0]],1);
+		parent2 = sample(p1.individuals[p1.individuals.tag==infection_status[1]],1);
+
+		breaks = host.chromosome.drawBreakpoints(parent1);
+
+		// Check which allele is drawn for the offspring SNP
+		polarity = sum(breaks <= PositionSNP) % 2; // 0 for the same allele than parent1, 1 for the same allele than parent2
+
+		// Allele 0 for genotype 1 and 1 for genotype 2
+		if (polarity==0){allele = parent1.genome1.countOfMutationsOfType(m4);}
+		else {allele = parent2.genome1.countOfMutationsOfType(m4);}
+
+		// Depending of the offspring allele, put it in the good subpopulation
+		if (allele == 0 & count_HI_H1<nb_offspring_HI_H1)
+		{ // Create offspring of genotype 1 from two healthy parents
+			subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL);
+			count_HI_H1 = count_HI_H1+1 ;
+		}
+		else if (allele == 1 & count_HI_H2<nb_offspring_HI_H2)
+		{ // Create offspring of genotype 1 from two healthy parents
+			subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL);
+			count_HI_H2 = count_HI_H2+1 ;
+		}
+	}
+
+	// Generate offspring from Infected-Infected parents
+	while	(count_II_H1<nb_offspring_II_H1 | count_II_H2<nb_offspring_II_H2)
+	{
+		// Sample two parents for each offspring, selfing allowed
+		parent1 = sample(p1.individuals[p1.individuals.tag==1],1);
+		parent2 = sample(p1.individuals[p1.individuals.tag==1],1);
+
+		breaks = host.chromosome.drawBreakpoints(parent1);
+
+		// Check which allele is drawn for the offspring SNP
+		polarity = sum(breaks <= PositionSNP) % 2; // 0 for the same allele than parent1, 1 for the same allele than parent2
+
+		// Allele 0 for genotype 1 and 1 for genotype 2
+		if (polarity==0){allele = parent1.genome1.countOfMutationsOfType(m4);}
+		else {allele = parent2.genome1.countOfMutationsOfType(m4);}
+
+		// Depending of the offspring allele, put it in the good subpopulation
+		if (allele == 0 & count_II_H1<nb_offspring_II_H1)
+		{ // Create offspring of genotype 1 from two healthy parents
+			subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL);
+			count_II_H1 = count_II_H1+1 ;
+		}
+		else if (allele == 1 & count_II_H2<nb_offspring_II_H2)
+		{ // Create offspring of genotype 1 from two healthy parents
+			subpop.addRecombinant(parent1.genome1, parent2.genome1, breaks, NULL, NULL, NULL);
+			count_II_H2 = count_II_H2+1 ;
+		}
+	}
+	self.active = 0; // This reproduction callback will be applied only once, and all offspring individuals are generated in this unique callback
+}
+
+ticks all early() {
+
+	////////////////////////// horizontal transmission
+	// Here, we perform the migration of new parasites after the reproduction events, and we do not select the host on which parasites migrate depending on their age
+	// This means that new parasites can infect new hosts, otherwise new host are imune to the parasite the first year, and as we aplied a carrying capacity, host population can never go extinct and is not subjected to selection anymore
+	if (p1.individuals.size() > 1)
+	{
+
+		// For each host, check if it is infected more than once
+		parasiteSubpops = parasite.subpopulations;
+		for (h in p1.individuals)
+		{
+			hostID = h.pedigreeID;
+			parasiteSubpop = parasiteSubpops[parasiteSubpops.tag == hostID];
+			h.tag =  parasiteSubpop.individuals.size();
+		}
+
+		//		print(sum(p1.individuals.tag));
+		//		nb_Healthy = p1.individuals[p1.individuals.tag==0].size(); //number of healthy hosts
+		//		nb_Infected = p1.individuals[p1.individuals.tag>0].size(); // number of infected hosts
+		//		print(nb_Healthy);
+		//		print(nb_Infected);
+		//		print(p1.individuals[p1.individuals.tag==1].size());
+		//		print(p1.individuals[p1.individuals.tag==2].size());
+		//		print(p1.individuals[p1.individuals.tag==3].size());
+
+		moving = p1.individuals[p1.individuals.tag>=2]; // host from witch parasites will move
+		infected = p1.individuals[p1.individuals.tag>=1]; // host already infected
+
+		for (h in moving) // LATER :  verifiy here that there is no biais in the order to migrate (ex if there a more parasites migrating than healthy hosts, it is always the last hosts of the list moving thant will kill their parasites, reshufle the list moving instead? We can use "sample" to reshuffle randomly, to do
+		{
+			// figure out which host we are in
+			hostID = h.pedigreeID;
+
+			// Curent parasite population
+			parasiteSubpop = parasiteSubpops[parasiteSubpops.tag == hostID];
+			// parasites in the current host
+			parasites_current_host = parasiteSubpop.individuals;
+			// number of parasites in the current host :
+			nb_parasites = parasites_current_host.size();
+
+			// For all individuals on the concerned host, perform the migration depending on "migration_towards":
+			// 0 the parasite does not migrate (it is the parent individual), 1 it migrates towards a healthy host of genotype 1, 2 it migrates towards a host of genotype 2
+			for(p in parasiteSubpop.individuals)
+			{
+				// get the value of "migration_towards"
+				mig_towards = p.getValue("migration_towards");
+				if(mig_towards>0)
+				{
+
+					// ATTENTION MODIFIER: Comment gerer le stacking de mutations ici, si deux mutations stack au niveau du SNP, on a un troisieme allele! Recoder pour faire une mutation reverse a la place
+					//if(p1.individuals[p1.individuals.tag==0 & p1.individuals.age>0].size()>=1) // We want at least one non infected (and not newly born) host for the migration
+
+					// List of available hosts to consider for the migration of p: healty host, and with the correct genotype
+					Available_hosts = p1.individuals[p1.individuals.tag==0 & p1.individuals.genome1.countOfMutationsOfType(m4)==(mig_towards-1)];
+
+					// We want at least one host available for the migration to take place
+					if(Available_hosts.size()>0)
+					{
+						// choose a different host (non infected, and not a new host) and get its ID
+						newHost = sample(Available_hosts,1);
+						newHostID = newHost.pedigreeID;
+
+						// Create a subpop for the new host and move to it
+						newSubpop = parasite.addSubpop(parasite.tag, 0);
+						parasite.tag = parasite.tag + 1;
+						newSubpop.tag = newHostID;
+
+						newSubpop.takeMigrants(p);
+
+						// add this new host in the list of infected hosts
+						newHost.tag=1;
+						h.tag=h.tag-1;
+						infected = p1.individuals[p1.individuals.tag>=1];
+					}
+					else // If there is no non infected host available for the migration, we will remove the extra parasites
+					{
+						parasite.killIndividuals(p);
+						h.tag=h.tag-1;
+					}
+				}
+			}
+		}
+		// color infected hosts
+		infected.color = "blue";
+	}
+
+	// Check if some host still have more than one parasite: return an error
+	if (p1.individuals[p1.individuals.tag>1].size()>0)
+		stop("Error: More than one parasite per host");
+
+	////////////////////////// disease outcome: additionnal host mortality
+	// To build proper equations, without intermediate time steps between ticks, calculate death rates from the population size before the reproduction events
+	// However, allow new hosts to die: if we only allow parents to die, new hosts are not subject to selection, and it can lead to a limit case with the mortality of each host except the new each year, which will completely erase the selection (because of this immunity period)
+
+	parasiteSubpops = parasite.subpopulations;
+
+	nb_Healthy_H1 = sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4)==0); // Number of healthy hosts of genotype 1
+	nb_Healthy_H2 = sum(p1.individuals[p1.individuals.tag==0].genome1.countOfMutationsOfType(m4)); // Number of healthy hosts of genotype 2
+	nb_Infected_H1 = sum(p1.individuals[p1.individuals.tag>0].genome1.countOfMutationsOfType(m4)==0); // Number of infected hosts of genotype 2
+	nb_Infected_H2 = sum(p1.individuals[p1.individuals.tag>0].genome1.countOfMutationsOfType(m4)); // Number of infected hosts of genotype 2
+
+	nb_Healthy_death_H1 = asInteger(round(nb_Healthy_H1*d)); // Number of healthy hosts of genotype 1 that will die
+	nb_Healthy_death_H2 = asInteger(round(nb_Healthy_H2*d)); // Number of healthy hosts of genotype 2 that will die
+	// PROBLEME HERE: With one parasite left, it can never die, if d+D<0.5 because round(d+D)=0
+	nb_Infected_death_H1 = asInteger(round(nb_Infected_H1*(d+D))); // Number of infected hosts of genotype 1 that will die
+	nb_Infected_death_H2 = asInteger(round(nb_Infected_H2*(d+D))); // Number of infected hosts of genotype 2 that will die
+
+	//	// if only one parasite left, nb_Infected*(d+D) becomes the probability of death, stochasticity here
+	//	if(nb_Infected ==1)
+	//	{
+	//		P_death = d+D;
+	//		if (runif(1) < P_death)
+	//		{
+	//			nb_infected_host_death = 1;
+	//		}
+	//	}
+
+	healthyDead_H1 = sample(p1.individuals[p1.individuals.tag==0 & p1.individuals.genome1.countOfMutationsOfType(m4)==0],nb_Healthy_death_H1,replace=F);
+	healthyDead_H2 = sample(p1.individuals[p1.individuals.tag==0 & p1.individuals.genome1.countOfMutationsOfType(m4)>0],nb_Healthy_death_H2,replace=F);
+	infectedDead_H1 = sample(p1.individuals[p1.individuals.tag==1 & p1.individuals.genome1.countOfMutationsOfType(m4)==0],nb_Infected_death_H1,replace=F);
+	infectedDead_H2 = sample(p1.individuals[p1.individuals.tag==1 & p1.individuals.genome1.countOfMutationsOfType(m4)>0],nb_Infected_death_H2,replace=F);
+
+	for (h in c(healthyDead_H1,healthyDead_H2,infectedDead_H1,infectedDead_H2))
+	{
+		hostID = h.pedigreeID;
+		parasiteSubpop = parasiteSubpops[parasiteSubpops.tag == hostID];
+		// the host has died; kill it and its parasite
+		host.killIndividuals(h);
+		parasiteSubpop.removeSubpopulation();
+	}
+}
+
+// ticks all 100 late() {
+// Introduce one mutation in one host and one parasite individual at the selected locus at generation 100
+//	targetH = sample(p1.individuals.genome1,1);
+//	targetH.addNewDrawnMutation(m4, PositionSNP);
+//}
+
+//ticks all 150 late() {
+//	parasiteSubpops = parasite.subpopulations;
+//	allParasites = parasiteSubpops.individuals;
+//	targetP = sample(allParasites.genome1,1);
+//	targetP.addNewDrawnMutation(m2, PositionSNP);
+//}
+
+ticks all late() {
+
+	c = community.tick;
+
+	infected = p1.individuals[p1.individuals.tag>=1];
+//	if(infected.size()>0) // Co-GWAS analyses on Plink can only deal with infected hosts, export only VCF with infected hosts
+//	{
+//		if(p1.individuals.size()%2==1) // Impair population size
+//		{
+//			// outputVCF() requires an even number of individuals, sample all individuals except one
+//			sample_pop = sample(p1.individuals,p1.individuals.size()-1);
+//			sample_pop.genomes.outputVCF(simplifyNucleotides=T);
+//		}
+//		else // Pair population size
+//		{
+//			infected.genomes.outputVCF(filePath = paste("VCF_infected_host_",c,".txt", sep=""), simplifyNucleotides=T);
+//		}
+//	}
+//
+//	noninfected = p1.individuals[p1.individuals.tag==0];
+//	if(noninfected.size()>0) // Export non infected host genotypes for further ABC analyses
+//	{
+//		noninfected.genomes.outputVCF(filePath = paste("VCF_noninfected_host_",c,".txt", sep=""), simplifyNucleotides=T);
+//	}
+
+	parasiteSubpops = parasite.subpopulations;
+	allParasites = parasiteSubpops.individuals;
+
+//////////////////////////
+
+//	if(allParasites.size()>0){
+////		if(allParasites.size()%2==1) // Impair population size
+////		{
+////			// outputVCF() requires an even number of individuals, sample all individuals except one
+////			sample_pop = sample(allParasites,allParasites.size()-1);
+////			sample_pop.genomes.outputVCF(simplifyNucleotides=T);
+////		}
+////		else // Pair population size
+////		{
+//			allParasites.genomes.outputVCF(filePath = paste("VCF_parasite_",c,".txt", sep=""),simplifyNucleotides=T);
+////		}
+
+	}
+//	cat(paste(sim.mutations.position, sep="\n"));
+//	cat(paste(parasite.subpopulations, parasite.subpopulations.tag, sep="\n"));
+//	cat(paste(parasite.subpopulations.tag, sep="\n"));
+
+//	writeFile(filePath = paste("parasite_output_",c,".txt", sep=""), contents = paste("parasite_subop","\n",parasite.subpopulations, "\n","parasite_subpop_tag", "\n",parasite.subpopulations.tag, "\n","parasite_pedigree","\n", allParasites.pedigreeID, "\n","parasite_genome1_pedigree","\n", allParasites.genome1.genomePedigreeID));
+//	writeFile(filePath = paste("host_output_",c,".txt", sep=""), contents = paste("host_pedigree","\n",p1.individuals.pedigreeID, "\n","host_genome1_pedigree","\n", p1.individuals.genome1.genomePedigreeID));
+//}
+
+
+// Create a ScriptBlock called s1, that will end the simulation after "generations" ticks (it is rescheduled above to take "generations" into account) The value 100 here is not used but necessary to create the block
+ticks all s1 100 late() {
+}
