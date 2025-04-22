@@ -6,6 +6,7 @@
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
 
 
+
 We want to investigate the joint behaviour of genealogies in coevolving species of host-parasite interactions. Describing the dynamics of coevolution at the level of genomic coalescence trees, our aims is to better understand the sigantures coevolution leaves in the genomes of interacting species to improve inference of both functional, quantitative GxG interactions, as well as population genetic information such as demographic and reproductive life-histories of both species.\\
 
 *** *How can we describe the co-dependence of host and pathogen genealogies?*
