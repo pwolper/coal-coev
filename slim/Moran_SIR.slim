@@ -41,10 +41,10 @@ reproduction() {
 }
 
 1 first() {
-	sim.addSubpop("p1", 1000, haploid = T);
+	sim.addSubpop("p1", 100, haploid = T);
 	p1.individuals.tagF = asFloat(seqLen(p1.individualCount));
 	p1.individuals.tag = SUSCEPTIBLE;
-	//p1.individuals.color = colors(p1.individualCount, "turbo");
+	p1.individuals.color = colors(p1.individualCount, "turbo");
 	
 	defineGlobal('countS', rep(0, simTime));
 	defineGlobal('countI', rep(0, simTime));
