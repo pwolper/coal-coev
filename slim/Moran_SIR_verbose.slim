@@ -1,17 +1,14 @@
 // set up a simple neutral simulation
 initialize() {
 	initializeSLiMModelType("nonWF");
-	initializeSLiMOptions(keepPedigrees=T);
-	initializeTreeSeq();
-	initializeMutationRate(0);
-	initializeMutationType("m1", 0.5, "f", 0.0);
-	initializeGenomicElementType("g1", m1, 1.0);
-	initializeGenomicElement(g1, 0, 0);
-	initializeRecombinationRate(0);
-
-	defineConstant("simTime", 10000);
-	defineConstant("treeSeq", T);
-
+	//initializeMutationRate(0);
+	//initializeMutationType("m1", 0.5, "f", 0.0);
+	//initializeGenomicElementType("g1", m1, 1.0);
+	//initializeGenomicElement(g1, 0, 1);
+	//initializeRecombinationRate(0);
+	
+	defineConstant("simTime", 2000);
+	
 	defineConstant("SUSCEPTIBLE", 0);
 	defineConstant("RESISTANT", 1);
 	defineConstant("INFECTED", 2);
@@ -22,24 +19,29 @@ initialize() {
 	defineConstant("m_r", 0.05); //Mutation infected -> resistant
 	defineConstant("m_s", 0.05); //Mutation resistant -> suscpetible
 	defineConstant("m_i", 0.005); //Migration of infected individuals into system
+
 }
 
 
 reproduction() {
 	// Moran reproduction. Sample one individual to reproduce
+	catn("\n	-- reproduction --");
 	fitness = p1.cachedFitness(NULL);
+	catn("Cached Fitness at reproduction: ");
+	catn(fitness);
 	parent = sample(p1.individuals, 1, weights=fitness);
+	catn("Parent sampled: "+ asInteger(parent.tagF));
 	offspring = subpop.addCloned(parent);
 	offspring.tagF = parent.tagF;
 	offspring.tag = parent.tag;
 	offspring.color = parent.color;
 	self.active = 0;
 
+
 }
 
 1 first() {
-	defineConstant("simID", getSeed());
-	sim.addSubpop("p1", 100, haploid = T);
+	sim.addSubpop("p1", 1000, haploid = T);
 	p1.individuals.tagF = asFloat(seqLen(p1.individualCount));
 	p1.individuals.tag = SUSCEPTIBLE;
 	//p1.individuals.color = colors(p1.individualCount, "turbo");
@@ -50,9 +52,27 @@ reproduction() {
 
 }
 
-1: early() {
-	inds = p1.individuals;
+1: first() {
+	catn("\n\n---- Tick " + community.tick + " ----");
+	catn("Ind. IDs:");
+	catn(asInteger(p1.individuals.tagF));
+	catn("SIR status:");
+	catn(p1.individuals.tag);
+}
 
+1: early() {
+	catn("\n	-- early(): --");
+	catn("Ind. IDs:");
+	catn(asInteger(p1.individuals.tagF));
+	catn("SIR status:");
+	catn(p1.individuals.tag);
+	
+	
+	
+	inds = p1.individuals;
+	
+	catn("\n		-- Host modifications --");
+	
 	//Infection with rate c
 	for (ind in p1.individuals) {
 		if (runif(1) < c) {
@@ -60,7 +80,7 @@ reproduction() {
 			if (ind.tag == INFECTED | target.tag == INFECTED) {
 				if (ind.tag != RESISTANT) {ind.tag = INFECTED;}
 				if (target.tag != RESISTANT) {target.tag = INFECTED;}
-			}
+				catn("Infectious contact: " + asInteger(ind.tagF) + " and " + asInteger(target.tagF));}
 		}
 	}
 	
@@ -68,50 +88,88 @@ reproduction() {
 	for (infected in inds[inds.tag == INFECTED]) {
 		if (runif(1) < m_r) {
 			infected.tag = RESISTANT;
-		}
+			catn("Resistance mutation: " + asInteger(infected.tagF)); }
 	}
 	
 	//mutation R->S
 	for (resistant in inds[inds.tag == RESISTANT]) {
 		if (runif(1) < m_s) {
 			resistant.tag = SUSCEPTIBLE;
-		}
+			catn("Loss of resistance: " + asInteger(resistant.tagF)); }
 	}
 	
 	//migration infection S->I
 	for (susceptible in inds[inds.tag == SUSCEPTIBLE]) {
 		if (runif(1) < m_i) {
 			susceptible.tag = INFECTED;
-		}
+			catn("Infection introduced: " + asInteger(susceptible.tagF)); }
 	}
 	
+	
 	//fitness recalculations
+	catn("\n		-- fitnessScaling by SIR status --");
 	sus = inds[inds.tag == SUSCEPTIBLE];
 	res = inds[inds.tag == RESISTANT];
+	
 	sus.fitnessScaling = 1 + S_s;
 	res.fitnessScaling = 1 + S_r;
+	
+	catn("fitness scaling factors: ");
+	catn(p1.individuals.fitnessScaling);
 	fitness = p1.cachedFitness(NULL);
+	catn("fitness values: ");
+	catn(fitness);
+
 }
 
 1: late() {
+	catn("\n	-- late() --");
 	victim = sample(p1.individuals, 1);
+	catn("Victim chosen: " + asInteger(victim.tagF));
 	sim.killIndividuals(victim);
+	catn("Individual IDs:");
+	catn(asInteger(p1.individuals.tagF));
+	catn("SIR status:");
+	catn(p1.individuals.tag);
 	fitness = p1.cachedFitness(NULL);
-
-	//logging
+	catn("fitness values: ");
+	catn(fitness);
+	
+	//logging 
 	tags = p1.individuals.tag;
+	catn('Tags: ');
+	catn(tags);
+	
 	countS[sim.cycle-1] = sum(tags == SUSCEPTIBLE);
+	catn('N. Susceptible: ' + sum(tags == SUSCEPTIBLE));
+	
 	countR[sim.cycle-1] = sum(tags == RESISTANT);
+	catn('N. Resistant: ' + sum(tags == RESISTANT));
+	
 	countI[sim.cycle-1] = sum(tags == INFECTED);
+	catn('N. Infected: ' + sum(tags == INFECTED));
+}
+
+2 early() {
+	//initial resistance
+	//resistant = p1.sampleIndividuals(1, tag=SUSCEPTIBLE);
+	//resistant.tag = RESISTANT;
+	//catn("Resistance introduced in Individual " + asInteger(resistant.tagF));
+	
+	//initial infection
+	//infected = p1.sampleIndividuals(1, tag=SUSCEPTIBLE);
+	//infected.tag = INFECTED;
+	//catn("Infection introduced in Individual " + asInteger(infected.tagF));
+
 }
 
 simTime late() {
-	// catn(countS);
-	// catn(countI);
-	// catn(countR);
+	catn("\n---- end of sim ----");
+	catn("Surviving: ");
 	catn(asInteger(p1.individuals.tagF));
-
-	if (exists("slimgui")) {
+	catn("Status:");
+	catn(p1.individuals.tag);
+	
 	x = seqLen(simTime);
 	plot = slimgui.createPlot("SIR dynamics", xlab="Generation", ylab="Count", width=700, height=500);
 	plot.lines(x, countS, 'green');
@@ -121,12 +179,7 @@ simTime late() {
 	plot.legendLineEntry("susceptible", "green", lwd=2);
 	plot.legendLineEntry("infected", "red", lwd=2);
 	plot.legendLineEntry("resistant", "cornflowerblue", lwd=2);
-	}
+	
+	
 
-	if ("treeSeq") {
-		inds = sortBy(sim.subpopulations.individuals, "pedigreeID");
-		infectionDict = Dictionary("ID", inds.pedigreeID, "InfectionTags", inds.tag);
-		file = paste0("./trees/Moran_SIR_test.trees");
-		sim.treeSeqOutput(file, metadata=infectionDict);
-	}
 }
