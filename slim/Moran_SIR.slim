@@ -9,8 +9,10 @@ initialize() {
 	initializeGenomicElement(g1, 0, 0);
 	initializeRecombinationRate(0);
 
-	defineConstant("simTime", 10000);
-	defineConstant("treeSeq", T);
+	defineConstant("simTime", 200000);
+	defineConstant("treeSeq", F);
+
+	defineConstant("N", 3000);
 
 	defineConstant("SUSCEPTIBLE", 0);
 	defineConstant("RESISTANT", 1);
@@ -18,10 +20,10 @@ initialize() {
 	
 	defineConstant("S_s", 0.1); //Reproductive advantage of susceptible (vs. infected)
 	defineConstant("S_r", 0.05); //Reproductive advantage of resistant (vs. infected)
-	defineConstant("c", 0.05); //Individual contact rate
-	defineConstant("m_r", 0.05); //Mutation infected -> resistant
-	defineConstant("m_s", 0.05); //Mutation resistant -> suscpetible
-	defineConstant("m_i", 0.005); //Migration of infected individuals into system
+	defineConstant("c", 0.00); //Individual contact rate scale value by N?
+	defineConstant("m_r", 0.0); //Mutation infected -> resistant
+	defineConstant("m_s", 0.0); //Mutation resistant -> suscpetible
+	defineConstant("m_i", 0.0); //Migration of infected individuals into system default= 0.005
 }
 
 
@@ -39,7 +41,7 @@ reproduction() {
 
 1 first() {
 	defineConstant("simID", getSeed());
-	sim.addSubpop("p1", 100, haploid = T);
+	sim.addSubpop("p1", N, haploid = T);
 	p1.individuals.tagF = asFloat(seqLen(p1.individualCount));
 	p1.individuals.tag = SUSCEPTIBLE;
 	p1.individuals.color = colors(p1.individualCount, "turbo");
@@ -105,11 +107,25 @@ reproduction() {
 	countI[sim.cycle-1] = sum(tags == INFECTED);
 }
 
+1 early() {
+	//initial resistance
+	resistant = p1.sampleIndividuals(asInteger(N/3), tag=SUSCEPTIBLE);
+	resistant.tag = RESISTANT;
+	//catn("Resistance introduced in Individual " + asInteger(resistant.tagF));
+	
+	//initial infection
+	infected = p1.sampleIndividuals(asInteger(N/3), tag=SUSCEPTIBLE);
+	infected.tag = INFECTED;
+	//catn("Infection introduced in Individual " + asInteger(infected.tagF));
+
+}
+
 simTime late() {
 	// catn(countS);
 	// catn(countI);
 	// catn(countR);
 	catn(asInteger(p1.individuals.tagF));
+	catn(p1.individuals.tag);
 
 	if (exists("slimgui")) {
 	x = seqLen(simTime);
@@ -117,13 +133,13 @@ simTime late() {
 	plot.lines(x, countS, 'green');
 	plot.lines(x, countI, 'red');
 	plot.lines(x, countR, 'cornflowerblue');
-	plot.addLegend("topRight", inset=0, labelSize=13);
+	plot.addLegend("topLeft", inset=0, labelSize=13);
 	plot.legendLineEntry("susceptible", "green", lwd=2);
 	plot.legendLineEntry("infected", "red", lwd=2);
 	plot.legendLineEntry("resistant", "cornflowerblue", lwd=2);
 	}
 
-	if ("treeSeq") {
+	if ("treeSeq" == T) {
 		inds = sortBy(sim.subpopulations.individuals, "pedigreeID");
 		infectionDict = Dictionary("ID", inds.pedigreeID, "InfectionTags", inds.tag);
 		file = paste0("./trees/Moran_SIR_test.trees");

@@ -6,7 +6,6 @@
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
 
 
-
 We want to investigate the joint behaviour of genealogies in coevolving species of host-parasite interactions. Describing the dynamics of coevolution at the level of genomic coalescence trees, our aims is to better understand the sigantures coevolution leaves in the genomes of interacting species to improve inference of both functional, quantitative GxG interactions, as well as population genetic information such as demographic and reproductive life-histories of both species.\\
 
 ** Questions and Aims
@@ -27,6 +26,9 @@ Improving the accuracy of the co-GWAS and the ABC computations to predict genomi
 - Offspring distributions from epidemiologcal models: negative binomial ([[cite:&lloyd-smith-2005-super-effec]]) with the parameters $R_{0}$ and $k$.
 - [[cite:&li-2017-quant-trans]] show that the dispersion paramter of the epidemiological offspring distribution $k$ can be estimated from the pathogen phylogeny, using a formulation of of the Kingman coalescent with arbitrary offspring distributions ($N_{e} = N/\sigma^{2}$,[[cite:&koelle-2011-rates-coales]], [[cite:&fraser-2017-coales]]). How valid is this assumption for MMC?
 - Multifurcating skyline plot [[cite:&hoscheit-2019-multif-skylin-plot]] uses Beta-coalescent to infer the effective population size through time, and show that the estimation of \alpha correlates with the degree of superspreading $k$ in an epidemiological model. What is the direct connection between \alpha and $k$?
+- Pathogen genealogy inference framework from structured Markov processes (eg. SIR type stochastic models). Aaron King https://arxiv.org/abs/2405.17032#
+- From simulations of SIR we can follow genealogy of host, or analytically for pathogen too it we know the AISG (?). Is this useful in downstream analysis (eg. tskit? adding contact arrows, etc.). Is the intrisic presence of the pathogen in the R status of the SIR model enough to work with the pathogen genealogy, or would a two species model be more practical?
+- steady states of the SIR model might be reflected in heights of the coalescent trees pathogen/host? Metric from [[cite:&welch-2005-integ-geneal-epidem]]. Expected relative difference betwwen host and viral tree root age and Proportion in common between viral and host trees? Extend results of [[cite:&welch-2005-integ-geneal-epidem]] to resistant classes as well?
 
 * Further thoughts
 First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
