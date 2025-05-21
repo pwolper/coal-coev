@@ -9,10 +9,10 @@ initialize() {
 	initializeGenomicElement(g1, 0, 0);
 	initializeRecombinationRate(0);
 
-	defineConstant("simTime", 200000);
+	defineConstant("simTime", 20000);
 	defineConstant("treeSeq", F);
 
-	defineConstant("N", 3000);
+	defineConstant("N", 300);
 
 	defineConstant("SUSCEPTIBLE", 0);
 	defineConstant("RESISTANT", 1);
@@ -124,15 +124,42 @@ simTime late() {
 	// catn(countS);
 	// catn(countI);
 	// catn(countR);
-	catn(asInteger(p1.individuals.tagF));
-	catn(p1.individuals.tag);
+	inds = p1.individuals;
+	susceptibles = inds[inds.tag == SUSCEPTIBLE];
+	infected = inds[inds.tag == INFECTED];
+	resistant = inds[inds.tag == RESISTANT];
+	
+	catn("Susceptible:");
+	//catn(asInteger(susceptibles.tagF));
+	//catn(tabulate(asInteger(susceptibles.tagF)));
+	catn("Types: " + length(unique(asInteger(susceptibles.tagF))));
+	typeCounts = unique(tabulate(asInteger(susceptibles.tagF)));
+	catn("Type counts:");
+	catn(typeCounts[typeCounts != 0]); //remove 0 from tabulate
+	catn("\nInfected:");	
+	catn("Types: " + length(unique(asInteger(infected.tagF))));
+	typeCounts = unique(tabulate(asInteger(infected.tagF)));
+	catn("Type counts:");
+	catn(typeCounts[typeCounts != 0]); //remove 0 from tabulate
+	//catn(asInteger(infected.tagF));
+	catn("Resistant:");	
+	catn("Types: " + length(unique(asInteger(resistant.tagF))));
+	typeCounts = unique(tabulate(asInteger(resistant.tagF)));
+	catn("Type counts:");
+	catn(typeCounts[typeCounts != 0]); //remove 0 from tabulate	
+	//catn(asInteger(resistant.tagF));
+	
+	
+	//catn(asInteger(p1.individuals.tagF));
+	//catn(p1.individuals.tag);
+
 
 	if (exists("slimgui")) {
 	x = seqLen(simTime);
-	plot = slimgui.createPlot("SIR dynamics", xlab="Generation", ylab="Count", width=700, height=500);
-	plot.lines(x, countS, 'green');
-	plot.lines(x, countI, 'red');
-	plot.lines(x, countR, 'cornflowerblue');
+	plot = slimgui.createPlot("SIR dynamics", xlab="Generation", ylab="Frequency", width=700, height=500);
+	plot.lines(x, countS/N, 'green');
+	plot.lines(x, countI/N, 'red');
+	plot.lines(x, countR/N, 'cornflowerblue');
 	plot.addLegend("topLeft", inset=0, labelSize=13);
 	plot.legendLineEntry("susceptible", "green", lwd=2);
 	plot.legendLineEntry("infected", "red", lwd=2);
