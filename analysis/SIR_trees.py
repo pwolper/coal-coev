@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 
 from pyprojroot import here
-import tskit
+import tskit, pyslim
 import json
 
 ts = tskit.load(here("slim/trees/Moran_SIR_test.trees"))
 
+removed_vacant = pyslim.has_vacant_samples(ts)
+if removed_vacant:
+    ts = pyslim.remove_vacant(ts).simplify()
+
+
+
 valid_nodes = [node.id for node in ts.nodes() if node.metadata.get("is_vacant") == [0]]
 
 # Simplify the tree sequence with these nodes as samples
-ts = ts.simplify(samples=valid_nodes)
+#ts = ts.simplify(samples=valid_nodes, keep_input_roots=False)
+#ts = ts.simplify()
 
 # for tree in ts.trees():
 #     assert tree.num_roots == 1, 'Tree not coalesced!'
@@ -17,6 +24,7 @@ ts = ts.simplify(samples=valid_nodes)
 
 #print(ts)
 print(ts.draw_text())
+
 
 
 md = ts.metadata['SLiM']['user_metadata']
@@ -47,7 +55,7 @@ infected_nodes = filter_nodes(ts, infected)
 print(infected_nodes)
 ts_infected = ts.simplify(samples=infected_nodes)
 print(ts_infected)
-print(ts_infected.draw_text())
+#print(ts_infected.draw_text())
 
 
 
@@ -56,7 +64,7 @@ susceptible_nodes = filter_nodes(ts, susceptible)
 print(susceptible_nodes)
 ts_susceptible = ts.simplify(samples=susceptible_nodes)
 print(ts_susceptible)
-print(ts_susceptible.draw_text())
+#print(ts_susceptible.draw_text())
 
 
 print("Resistant: ")
@@ -64,7 +72,7 @@ resistant_nodes = filter_nodes(ts, resistant)
 print(resistant_nodes)
 ts_resistant = ts.simplify(samples=resistant_nodes)
 print(ts_resistant)
-print(ts_resistant.draw_text())
+#print(ts_resistant.draw_text())
 
 
 
@@ -80,6 +88,7 @@ def tmrca(ts):
         print(tmrca)
     return(tmrca)
 
+tmrcs_ts = tmrca(ts)
 tmrca_resistant = tmrca(ts_resistant)
 tmrca_susceptible = tmrca(ts_susceptible)
 tmrca_infected = tmrca(ts_infected)
