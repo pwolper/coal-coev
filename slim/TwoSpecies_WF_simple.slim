@@ -1,0 +1,92 @@
+// Keywords: multispecies, interaction
+
+species all initialize() {
+	initializeSLiMModelType("nonWF");
+	
+	defineConstant("N", 10);
+
+}
+
+species host initialize() {
+	initializeSpecies(avatar="🌾", color="green");
+	initializeSLiMOptions(keepPedigrees=T);
+	
+	initializeMutationType("m1", 0.5, "f", 0.0); //resistance mutation with no fitness cost yet
+	m1.color = "cornflowerblue";
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElement(g1, 0, 0);
+	initializeMutationRate(0);
+	initializeRecombinationRate(0);
+
+}
+species pathogen initialize() {
+	initializeSpecies(avatar="🦠", color="red");
+
+}
+
+
+species host reproduction() {
+	fitness = p1.cachedFitness(NULL);
+	parent = sample(p1.individuals, 1, weights=fitness);
+	offspring = subpop.addCloned(parent);
+	//offspring.tagF = parent.tagF;
+	offspring.tag = parent.tag;
+	offspring.color = parent.color;
+	self.active = 0;
+}
+
+species pathogen reproduction() {
+
+infected = p1.individuals[p1.individuals.tag == 1];
+catn(infected.pedigreeID);
+
+//add pathogen reproduction for infected individuals, and sample new host randomly? Could add contact model?
+
+}
+
+ticks all 1 early() {
+	
+	host.addSubpop("p1", N, haploid=T);
+	p1.individuals.tag = 0; //Infection status. 0 for healthy, 1 for infected
+
+
+}
+
+ticks all 2: late() {
+	victim = sample(p1.individuals, 1);
+	host.killIndividuals(victim);
+	fitness = p1.cachedFitness(NULL);
+}
+
+ticks all 5 first() {
+
+	//initial resistance
+	resistant = p1.sampleIndividuals(1);
+	resistant.haploidGenome1.addNewDrawnMutation(m1, 0);
+	resistant.color = "cornflowerblue";
+	
+ 	// set some type of tag to exclude the resistant individuals from infection	
+	
+	//initial infection
+	pathogen.addSubpop("p2", 1);
+	p2.individuals.color = "red";
+	
+	newHost = p1.sampleIndividuals(1, exclude=resistant); //choose host to be infected
+	newHost.tag = 1; newHost.color = "red";
+	catn(newHost.pedigreeID);	
+	
+	p2.individuals.tag = newHost.pedigreeID;
+	
+	//How to get pathogen to reproduce now? Contact events in pathogen reproduction callback? Or assign contact first and then loop over hosts in pathogen callback?
+}
+
+
+
+
+ticks all 1 early() {}
+
+//species host survival() {}
+//species parasitoid survival() {}
+
+ticks all 50 late() {
+}
