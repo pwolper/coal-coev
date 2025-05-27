@@ -38,6 +38,9 @@ Improving the accuracy of the co-GWAS and the ABC computations to predict genomi
 - model of contact between infected individuals?
 
 ** Signals of coevolution from co-dependent genealogies
+*** Hypothesis
+- Coalescent tree of pathogen, scales with the contact rate/ transmission rate? Show with equilibrium of host pathogen dynamics? Results of [[cite:&zivkovic-2019-neutr-genom]].
+*** Cophylogeny
 - Inspiration from cophylogentic methods:
   - https://www.cell.com/action/showPdf?pii=S0169-5347%2806%2900378-8
   - https://www.annualreviews.org/content/journals/10.1146/annurev-ecolsys-102320-112823
