@@ -3,8 +3,8 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	defineConstant("N", 100);
-	defineConstant("c", 0.1);
+	defineConstant("N", 50);
+	defineConstant("c", 1);
 
 }
 
@@ -29,6 +29,7 @@ species pathogen initialize() {
 species host reproduction() {
 	fitness = p1.cachedFitness(NULL);
 	parent = sample(p1.individuals, 1, weights=fitness);
+	catn("Reproducing host: " + parent.pedigreeID);
 	offspring = subpop.addCloned(parent);
 	//offspring.tagF = parent.tagF;
 	offspring.tag = parent.tag;
@@ -87,15 +88,16 @@ ticks all 1: first() {
 ticks all 1 first() {
 	
 	//initial resistance
-	resistant = p1.sampleIndividuals(1);
-	resistant.haploidGenome1.addNewDrawnMutation(m1, 0);
-	resistant.color = "cornflowerblue";
-	catn("Resistant host: " + resistant.pedigreeID);
+	//resistant = p1.sampleIndividuals(1);
+	//resistant.haploidGenome1.addNewDrawnMutation(m1, 0);
+	//resistant.color = "cornflowerblue";
+	//catn("Resistant host: " + resistant.pedigreeID);
 	
 	//initial infection
 	pathogen.addSubpop("p2", 1);
 	p2.individuals.color = "red";
-	newHost = p1.sampleIndividuals(1, exclude=resistant); //choose host to be infected
+	//newHost = p1.sampleIndividuals(1, exclude=resistant); //choose host to be infected
+	newHost = p1.sampleIndividuals(1);
 	newHost.tag = 1; newHost.color = "red";
 	catn("Initial infection in host " + newHost.pedigreeID);
 	p2.individuals.tag = newHost.pedigreeID; //tag pathogen with host.pedigreeID

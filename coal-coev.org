@@ -34,6 +34,14 @@ Improving the accuracy of the co-GWAS and the ABC computations to predict genomi
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
 
+** Considerations for the two Species model
+- how to handle fitness of infected vs. non-infected and resistant host types vs. susceptible host types.
+- How to incorporate the infection matrix to determine coevolutionary outcomes with multiple hosts.
+- Host reprodution, Moran vs Wf? and possible extension to variable population size? Host reproduction on the same time scale as parasite reproduction? More generally this relates to the timescale of host drift, pathogen drift and transmission.
+- Parasite reproduction with it's own genetic drift from failed infections? Or infections of resistant individuals?
+- Ensure model can form equilibrium as observed for SIR model classes or similar.
+
+
 ** Pathogen epidemic model
 - model of contact between infected individuals?
 
