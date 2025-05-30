@@ -35,11 +35,14 @@ Improving the accuracy of the co-GWAS and the ABC computations to predict genomi
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
 
 ** Pathogen epidemic model
-- model of contact between infected individuals?
+- model of contact between infected individuals? Horizontal and vertical transmission. How to add genetic drift of the pathogen to model?
 
-** Signals of coevolution from co-dependent genealogies
+** Patterns of coevolution in co-dependent genealogies
 *** Hypothesis
-- Coalescent tree of pathogen, scales with the contact rate/ transmission rate? Show with equilibrium of host pathogen dynamics? Results of [[cite:&zivkovic-2019-neutr-genom]].
+- Coalescent tree of pathogen, scales with the contact rate/ transmission rate? Show with equilibrium of host pathogen dynamics? Results of [[cite:&zivkovic-2019-neutr-genom]]. Coalescence in both genealogies is dependent on the relative time-scale of genetic drift in both the host and the pathogen?
+
+
+- add table for different cases of the model.
 *** Cophylogeny
 - Inspiration from cophylogentic methods:
   - https://www.cell.com/action/showPdf?pii=S0169-5347%2806%2900378-8
