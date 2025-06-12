@@ -39,11 +39,16 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 ** SIR host model
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
+** Continuous vs. discrete vs. semi discrete model
+- epidemiological (or ecological model) based on the SIR dynamics with epidemiological feedback. Polymorphisms can be reached 'easily', but requires strong epidemiological feedback and is unlikely to maintained over a long (evolutionary) time. Continuous differential equations of SIR models. Requires overlapping generations to allow infections.
+- evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)
+- combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]])
 
 ** Considerations for the two Species model
 - how to handle fitness of infected vs. non-infected and resistant host types vs. susceptible host types.
 - Ensure model can form equilibrium as observed for SIR model classes or similar.
 - Variable population sizes to follow coevolutionary dynamics.
+
 
 *** Horizontal vs. vertical transmission of pathogen
 - How are the genealogies coupled for these different transmission types? Degree of coupling depends on transmission rate?
@@ -68,7 +73,6 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
   - https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.12150
   - https://onlinelibrary.wiley.com/doi/full/10.1111/j.1420-9101.2007.01340.x
   - https://www.numericalecology.com/Reprints/ParaFit_paper.pdf
-
 
 
 * Further thoughts
