@@ -25,36 +25,36 @@ Improving the accuracy of the co-GWAS and the ABC computations to predict genomi
 Previous work has focused much on phylodynamic inference of trees/genealogies of pathogen sequences informed by a dynamic model of disease, such as SIR models (Volz? Rambaut?, etc.?) or linear birth-death processes (Stadler?). This type of analysis is generally focused on short to medium time-scales such as epidemic dynamics of pathogens with the goal of inferring epidemiological parameters from genomic sequences of pathogens. As the times scales are short, phylodynamics generally involves one type of pathogen and and a set of host types (i.e. susceptible, resistant).
 On the other hand, there is a large body of work on host-parasite coevolution, focusing more on the long-term evolutionary change of hosts and their parasite, due to reciprocal adaptation.
 
+Separation of literature on phylodynamics and of host-pathogen coevolution, even though both make use of models of disease epidemiology. Why? Phylodynamic-based models of coevolution could help with developing co-genomic perspective of coevolution? Why does the infection matrix disappear when moving to phylodynamics work at the epidemiological timescale? Both coevolutionary literature and phylogenetic epidemiology mainly start from differential equation of SI(R) host clases, which describe the parasite implicitly in the infected hosts. Explicit models of pathogen? What is the connection between the deterministic models of coevolution and the stochastic ones. Do we need stochastic models to describe the observed branching processes (genealogies) of host and pathogen?
 
-Separation of literature on phylodynamics and of host-pathogen coevolution, even though both make use of models of disease epidemiology. Why? Phylodynamic-based models of coevolution could help with developing co-genomic perspective of coevolution? Why does the infection matrix disappear when moving to phylodynamics work at the epidemiological timescale?
-** Connecting coalescent models to epidemiology
-- Offspring distributions from epidemiologcal models: negative binomial ([[cite:&lloyd-smith-2005-super-effec]]) with the parameters $R_{0}$ and $k$.
-- [[cite:&li-2017-quant-trans]] show that the dispersion paramter of the epidemiological offspring distribution $k$ can be estimated from the pathogen phylogeny, using a formulation of of the Kingman coalescent with arbitrary offspring distributions ($N_{e} = N/\sigma^{2}$,[[cite:&koelle-2011-rates-coales]], [[cite:&fraser-2017-coales]]). How valid is this assumption for MMC?
-- Multifurcating skyline plot [[cite:&hoscheit-2019-multif-skylin-plot]] uses Beta-coalescent to infer the effective population size through time, and show that the estimation of \alpha correlates with the degree of superspreading $k$ in an epidemiological model. What is the direct connection between \alpha and $k$?
-- Special Issue: *Next-generation molecular and evolutionary epidemiology of infectious disease*.  https://royalsocietypublishing.org/toc/rstb/368/1614
-- Pathogen genealogy inference framework from structured Markov processes (eg. SIR type stochastic models). Aaron King https://arxiv.org/abs/2405.17032#
-- From simulations of SIR we can follow genealogy of host, or analytically for pathogen too it we know the AISG (?). Is this useful in downstream analysis (eg. tskit? adding contact arrows, etc.). Is the intrisic presence of the pathogen in the R status of the SIR model enough to work with the pathogen genealogy, or would a two species model be more practical?
-- steady states of the SIR model might be reflected in heights of the coalescent trees pathogen/host? Metric from [[cite:&welch-2005-integ-geneal-epidem]]. Expected relative difference betwwen host and viral tree root age and Proportion in common between viral and host trees? Extend results of [[cite:&welch-2005-integ-geneal-epidem]] to resistant classes as well?
-
+** The models
+- models of coevolution at different levels (epidemiological, ecological and evolutionary) ([[cite:&macpherson-2021-feedb-between]])
 ** SIR host model
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
 
 ** Considerations for the two Species model
-- how to handle fitness of infected vs. non-infected and resistant host types vs. susceptible host types.
+- Stochastic individual-based implementation of co-evolutionary 'SIR' model ([[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]), with separated host, and parasite birth/death (coalescent) model.
+- Variable population sizes to follow coevolutionary dynamics ([[cite:&zivkovic-2019-neutr-genom]]).
+- Translating the deterministic host SI model of one coevolutionary "run" developed by [[cite:&zivkovic-2019-neutr-genom]] into a stochastic model of the host and pathogen lineages (both medium or long-term coevolution). How can the parameters of the model be incorporated in the SLiM forward in time model?
 - Ensure model can form equilibrium as observed for SIR model classes or similar.
-- Variable population sizes to follow coevolutionary dynamics.
+- how to handle fitness of infected vs. non-infected and resistant host types vs. susceptible host types.
 
 *** Horizontal vs. vertical transmission of pathogen
 - How are the genealogies coupled for these different transmission types? Degree of coupling depends on transmission rate?
 - *Hypothesis:* Vertical transmission, pathogen genealogy will mirror the topology of the host genealogy. Horizontal tranmission will lead to the topology being different, as the pathogen can jump between lineages.
+
 *** Timescales of reproduction
 - *Host vs. pathogen reproduction.* Degree of generation overlap (WF vs. Moran continuum)? Scaling of time (speed/tick modulo) in forward simulations? Genetic drift in host vs. pathogen?
 - *Pathogen reproduction vs. transmission.* Drift introduced by transmission? Generation of pathogen offspring seperated from transmission process?
 - *Host drift vs. pathogen transmission.* Lineage pathogen can be transmitted through the hos genelogy is influenced by the drift of the host.
 - Modelling host and pathogen fitness. Selection on viability or mortality of host/pathogen? Host: infection, cost of resistance. Pathogen: infectivity, cost of infectivity.
+
 *** Infection Matrix
 - Infection matrix to incorporate the specific architecture of coevolutionary interaction. Multiple types of pathogen. Allow recombination between different types.
+
+*** Recombination in parasite
+- see Lively, 2010 paper for a model of coevolution involving sex https://academic.oup.com/jeb/article-abstract/23/7/1490/7324449?redirectedFrom=fulltext
 
 ** Patterns of coevolution in co-dependent genealogies
 *** Hypothesis
@@ -70,6 +70,16 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
   - https://www.numericalecology.com/Reprints/ParaFit_paper.pdf
 
 
+
+** Further reading: Connecting coalescent models to epidemiology
+- Offspring distributions from epidemiologcal models: negative binomial ([[cite:&lloyd-smith-2005-super-effec]]) with the parameters $R_{0}$ and $k$.
+- [[cite:&li-2017-quant-trans]] show that the dispersion paramter of the epidemiological offspring distribution $k$ can be estimated from the pathogen phylogeny, using a formulation of of the Kingman coalescent with arbitrary offspring distributions ($N_{e} = N/\sigma^{2}$,[[cite:&koelle-2011-rates-coales]], [[cite:&fraser-2017-coales]]). How valid is this assumption for MMC?
+- Multifurcating skyline plot [[cite:&hoscheit-2019-multif-skylin-plot]] uses Beta-coalescent to infer the effective population size through time, and show that the estimation of \alpha correlates with the degree of superspreading $k$ in an epidemiological model. What is the direct connection between \alpha and $k$?
+- Special Issue: *Next-generation molecular and evolutionary epidemiology of infectious disease*.  https://royalsocietypublishing.org/toc/rstb/368/1614
+- Pathogen genealogy inference framework from structured Markov processes (eg. SIR type stochastic models). Aaron King https://arxiv.org/abs/2405.17032#
+- From simulations of SIR we can follow genealogy of host, or analytically for pathogen too it we know the AISG (?). Is this useful in downstream analysis (eg. tskit? adding contact arrows, etc.). Is the intrisic presence of the pathogen in the R status of the SIR model enough to work with the pathogen genealogy, or would a two species model be more practical?
+- steady states of the SIR model might be reflected in heights of the coalescent trees pathogen/host? Metric from [[cite:&welch-2005-integ-geneal-epidem]]. Expected relative difference betwwen host and viral tree root age and Proportion in common between viral and host trees? Extend results of [[cite:&welch-2005-integ-geneal-epidem]] to resistant classes as well?
+- e3SIM generate SLiM code from SIR models? Can we use our dynamic coevolution model for this?  https://jaeheekimlab.github.io/pdfs/papers/2024-xu-episim.pdf
 
 * Further thoughts
 First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
