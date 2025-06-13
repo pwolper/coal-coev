@@ -32,6 +32,10 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 ** SIR host model
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
+** Continuous vs. discrete vs. semi discrete model
+- epidemiological (or ecological model) based on the SIR dynamics with epidemiological feedback. Polymorphisms can be reached 'easily', but requires strong epidemiological feedback and is unlikely to maintained over a long (evolutionary) time. Continuous differential equations of SIR models. Requires overlapping generations to allow infections.
+- evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)
+- combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]])
 
 ** Considerations for the two Species model
 - Stochastic individual-based implementation of co-evolutionary 'SIR' model ([[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]), with separated host, and parasite birth/death (coalescent) model.
@@ -39,6 +43,7 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - Translating the deterministic host SI model of one coevolutionary "run" developed by [[cite:&zivkovic-2019-neutr-genom]] into a stochastic model of the host and pathogen lineages (both medium or long-term coevolution). How can the parameters of the model be incorporated in the SLiM forward in time model?
 - Ensure model can form equilibrium as observed for SIR model classes or similar.
 - how to handle fitness of infected vs. non-infected and resistant host types vs. susceptible host types.
+
 
 *** Horizontal vs. vertical transmission of pathogen
 - How are the genealogies coupled for these different transmission types? Degree of coupling depends on transmission rate?
@@ -70,6 +75,7 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
   - https://www.numericalecology.com/Reprints/ParaFit_paper.pdf
 
 
+<<<<<<< HEAD
 
 ** Further reading: Connecting coalescent models to epidemiology
 - Offspring distributions from epidemiologcal models: negative binomial ([[cite:&lloyd-smith-2005-super-effec]]) with the parameters $R_{0}$ and $k$.
@@ -81,6 +87,8 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - steady states of the SIR model might be reflected in heights of the coalescent trees pathogen/host? Metric from [[cite:&welch-2005-integ-geneal-epidem]]. Expected relative difference betwwen host and viral tree root age and Proportion in common between viral and host trees? Extend results of [[cite:&welch-2005-integ-geneal-epidem]] to resistant classes as well?
 - e3SIM generate SLiM code from SIR models? Can we use our dynamic coevolution model for this?  https://jaeheekimlab.github.io/pdfs/papers/2024-xu-episim.pdf
 
+=======
+>>>>>>> 46f00adab1f7533013da6660717017dafe025594
 * Further thoughts
 First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
 
