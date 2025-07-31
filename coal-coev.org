@@ -55,6 +55,7 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - *Pathogen reproduction vs. transmission.* Drift introduced by transmission? Generation of pathogen offspring seperated from transmission process?
 - *Host drift vs. pathogen transmission.* Lineage pathogen can be transmitted through the host genelogy is influenced by the drift of the host.
 - Modelling host and pathogen fitness. Selection on viability or mortality of host/pathogen? Host: infection, cost of resistance. Pathogen: infectivity, cost of infectivity.
+- Pathogen genetic drift requires within-host pathogen reproduction?
 
 *** Infection Matrix
 - Infection matrix to incorporate the specific architecture of coevolutionary interaction. Multiple types of pathogen. Allow recombination between different types.
@@ -64,7 +65,7 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 
 ** Patterns of coevolution in co-dependent genealogies
 *** Hypothesis
-- Coalescent tree of pathogen, scales with the contact rate/ transmission rate? Show with equilibrium of host pathogen dynamics? Results of [[cite:&zivkovic-2019-neutr-genom]]. Coalescence in both genealogies is dependent on the relative time-scale of genetic drift in both the host and the pathogen?
+- Coalescent tree of pathogen, scales with the contact rate/transmission rate? Show with equilibrium of host pathogen dynamics? Results of [[cite:&zivkovic-2019-neutr-genom]]. Coalescence in both genealogies is dependent on the relative time-scale of genetic drift in both the host and the pathogen?
 - add table for different cases of host-pathogen models. (eg. vertical/horizontal transmission, timescale of host vs. pathogen, etc.)
 *** Co-phylogeny
 - Inspiration from co-phylogentic methods:
