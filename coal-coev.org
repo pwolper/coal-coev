@@ -34,7 +34,8 @@ This might require coalescents other than Kingman's coalescent. Depending on lif
 Measure of correlations between genealogies between species should be able to predict the interaction matrix of a genome-genome interaction? Do different types of coalescent models fit to different scoevolutionary scenarios (eg. multiple merger to arms race, etc.)? Do different types co-dependent coalescent signatures fit to different co-evolutionary scenarios such as GFG/MA and how do they differ from the neutral case. Can we connect the epidemiological parameters of a pathogen to it's reproductive Canning's model/coalescent parameters? How do we choose coalescent model to use then? How do such coalescent behaviour reflect back on the epidemiologcal process of the pathogen?
 
 *** How can this work be used improve co-evolutionary inference?
-Improving the accuracy of the co-GWAS and the ABC computations to predict genomic regions of interactions? Extension of ABC statistics? We are looking to understand the genomic signatures of co-evolution from a comprehensive (tree-based) perspective, to improve existing inference of GxG interactions. Can we learn anything new about co-evolutionary interaction at the genomic level in the process? How can the coalescent-driven description of host-pathogen genealogies improve epidemiological modelling of diseases (eg. inferring more accurate reproductive parameters or dating transmission chains)?
+Improving the accuracy of the co-GWAS and the ABC computations to predict genomic regions of interactions? Extension of ABC statistics? We are looking to understand the genomic signatures of co-evolution from a comprehensive (tree-based) perspective, to improve existing inference of GxG interactions. Can we learn anything new about co-evolutionary interaction at the genomic level in the process? How can the coalescent-driven description of host-pathogen genealogies improve epidemiological modelling of diseases (eg. inferring more accurate reproductive parameters or dating transmission chains)? Can we infer coevolutionary parameters from the paired ARGs inferred using published methods of ARG inference?
+
 ** Relevance
 Previous work has focused much on phylodynamic inference of trees/genealogies of pathogen sequences informed by a dynamic model of disease, such as SIR models (Volz? Rambaut?, etc.?) or linear birth-death processes (Stadler?). This type of analysis is generally focused on short to medium time-scales such as epidemic dynamics of pathogens with the goal of inferring epidemiological parameters from genomic sequences of pathogens. As the times scales are short, phylodynamics generally involves one type of pathogen and and a set of host types (i.e. susceptible, resistant).
 On the other hand, there is a large body of work on host-parasite coevolution, focusing more on the long-term evolutionary change of hosts and their parasite, due to reciprocal adaptation.
@@ -63,6 +64,7 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - How are the genealogies coupled for these different transmission types? Degree of coupling depends on transmission rate?
 - *Hypothesis:* Vertical transmission, pathogen genealogy will mirror the topology of the host genealogy. Horizontal tranmission will lead to the topology being different, as the pathogen can jump between lineages.
 
+<<<<<<< HEAD
 *** Life-cycle dependence?
 How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such as clonal bacterial infection or more independent, such as a population of body lice? This will determines a limit of how closely the pathogen genealogy follows that of the host?
 
@@ -72,6 +74,12 @@ How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such 
 
 - *Host transmission.* Horizontal transmission events acts as a main source of genetic drift in the pathogen genealogy, if transmission is less likely, drift acts to remove pathogen lineage regardless of their fitness. Horizontal transmission is driven in two parts by: (1) transmission rate of the pathogen, determined by it's genetics (and in interaction with the genotype of the host) and (2), there is an inherent stochastic process to the transmission, that likely is non-negleglible. Another driver of genetic drift in pathogen genealogies results from vertical transmission, where the genealogy is coupled to the host ancestry, again including a stochastic component of transmission from one generation to the next.
 
+=======
+*** Timescales of reproduction
+- *Host vs. pathogen reproduction.* Degree of generation overlap (WF vs. Moran continuum)? Scaling of time (speed/tick modulo) in forward simulations? Genetic drift in host vs. pathogen?
+- *Pathogen reproduction vs. transmission.* Drift introduced by transmission? Generation of pathogen offspring seperated from transmission process?
+- *Host drift vs. pathogen transmission.* Lineage pathogen can be transmitted through the host genelogy is influenced by the drift of the host.
+>>>>>>> 5361e43e19fa75155acf204c5aba59cc246d64a2
 - Modelling host and pathogen fitness. Selection on viability or mortality of host/pathogen? Host: infection, cost of resistance. Pathogen: infectivity, cost of infectivity.
 - Pathogen genetic drift requires within-host pathogen reproduction?
 
@@ -85,8 +93,8 @@ How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such 
 *** Hypothesis
 - Coalescent tree of pathogen, scales with the contact rate/transmission rate? Show with equilibrium of host pathogen dynamics? Results of [[cite:&zivkovic-2019-neutr-genom]]. Coalescence in both genealogies is dependent on the relative time-scale of genetic drift in both the host and the pathogen?
 - add table for different cases of host-pathogen models. (eg. vertical/horizontal transmission, timescale of host vs. pathogen, etc.)
-*** Cophylogeny
-- Inspiration from cophylogentic methods:
+*** Co-phylogeny
+- Inspiration from co-phylogentic methods:
   - https://www.cell.com/action/showPdf?pii=S0169-5347%2806%2900378-8
   - https://www.annualreviews.org/content/journals/10.1146/annurev-ecolsys-102320-112823
   - https://academic.oup.com/cz/article/62/4/393/1745416?login=false
