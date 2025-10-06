@@ -56,6 +56,7 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - epidemiological (or ecological model) based on the SIR dynamics with epidemiological feedback. Polymorphisms can be reached 'easily', but requires strong epidemiological feedback and is unlikely to maintained over a long (evolutionary) time. Continuous differential equations of SIR models. Requires overlapping generations to allow infections.
 - evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2006-stabil-genet]]
 - combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]).
+  
 
 ** Considerations for the two Species model
 - Stochastic individual-based implementation of co-evolutionary 'SIR' model ([[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]), with separated host, and parasite birth/death (coalescent) model.
