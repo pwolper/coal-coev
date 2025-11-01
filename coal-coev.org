@@ -6,86 +6,94 @@
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
 
 
-** Draft proposal
+
 The work considered for this PhD consists of three parts, that build upon each other:
 
-(I) a theoretical part aiming to understand coevolution at the level of evolutionary trees and tree sequences (i.e. genomes);
+(I) a theoretical part investigating and collecting knowledge of coevolutionary dynamics at the level of evolutionary trees and tree sequences (i.e. genomes); We aim to understand coevolutionary interaction from the level of genomes, and genealogies, particularly with emphasis on incorporating recombination, natural selection in both the host and parasite and life-history traits of the host pathogen interaction. This will be followed and linked to the next part,
 
-followed by part (II),  which aims to collect and characterize statistical measures and signatures of coevolutionary interactions leave in the genome (particularly with emphasis incorporating recombination, natural selection and life-history).
+(II),  which aims to establish and characterize statistical measures and signatures of coevolutionary interactions, based on the properties and signatures described in (I). We aim to leverage signatures found in coupled coalescent trees, in which samples host are linked to pathogen samples. 
 
 Finally we aim to appy the knowledge detailed in (I) and (II) to part (III) to gain understanding of coevolution in plant-pathogen systems, focusing on developing an integrated co-GWAS framework considering (?) biological and experimental attributes of the studied system, barley and it's fungal pathogens, /Fusarium/ and /Ramularia/.
 
-We anticipate that this work will improve our understanding of the coevolutionary interactions from several perspectives including the genetic perspective (i.e. interacting genes, GxG), an epidemiological/population-ecological perspective (i.e. to characterize disease in both temporal and spatial dimension) and an evolutionary perspective (i.e. understanding observed genomic patterns in coevolutionary species complexes).
+We anticipate that this work will improve our understanding of the coevolutionary interactions from several perspectives including the genetic perspective (i.e. interacting genes, GxG), an epidemiological/ population-ecological perspective (i.e. to characterize disease spread in both temporal and spatial dimension) and an evolutionary perspective (i.e. understanding observed genomic patterns in coevolutionary species complexes).
 
-*** Questions
+** Questions
 We want to investigate the joint behaviour of genealogies in coevolving species of host-parasite interactions. Describing the dynamics of coevolution at the level of genomic coalescence trees, our aims is to better understand the sigantures coevolution leaves in the genomes of interacting species to improve inference of both functional, quantitative GxG interactions, as well as population genetic information such as demographic and reproductive life-histories of both species.\\
-**** How can we describe the co-dependence of host and pathogen genealogies?
-As we know the pairings of hosts and pathogens (through time), can find a measure of correlations between the 'aligned' host and pathogen genealogies?  Above average appearance of host and parasite types together in pairwise nodes of the co-dependent genealogies? How will different statistical measures of the trees (eg. TMRCA and tree topology) be correlated in various co-evolutionary scenarios?  Relative importance of TMRCA vs. topology? Significant deviations from neutral 'co-evolutionary' signatures between indicate co-evolution (what does 'neutral' co-evolution mean?). The 'neutral' co-evolutionary model needs account for neutrality, linkage disequilibrium, life-history traits as well as demographic history.
+*** How can we describe the co-dependence of host and pathogen genealogies?
+As we know the pairings of hosts and pathogens (through time), can find a measure of correlations between the 'aligned' host and pathogen genealogies?  Above average appearance of host and parasite types together in pairwise nodes of the co-dependent genealogies? How will different statistical measures of the trees (eg. TMRCA and tree topology) be correlated in various co-evolutionary scenarios?  Relative importance of TMRCA vs. topology? Significant deviations from neutral 'co-evolutionary' signatures between indicate co-evolution (what does 'neutral' co-evolution mean?). The 'neutral' co-evolutionary model needs account for neutrality, linkage disequilibrium, life-history traits as well as demographic history. 
 
-**** Coalescent models used need to be descriptive of the co-evolutionary dynamics at play.
-This might require coalescents other than Kingman's coalescent. Depending on life-history the host and pathogen might require different reproductive models, which give rise to the sample genealogy. For example, Wright-Fisher reproduction in host (or neutral agricultural sowing scheme) and sweepstakes reproduction in pathogens? Comparison of coalescent trees should be independent of coalescent model used to construct the sample genealogy, so to give freedom to model life-history and epidemiology. What role does the chosen epidemiological model have on the coalescent process used? Significance of multiple-merger coalescent in the spread of disease and epidemiological descriptions (see work on multifurcating skyline plot, [[cite:&hoscheit-2019-multif-skylin-plot]])? Can we connect the model of co-evolution to the multiple merger dynamics of skewed pathogen offspring distributions?  What is the relation of the forward (eg. disease dynamics) and backwards models (host and pathogen coalescents)? What information does the model of disease dynamics hold towards to description of coalescent genealogies of hosts and parasites?
+*** What models of genealogies best describe the coevolutionary dynamics between hosts and pathogens?
+Coalescent models used need to be descriptive of the co-evolutionary dynamics at play. This might require coalescents other than Kingman's coalescent. Depending on life-history the host and pathogen might require different reproductive models, which give rise to the sample genealogy. For example, Wright-Fisher reproduction in host (or neutral agricultural sowing scheme) and sweepstakes reproduction in pathogens? Coalescent trees used to construct the sample genealogy should give freedom to model life-history and epidemiology. What role does the chosen epidemiological model have on the coalescent process used? Various different coalecent models connected to epidemiological processes, such as [[cite:&fraser-2017-coales]], add omega coalescent). What about the significance of multiple-merger coalescent in the spread of disease and epidemiological descriptions (see work on multifurcating skyline plot, [[cite:&hoscheit-2019-multif-skylin-plot]])? Depending on life-history and disease dynamics, are multiple merger coalescent models necessary to capture skewed pathogen offspring distributions?  What is the relation of the forward (eg. disease dynamics) and backwards models (host and pathogen coalescents)? What information does the model of disease dynamics hold towards to description of coalescent genealogies of hosts and parasites?
 
-**** Can co-dependent genealogies predict the interaction matrix of a genome-genome interaction?
+*** Can co-dependent genealogies predict the interaction matrix of a genome-genome interaction?
 Measure of correlations between genealogies between species should be able to predict the interaction matrix of a genome-genome interaction? Do different types of coalescent models fit to different scoevolutionary scenarios (eg. multiple merger to arms race, etc.)? Do different types co-dependent coalescent signatures fit to different co-evolutionary scenarios such as GFG/MA and how do they differ from the neutral case. Can we connect the epidemiological parameters of a pathogen to it's reproductive Canning's model/coalescent parameters? How do we choose coalescent model to use then? How do such coalescent behaviour reflect back on the epidemiologcal process of the pathogen?
 
-**** How can this work be used improve co-evolutionary inference?
+*** How can this work be used improve co-evolutionary inference?
 Improving the accuracy of the co-GWAS and the ABC computations to predict genomic regions of interactions? Extension of ABC statistics? We are looking to understand the genomic signatures of co-evolution from a comprehensive (tree-based) perspective, to improve existing inference of GxG interactions. Can we learn anything new about co-evolutionary interaction at the genomic level in the process? How can the coalescent-driven description of host-pathogen genealogies improve epidemiological modelling of diseases (eg. inferring more accurate reproductive parameters or dating transmission chains)? Can we infer coevolutionary parameters from the paired ARGs inferred using published methods of ARG inference?
 
-*** Aims
-*We propose the following approach:*
-- Building a scalable model of antagonistically interacting species, such as host-pathogen models to model and simulate the joint properties of host-parasite genealogies. This model will integrate evolutionary, ecolological, immunological and epidemiological assumptions and processes on an individual-based level.
-- To develop an intuition about the impacts left by epidemiological and co-evolutionary processes on the host and parasite genealogy under simple and more realistic models of interaction.
-- To show the utility of joint host-pathogen genealogies for infering the properties of the host-parasite interaction. This might include epidemiological parameters, along the lines of phylodynamic inference (eg. R_{0}, the historical disease demography), or the inference of coevolutionary parameters, such as resistance, infectivity (alleles allowing infection) and the shape of the infection matrix.
-- To use joint host-pathogen data to gain understanding about the our barley-fungus system and the epidemiology and coevolutionary process that shape(d) it. This part aims to use state-of-the-art inference methods to infer the ancestral recombination graph (ARG) along the genome of both host and pathogen pairs, and compare data to pairs of ARGs generated through simualations of coevolutionary/epidemiological models. This parts also aims to understand the biases left by violations of the classical population genetic theory by more complex models of antagonistic interaction, and how these bias ARG inference methods.
-- To use our findings to improve existing methods such as co-GWAS or ABC methods, aiming to infer the coevolutionary interaction and epidemiological parameters. From our coalescent-based approach, we aim to find new statistics of the coupled coalescent tree sequences, which provide more statistical power to distinguish different models of coevolution from each other.
+** Aims
+We propose the following approach:
+
+Building a scalable model of antagonistically interacting species, such as host-pathogen models to model and simulate the joint properties of host-parasite genealogies. This model will integrate evolutionary, ecolological, immunological and epidemiological assumptions and processes on an individual-based level.
+
+To develop an intuition about the impacts left by epidemiological and co-evolutionary processes on the host and parasite genealogy under simple and more realistic models of interaction.
+
+To show the utility of joint host-pathogen genealogies for infering the properties of the host-parasite interaction. This might include epidemiological parameters, along the lines of phylodynamic inference (eg. R_{0}, the historical disease demography), or the inference of coevolutionary parameters, such as resistance, infectivity (alleles allowing infection) and the shape of the infection matrix.
+
+To use joint host-pathogen data to gain understanding about the our barley-fungus system and the epidemiology and coevolutionary process that shape(d) it. This part aims to use state-of-the-art inference methods to infer the ancestral recombination graph (ARG) along the genome of both host and pathogen pairs, and compare data to pairs of ARGs generated through simualations of coevolutionary/epidemiological models. This parts also aims to understand the biases left by violations of the classical population genetic theory by more complex models of antagonistic interaction, and how these bias ARG inference methods.
+
+To use our findings to improve existing methods such as co-GWAS or ABC methods, aiming to infer the coevolutionary interaction and epidemiological parameters. From our coalescent-based approach, we aim to find new statistics of the coupled coalescent tree sequences, which provide more statistical power to distinguish different models of coevolution from each other.
 
 After investigating the theoretical aspects of coevolution and epidemic dynamical models in context of host pathogen coalescent and sample trees, we will focus our efforts on developing a realistic model of fungel crop pathogen evolution in a temporal and spatial manner, useful for inferring epidemiological and coevolutionary parameters from sequencing data collected from crops.
 
-** Relevance
+* Introduction
+*** Life-cycle and transmission dynamics affect the coevolutionary dynamics between host and pathogens
+How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such as clonal bacterial infection or more independent, such as a population of body lice? This will determines a limit of how closely the pathogen genealogy follows that of the host?
+
+*Time scale of host vs. pathogen reproduction.* Degree of generation overlap (WF vs. Moran continuum)? Scaling of time (speed/tick modulo) in forward simulations? Genetic drift in host vs. pathogen? How many pathogen generation per host generation determines the 'speed of evolution' a pathogen can have compared to the host. 
+
+*Pathogen reproduction vs. transmission.* Drift introduced by transmission? Generation of pathogen offspring seperated from transmission process? Such as with intra-host evolution of bacteria. Intra-host evolution with strong immune selection, influence the 'neutral' process bacteria observe. The scale of reproduction events per transmission event determines how separated the pathogen reproduction is from the host transmission tree. Significant within-host evolution and competition can drive coalescent events in the pathogen genealogy, that are not caused by transmission events. 
+
+*Host transmission* Transmission events of pathogens between their hosts act as a main source of genetic drift in the pathogen population. This is due to transmission being a stochastic process, even highly fit pathogen lineages can be removed from the population if the rate of transmission is too low. The transmission is driven by both the transmission rate of the pathogen - determined by it's genetics (and in interaction with the genotype of the host) - and the spatial infection process between hosts, which gives rise to transmission network, considerably relevant in case where infection requires close contact events.  
+  
+*Horizontal vs. vertical transmission of pathogen*:  How are the genealogies coupled for these different transmission types? Degree of coupling depends on transmission rate? *Hypothesis:* Vertical transmission, pathogen genealogy will mirror the topology of the host genealogy. Horizontal tranmission will lead to the topology being different, as the pathogen can jump between lineages.
+
+*** Phylodynamics inference
+The ancestral relationships or genealogies of a individuals, populations or species at all different levels can be described by different kinds of stochastic branching processes, such as those describing birth-death processes, coalescent trees or species phylogenies. The inference of genealogical trees for genomes and species has made considerable strides in the last decade, with powerful Bayesian coalescent methods (eg. SMC, SINGER, tsinfer) to infer coalescent tree (-sequences), and a maturing toolkit to analyze and manipulate genome tree data (eg. tskit, msprime) has arisen.
+Similarly, phylodynamic methods have been developed, that allow for estimation of epidemiological parameters, such as R_{0}, under a given phylogenic tree. The important assumption here is, that the genealogical tree connecting the samples has been generated by an epidemiological process, or other stochastic population model. Commonly used in phylodynamics are the coalescent and birth-death models ([[cite:&featherstone-2022-epidem-infer]]). Phylodynamics therefore links epidemiological models, based on dynamics of host compartments, such as susceptible, infected and recovered, with evolutionary models, that give rise to an observed phylogeny of samples. Assuming, that the pathogen is transmitted horizontally between individuals following the dynamics of an underlying epidemiological model, and transmission events correspond to branching events in the phylogeny, we can derive epidemiological properties, such as growth and/or transmission rates, from the demography obtained from tree priors, such as the coalescent with exponential growth. This works, because $N_{e}(t)$ under the coalescent depends on disease prevalance (number of infected individuals), as well as the transmission rates, as has been shown by  [[cite:&frost-2010-viral-phylod]]. Simply put, phylodynamics provides an interface between evolutionary models of genealogies of a sample of pathogens and the epidemiological model giving rise to this observed phylogeny. The theoretical basis of phylodynamics is continuously being expanded upon, with generalized coalescent models more accurately derived for epidemiological dynamics (*cite omega-coalescent paper*) and the ability to obtain phylodynamics likelihood functions from a broad range of compartmental models ([[cite:&king-2024-exact-phylod]]).
+
+* Relevance
 Previous work has focused much on phylodynamic inference of trees/genealogies of pathogen sequences informed by a dynamic model of disease, such as SIR models (Volz? Rambaut?, etc.?) or linear birth-death processes (Stadler?). This type of analysis is generally focused on short to medium time-scales such as epidemic dynamics of pathogens with the goal of inferring epidemiological parameters from genomic sequences of pathogens. As the times scales are short, phylodynamics generally involves one type of pathogen and and a set of host types (i.e. susceptible, resistant).
 On the other hand, there is a large body of work on host-parasite coevolution, focusing more on the long-term evolutionary change of hosts and their parasite, due to reciprocal adaptation.
 
 Separation of literature on phylodynamics and of host-pathogen coevolution, even though both make use of models of disease epidemiology. Why? Phylodynamic-based models of coevolution could help with developing co-genomic perspective of coevolution? Why does the infection matrix disappear when moving to phylodynamics work at the epidemiological timescale? Both coevolutionary literature and phylogenetic epidemiology mainly start from differential equation of SI(R) host clases, which describe the parasite implicitly in the infected hosts. Explicit models of pathogen? What is the connection between the deterministic models of coevolution and the stochastic ones. Do we need stochastic models to describe the observed branching processes (genealogies) of host and pathogen?
 
-** The models
+* The models
 - models of coevolution at different levels (epidemiological, ecological and evolutionary) ([[cite:&macpherson-2021-feedb-between]])
 - classical coevolution model used by [[cite:&zivkovic-2019-neutr-genom]],[[cite:&boots-2014-how-specif]],
 - discrete, evolutionary model such as [[cite:&tellier-2007-polym-multil]]
-*** SIR host model
+** SIR host model
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
-*** Continuous vs. discrete vs. semi discrete model
+** Continuous vs. discrete vs. semi discrete model
 - epidemiological (or ecological model) based on the SIR dynamics with epidemiological feedback. Polymorphisms can be reached 'easily', but requires strong epidemiological feedback and is unlikely to maintained over a long (evolutionary) time. Continuous differential equations of SIR models. Requires overlapping generations to allow infections.
-- evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2006-stabil-genet]]
-- combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]).
+- evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2006-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
+  - combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
   
-*** Considerations for the two Species model
+** Considerations for the two Species model
 - Stochastic individual-based implementation of co-evolutionary 'SIR' model ([[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]), with separated host, and parasite birth/death (coalescent) model.
 - Variable population sizes to follow coevolutionary dynamics ([[cite:&zivkovic-2019-neutr-genom]]).
 - Translating the deterministic host SI model of one coevolutionary "run" developed by [[cite:&zivkovic-2019-neutr-genom]] into a stochastic model of the host and pathogen lineages (both medium or long-term coevolution). How can the parameters of the model be incorporated in the SLiM forward in time model?
 - Ensure model can form equilibrium as observed for SIR model classes or similar.
 - how to handle fitness of infected vs. non-infected and resistant host types vs. susceptible host types.
 
-**** Horizontal vs. vertical transmission of pathogen
-- How are the genealogies coupled for these different transmission types? Degree of coupling depends on transmission rate?
-- *Hypothesis:* Vertical transmission, pathogen genealogy will mirror the topology of the host genealogy. Horizontal tranmission will lead to the topology being different, as the pathogen can jump between lineages.
-
-**** Life-cycle dependence?
-How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such as clonal bacterial infection or more independent, such as a population of body lice? This will determines a limit of how closely the pathogen genealogy follows that of the host?
-
-- *Time scale of host vs. pathogen reproduction.* Degree of generation overlap (WF vs. Moran continuum)? Scaling of time (speed/tick modulo) in forward simulations? Genetic drift in host vs. pathogen?
-
-- *Pathogen reproduction vs. transmission.* Drift introduced by transmission? Generation of pathogen offspring seperated from transmission process? Such as with intra-host evolution of bacteria. Intra-host evolution with strong immune selection, influence the 'neutral' process bacteria observe. The scale of reproduction events per transmission event determines how separated the pathogen reproduction is from the host transmission tree.
-
-- *Host transmission.* Horizontal transmission events acts as a main source of genetic drift in the pathogen genealogy, if transmission is less likely, drift acts to remove pathogen lineage regardless of their fitness. Horizontal transmission is driven in two parts by: (1) transmission rate of the pathogen, determined by it's genetics (and in interaction with the genotype of the host) and (2), there is an inherent stochastic process to the transmission, that likely is non-negleglible. Another driver of genetic drift in pathogen genealogies results from vertical transmission, where the genealogy is coupled to the host ancestry, again including a stochastic component of transmission from one generation to the next.
-
 - Modelling host and pathogen fitness. Selection on viability or mortality of host/pathogen? Host: infection, cost of resistance. Pathogen: infectivity, cost of infectivity.
-- Pathogen genetic drift requires within-host pathogen reproduction?
+- Pathogen genetic drift requires within-host pathogen reproduction or stochastic transmission modell
 
-**** Infection Matrix
+*** Infection Matrix
 - Infection matrix to incorporate the specific architecture of coevolutionary interaction. Multiple types of pathogen. Allow recombination between different types.
 
-**** Recombination in parasite
+*** Recombination in parasite
 - see Lively, 2010 paper for a model of coevolution involving sex https://academic.oup.com/jeb/article-abstract/23/7/1490/7324449?redirectedFrom=fulltext
 
 ** Patterns of coevolution in co-dependent genealogies
@@ -102,11 +110,6 @@ How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such 
   - https://www.numericalecology.com/Reprints/ParaFit_paper.pdf
 
 ** Further reading: Connecting coalescent models to epidemiology
-*** Phylodynamics inference
-The ancestral relationships or genealogies of a individuals, populations or species at all different levels can be described by different kinds of stochastic branching processes, such as those describing birth-death processes, coalescent trees or species phylogenies. The inference of genealogical trees for genomes and species has made considerable strides in the last decade, with powerful Bayesian coalescent methods (eg. SMC, SINGER, tsinfer) to infer coalescent tree (-sequences), and a maturing toolkit to analyze and manipulate genome tree data (eg. tskit, msprime) has arisen.
-Similarly, phylodynamic methods have been developed, that allow for estimation of epidemiological parameters, such as R_{0}, under a given phylogenic tree. The important assumption here is, that the genealogical tree connecting the samples has been generated by an epidemiological process, or other stochastic population model. Commonly used in phylodynamics are the coalescent and birth-death models ([[cite:&featherstone-2022-epidem-infer]]). Phylodynamics therefore links epidemiological models, based on dynamics of host compartments, such as susceptible, infected and recovered, with evolutionary models, that give rise to an observed phylogeny of samples. Assuming, that the pathogen is transmitted horizontally between individuals following the dynamics of an underlying epidemiological model, and transmission events correspond to branching events in the phylogeny, we can derive epidemiological properties, such as growth and/or transmission rates, from the demography obtained from tree priors, such as the coalescent with exponential growth. This works, because $N_{e}(t)$ under the coalescent depends on disease prevalance (number of infected individuals), as well as the transmission rates, as has been shown by  [[cite:&frost-2010-viral-phylod]]. Simply put, phylodynamics provides an interface between evolutionary models of genealogies of a sample of pathogens and the epidemiological model giving rise to this observed phylogeny. The theoretical basis of phylodynamics is continuously being expanded upon, with generalized coalescent models more accurately derived for epidemiological dynamics (*cite omega-coalescent paper*) and the ability to obtain phylodynamics likelihood functions from a broad range of compartmental models ([[cite:&king-2024-exact-phylod]]).
-
-*** Ideas and further considerations
 - Offspring distributions from epidemiologcal models: negative binomial ([[cite:&lloyd-smith-2005-super-effec]]) with the parameters $R_{0}$ and $k$.
 - [[cite:&li-2017-quant-trans]] show that the dispersion paramter of the epidemiological offspring distribution $k$ can be estimated from the pathogen phylogeny, using a formulation of of the Kingman coalescent with arbitrary offspring distributions ($N_{e} = N/\sigma^{2}$,[[cite:&koelle-2011-rates-coales]], [[cite:&fraser-2017-coales]]). How valid is this assumption for MMC?
 - Multifurcating skyline plot [[cite:&hoscheit-2019-multif-skylin-plot]] uses Beta-coalescent to infer the effective population size through time, and show that the estimation of \alpha correlates with the degree of superspreading $k$ in an epidemiological model. What is the direct connection between \alpha and $k$?
@@ -116,9 +119,9 @@ Similarly, phylodynamic methods have been developed, that allow for estimation o
 - steady states of the SIR model might be reflected in heights of the coalescent trees pathogen/host? Metric from [[cite:&welch-2005-integ-geneal-epidem]]. Expected relative difference betwwen host and viral tree root age and Proportion in common between viral and host trees? Extend results of [[cite:&welch-2005-integ-geneal-epidem]] to resistant classes as well?
 - e3SIM generate SLiM code from SIR models? Can we use our dynamic coevolution model for this?  https://jaeheekimlab.github.io/pdfs/papers/2024-xu-episim.pdf
 
-$$R_{0} = rD + 1 $$
-
-* Further thoughts
+* Further thoughts :noexport:
 First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
 
+
+* Bibliography
 [[printbibliography:]]
