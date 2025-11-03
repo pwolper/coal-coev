@@ -1,12 +1,13 @@
 #+title: Inferring coevolutionary interaction from a coalescent perspective
-#+author: Philip L. Wolper
-
 #+setupfile: ~/.doom.d/setup-files/latex.setup
-#+OPTIONS: toc:nil num:nil date:nil
+#+OPTIONS: toc:nil author:nil
+
+#+LATEX_HEADER: \author[1]{Philip L. Wolper}
+#+LATEX_HEADER: \affil[1]{Chair of Population Genetics, Technical University of Munich, Germany}
+
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
 
-
-
+* Research Outline
 The work considered for this PhD consists of three parts, that build upon each other:
 
 (I) a theoretical part investigating and collecting knowledge of coevolutionary dynamics at the level of evolutionary trees and tree sequences (i.e. genomes); We aim to understand coevolutionary interaction from the level of genomes, and genealogies, particularly with emphasis on incorporating recombination, natural selection in both the host and parasite and life-history traits of the host pathogen interaction. This will be followed and linked to the next part,
@@ -31,23 +32,23 @@ Measure of correlations between genealogies between species should be able to pr
 *** How can this work be used improve co-evolutionary inference?
 Improving the accuracy of the co-GWAS and the ABC computations to predict genomic regions of interactions? Extension of ABC statistics? We are looking to understand the genomic signatures of co-evolution from a comprehensive (tree-based) perspective, to improve existing inference of GxG interactions. Can we learn anything new about co-evolutionary interaction at the genomic level in the process? How can the coalescent-driven description of host-pathogen genealogies improve epidemiological modelling of diseases (eg. inferring more accurate reproductive parameters or dating transmission chains)? Can we infer coevolutionary parameters from the paired ARGs inferred using published methods of ARG inference?
 
-** Aims
+** Approach
 We propose the following approach:
 
-Building a scalable model of antagonistically interacting species, such as host-pathogen models to model and simulate the joint properties of host-parasite genealogies. This model will integrate evolutionary, ecolological, immunological and epidemiological assumptions and processes on an individual-based level.
+1. Building a scalable model of antagonistically interacting species, such as host-pathogen models to model and simulate the joint properties of host-parasite genealogies. This model will integrate evolutionary, ecolological, immunological and epidemiological assumptions and processes on an individual-based level.
 
-To develop an intuition about the impacts left by epidemiological and co-evolutionary processes on the host and parasite genealogy under simple and more realistic models of interaction.
+2. To develop an intuition about the impacts left by epidemiological and co-evolutionary processes on the host and parasite genealogy under simple and more realistic models of interaction.
 
-To show the utility of joint host-pathogen genealogies for infering the properties of the host-parasite interaction. This might include epidemiological parameters, along the lines of phylodynamic inference (eg. R_{0}, the historical disease demography), or the inference of coevolutionary parameters, such as resistance, infectivity (alleles allowing infection) and the shape of the infection matrix.
+3. To show the utility of joint host-pathogen genealogies for infering the properties of the host-parasite interaction. This might include epidemiological parameters, along the lines of phylodynamic inference (eg. R_{0}, the historical disease demography), or the inference of coevolutionary parameters, such as resistance, infectivity (alleles allowing infection) and the shape of the infection matrix.
 
-To use joint host-pathogen data to gain understanding about the our barley-fungus system and the epidemiology and coevolutionary process that shape(d) it. This part aims to use state-of-the-art inference methods to infer the ancestral recombination graph (ARG) along the genome of both host and pathogen pairs, and compare data to pairs of ARGs generated through simualations of coevolutionary/epidemiological models. This parts also aims to understand the biases left by violations of the classical population genetic theory by more complex models of antagonistic interaction, and how these bias ARG inference methods.
+4. To use joint host-pathogen data to gain understanding about the our barley-fungus system and the epidemiology and coevolutionary process that shape(d) it. This part aims to use state-of-the-art inference methods to infer the ancestral recombination graph (ARG) along the genome of both host and pathogen pairs, and compare data to pairs of ARGs generated through simualations of coevolutionary/epidemiological models. This parts also aims to understand the biases left by violations of the classical population genetic theory by more complex models of antagonistic interaction, and how these bias ARG inference methods.
 
-To use our findings to improve existing methods such as co-GWAS or ABC methods, aiming to infer the coevolutionary interaction and epidemiological parameters. From our coalescent-based approach, we aim to find new statistics of the coupled coalescent tree sequences, which provide more statistical power to distinguish different models of coevolution from each other.
+5. To use our findings to improve existing methods such as co-GWAS or ABC methods, aiming to infer the coevolutionary interaction and epidemiological parameters. From our coalescent-based approach, we aim to find new statistics of the coupled coalescent tree sequences, which provide more statistical power to distinguish different models of coevolution from each other.
 
-After investigating the theoretical aspects of coevolution and epidemic dynamical models in context of host pathogen coalescent and sample trees, we will focus our efforts on developing a realistic model of fungel crop pathogen evolution in a temporal and spatial manner, useful for inferring epidemiological and coevolutionary parameters from sequencing data collected from crops.
+6. After investigating the theoretical aspects of coevolution and epidemic dynamical models in context of host pathogen coalescent and sample trees, we will focus our efforts on developing a realistic model of fungel crop pathogen evolution in a temporal and spatial manner, useful for inferring epidemiological and coevolutionary parameters from sequencing data collected from crops.
 
 * Introduction
-*** Life-cycle and transmission dynamics affect the coevolutionary dynamics between host and pathogens
+** Life-cycle and transmission dynamics affect the coevolutionary dynamics between host and pathogens
 How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such as clonal bacterial infection or more independent, such as a population of body lice? This will determines a limit of how closely the pathogen genealogy follows that of the host?
 
 *Time scale of host vs. pathogen reproduction.* Degree of generation overlap (WF vs. Moran continuum)? Scaling of time (speed/tick modulo) in forward simulations? Genetic drift in host vs. pathogen? How many pathogen generation per host generation determines the 'speed of evolution' a pathogen can have compared to the host. 
@@ -58,7 +59,7 @@ How co-dependent is the pathogen life-cycle on the host? Extreme coupling, such 
   
 *Horizontal vs. vertical transmission of pathogen*:  How are the genealogies coupled for these different transmission types? Degree of coupling depends on transmission rate? *Hypothesis:* Vertical transmission, pathogen genealogy will mirror the topology of the host genealogy. Horizontal tranmission will lead to the topology being different, as the pathogen can jump between lineages.
 
-*** Phylodynamics inference
+** Phylodynamics inference
 The ancestral relationships or genealogies of a individuals, populations or species at all different levels can be described by different kinds of stochastic branching processes, such as those describing birth-death processes, coalescent trees or species phylogenies. The inference of genealogical trees for genomes and species has made considerable strides in the last decade, with powerful Bayesian coalescent methods (eg. SMC, SINGER, tsinfer) to infer coalescent tree (-sequences), and a maturing toolkit to analyze and manipulate genome tree data (eg. tskit, msprime) has arisen.
 Similarly, phylodynamic methods have been developed, that allow for estimation of epidemiological parameters, such as R_{0}, under a given phylogenic tree. The important assumption here is, that the genealogical tree connecting the samples has been generated by an epidemiological process, or other stochastic population model. Commonly used in phylodynamics are the coalescent and birth-death models ([[cite:&featherstone-2022-epidem-infer]]). Phylodynamics therefore links epidemiological models, based on dynamics of host compartments, such as susceptible, infected and recovered, with evolutionary models, that give rise to an observed phylogeny of samples. Assuming, that the pathogen is transmitted horizontally between individuals following the dynamics of an underlying epidemiological model, and transmission events correspond to branching events in the phylogeny, we can derive epidemiological properties, such as growth and/or transmission rates, from the demography obtained from tree priors, such as the coalescent with exponential growth. This works, because $N_{e}(t)$ under the coalescent depends on disease prevalance (number of infected individuals), as well as the transmission rates, as has been shown by  [[cite:&frost-2010-viral-phylod]]. Simply put, phylodynamics provides an interface between evolutionary models of genealogies of a sample of pathogens and the epidemiological model giving rise to this observed phylogeny. The theoretical basis of phylodynamics is continuously being expanded upon, with generalized coalescent models more accurately derived for epidemiological dynamics (*cite omega-coalescent paper*) and the ability to obtain phylodynamics likelihood functions from a broad range of compartmental models ([[cite:&king-2024-exact-phylod]]).
 
