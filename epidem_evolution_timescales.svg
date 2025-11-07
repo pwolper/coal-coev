@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="297mm"
+   height="210mm"
+   viewBox="0 0 297 210"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="epidem_evolution_timescales.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.0973349"
+     inkscape:cx="583.23125"
+     inkscape:cy="223.72386"
+     inkscape:window-width="1920"
+     inkscape:window-height="1032"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient13695">
+      <stop
+         style="stop-color:#bdcde1;stop-opacity:1;"
+         offset="0"
+         id="stop13691" />
+      <stop
+         style="stop-color:#d7e8d0;stop-opacity:1;"
+         offset="1"
+         id="stop13693" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1970">
+      <stop
+         style="stop-color:#2c7bb6;stop-opacity:0.49803922;"
+         offset="0.5"
+         id="stop8515" />
+      <stop
+         style="stop-color:#2c7bb6;stop-opacity:0;"
+         offset="1"
+         id="stop1988" />
+    </linearGradient>
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.3244081"
+       markerHeight="6.155385"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient13695"
+       id="linearGradient13697"
+       x1="15.073922"
+       y1="64.263939"
+       x2="258.46066"
+       y2="150.00627"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,0.52916663)" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter26726"
+       x="-0.019793024"
+       y="-0.056614438"
+       width="1.039586"
+       height="1.1132289">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.0261663"
+         id="feGaussianBlur26728" />
+    </filter>
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2">
+    <rect
+       style="opacity:0.68473451;mix-blend-mode:normal;fill:url(#linearGradient13697);fill-opacity:1;stroke:none;stroke-width:0.600001;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter26726)"
+       id="rect1941"
+       width="245.68246"
+       height="85.893265"
+       x="14.000651"
+       y="63.945099" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000;stroke-width:1.065;stroke:#000000;stroke-dasharray:none;marker-end:url(#TriangleStart)"
+       d="M 14.137656,149.6495 H 256.93398"
+       id="path165" />
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87778px;font-family:KaTeX_Math;-inkscape-font-specification:'KaTeX_Math, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       x="259.20001"
+       y="161.44807"
+       id="text1223"><tspan
+         sodipodi:role="line"
+         id="tspan1421"
+         x="259.20001"
+         y="161.44807">t</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:KaTeX_Main;-inkscape-font-specification:'KaTeX_Main, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       x="231.01161"
+       y="61.35355"
+       id="text1731"><tspan
+         sodipodi:role="line"
+         id="tspan1729"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:KaTeX_Main;-inkscape-font-specification:'KaTeX_Main, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0"
+         x="231.01161"
+         y="61.35355">Evolution</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;font-family:KaTeX_Main;-inkscape-font-specification:'KaTeX_Main, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       x="16.965025"
+       y="60.824383"
+       id="text1731-7"><tspan
+         sodipodi:role="line"
+         id="tspan1766"
+         x="16.965025"
+         y="60.824383">Epidemiology</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:KaTeX_Main;-inkscape-font-specification:'KaTeX_Main, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       x="27.06772"
+       y="80.852745"
+       id="text1731-7-1"><tspan
+         sodipodi:role="line"
+         id="tspan28023"
+         x="27.06772"
+         y="80.852745">transmission </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:KaTeX_Main;-inkscape-font-specification:'KaTeX_Main, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:#000000;stroke-width:0;stroke-dasharray:none"
+       x="33.479836"
+       y="93.89267"
+       id="text1731-7-1-1"><tspan
+         sodipodi:role="line"
+         id="tspan28023-0"
+         x="33.479836"
+         y="93.89267">transmission </tspan></text>
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:0.6;stroke-dasharray:1.2, 3.6;stroke-dashoffset:0"
+       d="M 88.304807,63.748409 V 148.48131"
+       id="path1822" />
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:0.6;stroke-dasharray:1.2, 3.6;stroke-dashoffset:0"
+       d="M 175.17405,63.748409 V 148.48131"
+       id="path1822-4" />
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:0.611402;stroke-dasharray:none;stroke-dashoffset:0"
+       d="m 14.137656,63.924381 c 244.133114,0 244.133114,0 244.133114,0"
+       id="path1851" />
+  </g>
+</svg>
