@@ -51,7 +51,7 @@ We propose the following approach:
 ** Time and spatial scales determine the lense we look at things through
 Figure [[host-pathogen-scales]] shows the spatial and temporal time scales that investigations into host-pathogen interactions can deal with.
 #+name: host-pathogen-scales
-#+caption: Scales of host-pathogen interactions. Add references of figures.
+#+caption: Scales of host-pathogen interactions. A) Epidemic dynamics of disease transmission and spread within a field. Adapted from [[cite:&luz-2010-model-trans]], [[cite:&kuehnert-2011-phylog-epidem]]. B) Metapopulation dynamics between fields. C) Coevolutionary interactions between hosts and pathogens drive the dynamics of their allele frequencies. Adapted from [[cite:&tellier-2021-theor-host]], [[cite:&zivkovic-2019-neutr-genom]], [[cite:&vienne-2013-cospec-vs]] and [[cite:&woolhouse-2002-biolog-biomed]]. D) Long-term coevolution between host and pathogen can lead to accosiations in their species phylogenies. Adapted from [[cite:&ebert-2020-host]] and [[cite:&dismukes-2022-cophy-method]]. Additional icons have been taken from [[https://biorender.com]]. 
 #+attr_latex: :width \textwidth :center t :placement [h]
 [[~/org/talks/useful_figures/Coevolution_vs_Phylodynamics.png]]
 
