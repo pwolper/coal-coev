@@ -131,6 +131,11 @@ First, we need a basic model to describe the interaction of host and pathogen ge
 * BarleyCOPA meeting, 2025: Research overview
 ** TODO add presentation outline
 - process-based models
+** ARG-based GWAS
+[[cite:&rebollo-2025-lever]]
+
+1. Controlling for genetic relatedness in Genome-wide association studies (GWAS)
+
 
 * Bibliography
 [[printbibliography:]]
