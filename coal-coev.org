@@ -1,4 +1,4 @@
-#+title: Inferring coevolutionary interaction from a coalescent perspective
+#+title: Coevolutionary trees: Using tree-based models to understand host-pathogen interactions
 #+setupfile: ~/.doom.d/setup-files/latex.setup
 #+OPTIONS: toc:nil author:nil
 
@@ -7,7 +7,7 @@
 
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
 
-* Research Outline
+* Research Outline :noexport:
 The work considered for this PhD consists of three parts, that build upon each other:
 
 (I) a theoretical part investigating and collecting knowledge of coevolutionary dynamics at the level of evolutionary trees and tree sequences (i.e. genomes); We aim to understand coevolutionary interaction from the level of genomes, and genealogies, particularly with emphasis on incorporating recombination, natural selection in both the host and parasite and life-history traits of the host pathogen interaction. This will be followed and linked to the next part,
@@ -47,7 +47,7 @@ We propose the following approach:
 
 6. After investigating the theoretical aspects of coevolution and epidemic dynamical models in context of host pathogen coalescent and sample trees, we will focus our efforts on developing a realistic model of fungel crop pathogen evolution in a temporal and spatial manner, useful for inferring epidemiological and coevolutionary parameters from sequencing data collected from crops.
 
-* Introduction
+* Introduction :noexport:
 ** Time and spatial scales determine the lense we look at things through
 Figure [[host-pathogen-scales]] shows the spatial and temporal time scales that investigations into host-pathogen interactions can deal with.
 #+name: host-pathogen-scales
@@ -128,13 +128,28 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 
 * Further thoughts :noexport:
 First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
-* BarleyCOPA meeting, 2025: Research overview
-** TODO add presentation outline
-- process-based models
+* BarleyCOPA meeting, 2025: Research overview :noexport:
 ** ARG-based GWAS
 [[cite:&rebollo-2025-lever]]
 
 1. Controlling for genetic relatedness in Genome-wide association studies (GWAS)
+
+Branch based-relationship matrix (BRM) - [[cite:&lehmann-2025-args]], [[cite:&fan-2022-geneal-estim]]
+* 1st TAC meeting, January 2026
+_Underlying goal_:
+1. To connecting genealogical structures to (co-)evolutionary and epidemiological processes, by considering the reproductive processes of the host and pathogens and the infection process that connects them.
+2. To develop a framework of coupled host-pathogen genealogies from paired samples.
+3. To use ARGs of hosts and pathogens to improve existing joint genomic inference (eg. genome-to-genome, co-GWAS)
+
+_Questions about coevolutionary trees_:
+- How do properties of coevolutionary dynamics affect joint genome evolution in host and pathogens from an tree-based perspective? (eg. infection matrix, horizontal vs. vertical transmission, cost of infection/resistance, co-infection, generation times).
+- Can we recover / infer above parameters of the coevolutionary system from the knowledge of the joint ARGs, considering biases to ARG inference by model violations?
+
+_Questions about pathogen ARGs_:
+- Can we use reconstructed pathogen ARGs to conduct phylodynamic inference and gain insights in to pathogen transmission properties. Relevant for barley-crop pahogens: Characterizing dispersal and population structures between fields (epidemic within field probably not resolved enough). Also the question of recombination between and within strains/species of Fusarium.
+
+_Questions about GxG inference_:
+- Can host and pathogen ARGs be used to represent the evolutionary histories of our samples and imporve the inference power of genome-to-genome methods. (Similar to how ARGs can improve GWAS ([[cite:&rebollo-2025-lever]]))?
 
 
 * Bibliography
