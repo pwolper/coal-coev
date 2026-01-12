@@ -1,5 +1,5 @@
-#+title: Understanding host-pathogen interactions and (co-)evolution through coalescent genealogies and ancestral recombination graphs
-#+subtitle: Linking epidemiological dynamics, (co-)evolution and genomic ancestry of host-pathogen interactions
+#+title: Understanding host-pathogen interactions and (co)evolution through coalescent genealogies and ancestral recombination graphs
+#+subtitle: Linking epidemiological dynamics, (co)evolution and genomic ancestry of host-pathogen interactions
 #+setupfile: ~/.doom.d/setup-files/latex.setup
 #+OPTIONS: toc:nil author:nil
 
@@ -10,23 +10,17 @@
 
 #+LATEX_HEADER: \usepackage{tabularx}
 
+* Introduction
+Host-pathogen coevolutionary systems are shaped by a complex interplay of epidemiological, ecological and evolutionary processes. Disease transmission, recovery and population dynamics of hosts and pathogens interact with mutation, selection, recombination and genetic drift to generate feedbacks that operate across  multiple timescales. Understanding how these processes jointly shape genomic variation and the evolutionary history of populations remains a central challenge for the fields of coevolution and molecular epidemiology, and requires theoretical frameworks that can integrate short-term epidemiological dynamics with long-term evolutionary processes.
+
 * Background and Motivation
-** Epidemiology and (co-)evolution aross timescales
-Epidemiological (eco-evolutionary) models vs. coevolutionary models. Why is it important to combine both epidemiological and evolutionary scales?
+** Epidemiology and (co-)evolution across timescales
+Epidemiological and evolutionary processes act on different (but overlapping) timescales, and are tightly linked in coevolving host-pathogen systems. The processes related to epidemiology (such as transmission, infection and recovery) typically operate on short timescales, shaping the population dynamics of infectious disease. On the other hand, evolutionary processes (such as mutation, recombination, selection and geentic drift) act on longer timescales and determine the evolutionary history of host and pathogen lineages over time. Importantly, these processes do not act independently from each other, as there is significant feedback between evolution and epidemiology: Epidemiological dynamics influence the evolution of hosts and pathogens, while evolutionary change can shape future epidemic processes. Figure [[epi-evo-timescales]] shows how different processes shape both the epidemiology and evolution and how they interact with each other. 
 
-- Epidemiological processes (transmission, recovery, bottlenecks) act on short timescales
-- Evolutionary processes (selection, recombination, drift) shape long-term genealogies
+When designing models it is especially important to keep in mind the difference between both approaches.
+Epidemiological approaches alone miss things like selection for host and pathogen types and their genomic evolution including mutation and recombination. On the other hand, evolutionary models (without epidemiological dynamics) do not account for population dynamics and disease ecology, which arising from a disease transmission and other types of pathogen reproduction.
 
-Both epidemiological (or more general ecological dynamics) influence evolutionary outcomes, as does evolution shape future epidemic processes. 
-
-- Epidemiological approaches alone misses things like selection for host and pathogen types and their genomic evolution including mutation and recombination.
-- Evolutionary models - without epidemiological dynamics - do not account for population dynamics and disease ecology, which arising from a disease transmission and other types of pathogen reproduction. 
-  
-What is the special role of reproduction, infection and recombination in both epidemiology and evolution?
-- Infection = reproduction for pathogens
-- Transmission bottlenecks = strong drift + selection filters
-- Recombination = decouples loci → breaks tree-based assumptions
-This will later justify ARGs over trees.
+At a more fundamental level, in host–pathogen systems, epidemiological and evolutionary processes are highly dependent on each other, because transmission in an epidemiological setting is equivalent to the reproduction of the pathogen in an evolutionary model: infection events define the branching structure of the pathogen genealogies, while host infection outcomes determine the population dynamics giving rise to host evolution (i.e. host reproductive success and survival).  Transmission bottlenecks are a strong generator of genetic drift and selection and epidemiological structure (eg. spatial contact structure) reflect population structure in population genetic contexts. Finally, recombination between pathogen lineages is only possible if distinct pathogen genotypes co-occur in an infected host, requiring the consideration of co-infection dynamics. The correspondence between epidemiological processes and evolutionary processes implies that both epidemiology and evolutionary processes will be encoded in the ancestral genealogical history of host and pathogens. Patterns of ancestry, such as the timing and shape of genealogies, distributions of common ancestors and linkage along the genome, contain information about transmission dynamics, host-pathogen interactions and coevolutionary history. As a result, genealogies offer a framework in which short-term infection dynamics and long-term evolutionary change can be studied jointly.
 
 #+name: epi-evo-timescales
 #+caption: Processes shaping epidemiology and evolution of hosts and pathogen and their relevance across different time and spatial scales. 
@@ -35,47 +29,51 @@ This will later justify ARGs over trees.
 
 # #+attr_latex: :heigth 1.1\pageheight  :float sideways :center t :placement [h]
 ** Phylodynamics: connecting epidemiology and genealogies
-Phylodynamics has been sucessful in linking trees and genealogies to epidemiological processes (cite?). This sucess lies in a theoretical foundation, that links tree branching models (such as the coalescent or birth-death processes) to a wide range of common epidemiological compartmental models. This has allowed backwards inference of epidemiological dynamics of observed pathogen genealogies through likelihood- or simulation-based inference methods (eg. ABC), and can be readily applied to data, such as viral or bacterial sequences (cite?).
+Phylodynamics has been sucessful in linking trees and genealogies to epidemiological processes ([[cite:&featherstone-2022-epidem-infer]]). This sucess lies in a theoretical foundation, that links tree branching models (such as the coalescent or birth-death processes) to a wide range of common epidemiological compartmental models. It has allowed backwards inference of epidemiological dynamics of observed pathogen genealogies through likelihood- or simulation-based inference methods (eg. ABC), and can be readily applied to data, such as viral or bacterial sequences. Recent theoretical advances have formualated general colescent processes allowing for multiple mergers in the context of epidemiology ([[cite:&didelot-2025-ances-proces]]).
+*add more background on theory of connecting population dynamic models to genealogies?*
 
 ** Host-pathogen coevolutionary theory
-Coevolutionary models include a wider-range of population and quantitative genetics models and approaches, that describe the coevolving dynamics of hosts and pathogens, occuring at evolutionary time scales. Most commonly these models are designed to include host and pathogen genotypes, infection genetics, different types of frequency-dependent selection, as well and have readily been extended with mutation and recombination. As such coevolutionary models have been used to describe rich dynamics; including cyclical dynamics and maintainance of polymorphisms through trench warefare; and unstable equilibria leading to fixations through arms race dynamics, to name a few. *How is coevolution typically studied? How has it been applied to data?*
+Coevolution refers to the reciprocal process of adaptations and counteradaptations between hosts and pathogens.
+Coevolutionary models include a wider-range of population and quantitative genetics models and approaches, that describe the coevolving dynamics of hosts and pathogens, occuring at evolutionary time scales. Most commonly these models are designed to include host and pathogen genotypes, infection genetics, different types of frequency-dependent selection, as well and have readily been extended with mutation and recombination. As such coevolutionary models have been used to describe rich dynamics; including cyclical dynamics and maintainance of polymorphisms through trench warefare; and unstable equilibria leading to fixations through arms race dynamics, to name a few. 
 
-The importance of including population dynamics in coevolutionary models is recognized, as eco-evolutionary (epidemiological) feedbacks have a major impact on the model dynamics (cite boots and ashy or mcphearson paper). Yet still the literature of coevolutionary models is split by the inclusion or exclusion of population dynamics (cite buckingham and ashby). 
+The importance of including population dynamics in coevolutionary models is recognized, as eco-evolutionary (epidemiological) feedbacks have a major impact on the model dynamics ([[cite:&buckingham-2022-coevol-theor]]). Yet still the literature of coevolutionary models is split by the inclusion or exclusion of population dynamics, and including population dynamics increases the complexity of the models significantly. Recently, forward-time simulation frameworks capable of tracking ancestral genealogies under recombination and complex population dynamics (e.g. SLiM 5.0) have been developed, enabling the study of ancestry patterns generated by realistic coevolutionary models.
 
 The genomic signatures arising in coevolutionary models are typically characterized with population-level summary statistics (eg. allele frequencies, diversity measures or linkage disequilibrium) (see [[cite:&tellier-2014-speed-adapt]], [[cite:&ebert-2020-host]]). While these approaches have yielded important insights into signatures of coevolutionary dynamics, the genealogical histories underlying recombining host and pathogen genomes are rarely modelled explicitly.  
 
-Recently, forward-time simulation frameworks capable of tracking ancestral genealogies under recombination and complex population dynamics (e.g. SLiM 5.0) have been developed, enabling the study of ancestry patterns generated by realistic coevolutionary models.
 ** Genealogies and ancestral recombiantion graphs (ARGs) as descriptors of evolutionary history
-Ancestral recombination graphs (ARGs) have emerged as a central object in modern population genetics, enabling the study of genome-wide ancestry in the presence of recombination and complex demography. Specifically the development of ways to represent, simulate and infer ARGs has lead to a conceptual shift in population genetics, from focusing on summary statistics to studying the underlying genealogical structures. As such ARGs can be interpreted as sequences of coalescent trees along the genome, as broken up by recombination. They connect fundamental evolutionary processes -such as drift, selection, recombination and demography - to observed genomic patters by making the full ancestral structure of the genome explicit. Because ARGs offer this connection of observed genetic variation to evolutionary processes shaping coalescence and recombination of lineages, they are perfectly primed to be used for understanding the coevolutionary and epidemiology of hosts and pathogens.
+
+#+name: couple-genealogies
+#+caption: 
+#+attr_latex: :width 1\linewidth  :center t :placement [h]
+[[./figures/coupled_genealogies.png]]
+
+Ancestral recombination graphs (ARGs) have emerged as a central object in modern population genetics, enabling the study of genome-wide ancestry in the presence of recombination and complex demography. Specifically the development of ways to represent, simulate and infer ARGs has lead to a conceptual shift in population genetics, from focusing on summary statistics to studying the underlying genealogical structures. As such ARGs can be interpreted as sequences of coalescent trees along the genome, as broken up by recombination. They connect fundamental evolutionary processes, such as drift, selection, recombination and demography, to observed genomic patters by making the full ancestral structure of the genome explicit. Coalescent theory provides the connection between sample genealogies and stochastic population processes that shape the underlying genealogies and evolutionary trees. 
+Because ARGs offer this connection of observed genetic variation to evolutionary processes shaping coalescence and recombination of lineages, they are perfectly primed to be used for understanding the coevolutionary and epidemiology of hosts and pathogens.
+
+
+Within this framework, ancestral recombination graphs can be used in several distinct ways, prompting different questions: ARGs as explanatory objects (How does epidemiology and coevolution shape ARGs?); ARGs as descriptive summaries (What information do genealogies encode about the epidemiological and coevolutionary processes?); ARGs as inference targets (Can we reconstruct ARGs robustly under realistic population dynamics and coevolutionary models?)
 
 Genealogies of hosts and pathogen are shaped by a combination of reproduction, transmission, selection and recombination. 
 How can we use ARGs to connect epidemiology and evolution (in ways not previously done)? Which features of ARGs reflect epidemiological vs evolutionary processes? ARGs are sequential, tree-based outlines of genomic signatures. As there is a duality between genealogies and genomes ([[cite:&ralph-2020-effic-summar]]), the ARGs will contain many classical genetic diversity statistics, as well as genetic linkage along the genome (see list of statistics in [[cite:&ebert-2020-host]]).
 
-Coalescent theory provides the connection between sample genealogies and stochastic population processes that shape the underlying genealogies and evolutionary trees. 
-
-- ARGs as explanatory objects:  How do processes shape genealogies / ARGs?
-- ARGs as descriptive summaries: What information do genealogies encode about the processes?
-- ARGs as inference targets: Can we reconstruct ARGs robustly under realistic population dynamics?
 
 * Research Gap
 /Limitations of phylodynamics for coevolving host-pathogen systems./ While phylodynamics is a young and rapidly advancing field, its applicability relies on several key assumptions. Most phylodynamic models are designed for rapidly evolving pathogens, such that mutations arise on the same timescale as transmission, and therefore are primarliy the inference is suited for short timescales, such as epidemic outbreaks. Additionally, most common epidemiological models, describe dynamics in terms of host compartments, with pathogen reproduction represented indirectly (eg. $N_e$ of infected host compartment) and host evolution is typically excluded.  While phylodynamics provides a powerful link between epidemiological models and pathogen phylogenies, they are fundamentally grounded in tree-based representations, that assume neglible recombination and do not describe evolutionary processes such as selection in a coevolutionary setting. This limits the applicability of phylodynamic methods to many coevolving biological systems, with complex reproductive life cycles and epidemiology. Adressing this gap requires moving beyond single trees towards genealogical representations that can accomodate recombination and long-term dynamics. 
 
-/"Genealogical gap" in coevolutionary theory./ Despite their mechanistic richness, coevolutionary models currently lack a unifying genealogical and inferential framework comparable to phylodynamics. In particular, coevolutionary dynamics have not been analyzed within the framework of ancestral recombination graphs and genomic evolutionary trees, limiting our ability to link model dynamics to recombining genomic data. While many genomic sigantures of coevolution have been investigates (see list in [[cite:&ebert-2020-host]], [[cite:&tellier-2014-speed-adapt]]), these signatures have not been explained in the context of genealogies and coalescent tree-sequences.
+/'Genealogical gap' in coevolutionary theory./ Despite their mechanistic richness, coevolutionary models currently lack a unifying genealogical and inferential framework comparable to phylodynamics. In particular, coevolutionary dynamics have not been analyzed within the framework of ancestral recombination graphs and genomic evolutionary trees, limiting our ability to link model dynamics to recombining genomic data. While many genomic sigantures of coevolution have been investigates (see list in [[cite:&ebert-2020-host]], [[cite:&tellier-2014-speed-adapt]]), these signatures have not been explained in the context of genealogies and coalescent tree-sequences.
 
-
- /Integrating Phylodynamics and Host-Pathogen Coevolution through Ancestral Recombination Graphs/ Taken together, current approaches leave a conceptual gap between phylodynamic models, which link genealogical trees to epidemiological processes on short timescales, and coevolutionary host–pathogen models, which describe long-term evolutionary dynamics but remain largely disconnected from genealogical representations.  Ancestral recombination graphs (ARGs) offer a natural way to bridge this gap by extending tree-based phylodynamic frameworks to recombining genomes and by embedding epidemiological and coevolutionary processes directly into the structure of ancestry. However, how host–pathogen interactions, transmission dynamics, and recombination jointly shape ARGs—and what information such ARGs can provide about underlying evolutionary and epidemiological processes—remains largely unexplored. Addressing this gap requires a unified framework that treats ARGs as the central objects linking epidemiology, coevolution, and genomic data.
+ /Integrating Phylodynamics and Host-Pathogen Coevolution through Ancestral Recombination Graphs/. Taken together, current approaches leave a conceptual gap between phylodynamic models, which link genealogical trees to epidemiological processes on short timescales, and coevolutionary host–pathogen models, which describe long-term evolutionary dynamics but remain largely disconnected from genealogical representations.  Ancestral recombination graphs (ARGs) offer a natural way to bridge this gap by extending tree-based phylodynamic frameworks to recombining genomes and by embedding epidemiological and coevolutionary processes directly into the structure of ancestry. However, how host–pathogen interactions, transmission dynamics, and recombination jointly shape ARGs—and what information such ARGs can provide about underlying evolutionary and epidemiological processes—remains largely unexplored. Addressing this gap requires a unified framework that treats ARGs as the central objects linking epidemiology, coevolution, and genomic data.
  
-Not only is there limited integration between evolution and epidemiology (cite buckingham and ashby paper), specifically related to biological systems outside of viral epidemiology, there is also a need for ideas on how to use ARGs and ARG-derived summaries in context of phylodynamic inference and host-pathogen coevolution. 
-
 * Research Questions and Aims
 This project aims to establish ancestral recombination graphs (ARGs) as a unifying object for studying and inferring host-pathogen coevolution across epidemiological and evolutionary timescales. Our aims represent distinct but connected research questions involving explanatory theoretical modeling, inference from data and evaluation of existing methodological approaches. 
 
 ** Use ARGs for to describe and infer host-pathogen interactions
-*Aim:* Use ARGs as descriptive and inferential objects resulting from host-pathogen coevolution and epidemiological dynamics. This involves setting up a realistic model to simulate host and pathogen ARGs, as well as usig ARG-derived summary statistics to improve existing inference methods (eg. GxG ABC framework)
+*Aim:* Use ARGs as descriptive and inferential objects resulting from host-pathogen coevolution and epidemiological dynamics. This involves setting up a realistic model to simulate host and pathogen ARGs, as well as using ARG-derived summary statistics to improve existing inference methods (eg. GxG ABC framework)
 
 *Guiding Questions:*
 - How do coevolution and epidemiology jointly shape ARGs of hosts and pathogens?
-- Can ARG-derived statistics be used to infer genetic interactions, infection matrices, or epidemiological parameters from sampled data?
+- Can ARG-derived statistics be used to infer genetic interactions, infection matrices, or epidemiological parameters from sampled data? 
+- Can we extend tree-based phylodynamic inference to full ARGs?
 - Do ARGs capture known genomic signatures of coevolutions and epidemiological dynamics?
 - How can we apply coevolutionary models and inference to data beyond using simple summary statistics? 
   
@@ -94,13 +92,26 @@ This project aims to establish ancestral recombination graphs (ARGs) as a unifyi
 - How does recombination, selection and epidemiological demography affect the inference of ARGs?
 - Which ARG-derived statistics are robust for downstream inference?
 
-* Models and Methods
+* Models and Methods :noexport:
 - Sketch ARGs models, branching process models and coevolutionary models that can be used to describe host and pathogen ARGs. Simulation with SLiM.
 - A joint ARG is a pair of host and pathogen ARGs whose branching, coalescence, and recombination events are statistically dependent through infection and transmission processes.
 - GxG ABC inference outline.
+- Data availability of crop and pathogen data. Barley-Fusarium and Ramularia.
   
-* Expected Outcome and Significance 
-* Timeline and course of action
+* Course of action 
+** Simulation framework
+Develop a simulation framework to simulate joint host and pathogen ARGs with SLiM; This should include realistic epidemiology (transmission and infection); reproduction in hosts and pathogens; coevolutionary dynamcis (including costs, frequency-dependent selection and infection matrices); population structure; as well as population genetic processes, such as mutation and recombination.
+** Use ARGs to improve simulation-based GxG inference  
+Use ARGs and ARG-derived summaries, to adress the following limitations of current GxG inference framweworks based on approximate bayesian computation (ABC): 
+  - Structured populations bias the inference of GxG and needs to be accounted for.
+  - Simplified epidemiology in current ABC setup
+  - Summary statistics used by ABC are sensitive to sample size and allele frequencies (eg. MAF filtering)
+  - Computational scalability issues due to pairwise comparisons between SNPs. (Compare trees rather than SNPs...)
+
+We first aim to improve the ability of the ABC to correctly discern between different models of coevolution using simulated data, and then we aim to apply the ABC framework to data from from Fusarium and Barley, with adjustments to our simulation framework to mirror the biological realities of the system.
+** ARG-based inference of epidemiology
+Use simulation to show how different epidemiological dynamics affect pathogen ARGs. Possibly extend simple phylodynamic inference to ARGs and apply to data.
+  
 * Bibliography
 [[printbibliography:]]
 
