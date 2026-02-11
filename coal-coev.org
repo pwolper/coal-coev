@@ -196,7 +196,5 @@ Coalescent theory provides the connection between sample genealogies and stochas
 ** Timeline and course of action
 
 
-
-
 * Bibliography
 [[printbibliography:]]
