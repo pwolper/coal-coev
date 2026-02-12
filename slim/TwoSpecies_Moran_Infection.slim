@@ -3,8 +3,8 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	defineConstant("N", 50);
-	defineConstant("c", 1);
+	defineConstant("N", 50); //constant host population size
+	defineConstant("c", 0.1); //contact rate, with which infected host will infect another host
 
 }
 
@@ -22,48 +22,58 @@ species host initialize() {
 }
 species pathogen initialize() {
 	initializeSpecies(avatar="🦠", color="red");
+	//initializeSLiMOptions(keepPedigrees=T); are pdeigreeID of two species unique?
 
 }
 
 
 species host reproduction() {
+	catn("\n - Host reproduction - ");
 	fitness = p1.cachedFitness(NULL);
 	parent = sample(p1.individuals, 1, weights=fitness);
 	catn("Reproducing host: " + parent.pedigreeID);
 	offspring = subpop.addCloned(parent);
+	catn("OffspringID: " + offspring.pedigreeID);
 	//offspring.tagF = parent.tagF;
-	offspring.tag = parent.tag;
-	offspring.color = parent.color;
+	offspring.tag = 0;
+	//offspring.color = parent.color;
 	self.active = 0;
 }
 
 species pathogen reproduction() {
-	
+	catn("\n - Pathogen reproduction/infection - ");
 	pathogenHosts = p2.individuals.tag;
-	catn("pathogenHosts");
-	catn(pathogenHosts);
-	catn("unique(pathogenHosts)");
-	catn(unique(pathogenHosts));
+	cat("pathogenHosts: "); catn(pathogenHosts);
+	//cat("unique(pathogenHosts): "); catn(unique(pathogenHosts));
 	
-	infected = p1.individuals[match(p1.individuals.pedigreeID, p2.individuals.tag) >= 0];
-	
-	//infected = p1.individuals[p1.individuals.tag == 1]; //will work when I add horizontal transmission.
-	//infected = p1.individuals[match(p1.individuals.predigreeID, p2.individuals.tags
+	//infected = p1.individuals[match(p1.individuals.pedigreeID, p2.individuals.tag) >= 0];
+	infected = p1.individuals[p1.individuals.tag == 1]; //will work when I add horizontal transmission.
+	//cat("Infected: "); catn(infected);
 	catn("Number of infected individuals: " + length(infected));
-	catn(infected.pedigreeID);
+	//catn(infected.pedigreeID);
 	
 	
 	for (ind in infected) {
 		if (runif(1) < c) { //contact rate decides if individual infects 
+		
+			susceptibles = p1.individuals[p1.individuals.tag == 0];
+			cat("Susceptibles: "); catn(susceptibles.pedigreeID);
+			//catn("N. susceptibles: " + length(susceptibles));
+			if (length(susceptibles) == 0) {
+				catn("All individuals infected already..."); 
+				community.simulationFinished();
+				break;}; //break the loop if all individuals are infected already...
+				
+			catn("* Infection from host " + ind.pedigreeID);
 			parasitoid = p2.individuals[p2.individuals.tag == ind.pedigreeID]; //pathogen individual infecting ind
-			catn("Number of individual pathogens in host " + ind.pedigreeID +": " + size(parasitoid)); //should be 1
+			//catn("	Number of individual pathogens in host " + ind.pedigreeID +": " + size(parasitoid)); //should be 1 (if not sample...)
 			parent = sample(parasitoid, 1);
-			offspring = subpop.addCloned(parent);
-			catn(offspring);
-			target = p1.sampleIndividuals(1); //new individual to infect (maybe only healthy ones?), TODO exclude resistant individuals... 
+			
+			target = p1.sampleIndividuals(1, tag=0); //new individual to infect (choose only susceptible)
 			target.color = "red"; target.tag = 1; //mark host as infected
-			catn("Infection from: " + ind.pedigreeID + " -> " + target.pedigreeID);
-			//catn("Target individual: " + target.pedigreeID);
+			catn("	Infection from: " + ind.pedigreeID + " -> " + target.pedigreeID);
+			//catn("	Target individual: " + target.pedigreeID);
+			offspring = subpop.addCloned(parent); //reproduce pathogen to target host
 			offspring.tag = target.pedigreeID;
 			offspring.color = parent.color;
 		}
@@ -78,14 +88,6 @@ ticks all 1 first() {
 	
 	host.addSubpop("p1", N, haploid=T);
 	p1.individuals.tag = 0; //Infection status. 0 for healthy, 1 for infected
-}
-
-ticks all 1: first() {
-	catn("\n -- first() --");
-	catn(p1.individuals.pedigreeID);
-}
-
-ticks all 1 first() {
 	
 	//initial resistance
 	//resistant = p1.sampleIndividuals(1);
@@ -104,8 +106,22 @@ ticks all 1 first() {
 
 }
 
+ticks all 1: first() {
+	catn("\n -- first() --");
+	catn("HostIDs:"); catn(p1.individuals.pedigreeID);
+	//catn("PathogenIDs:"); catn(p2.individuals.pedigreeID);
+}
+
+
 ticks all 1: late() {
-	catn("-- late() --");
+	catn("\n-- late() --");
+	susceptibles = p1.individuals[p1.individuals.tag == 0];
+	catn("\nN. susceptibles: " + length(susceptibles));
+	infected = p1.individuals[p1.individuals.tag == 1];
+	catn("N. infected: " + length(infected));
+	
+	//if (length(susceptibles) == 0) {sim.simulationFinished();}
+	//if (length(infected) == 0) {sim.simulationFinished();}
 	//Choose one host to die	
 	victim = sample(p1.individuals, 1);
 	catn("Kill host: " + victim.pedigreeID);
@@ -114,26 +130,9 @@ ticks all 1: late() {
 	killPathogen = p2.individuals[p2.individuals.tag == victim.pedigreeID];
 	catn("Kill Pathogen associated with host: " + killPathogen.tag);
 	pathogen.killIndividuals(killPathogen);
-
+	
 }
 
-
-
-ticks all 1: late() {
-	
-	//TODO kill pathogen if host dies
-	hostIDs = p1.individuals.pedigreeID;
-	catn("hostIDs");
-	catn(hostIDs);
-	
-	pathogenHosts = p2.individuals.tag;
-	catn("pathogenHosts");
-	catn(pathogenHosts);
-	
-	catn("match(pathogenHosts, hostIDs)");
-	catn(match(pathogenHosts, hostIDs)>=0);
-
-}
 
 //species host survival() {}
 //species parasitoid survival() {}
