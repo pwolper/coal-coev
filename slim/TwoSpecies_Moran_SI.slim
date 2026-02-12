@@ -3,8 +3,8 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	defineConstant("N", 50); //constant host population size
-	defineConstant("c", 0.1); //contact rate, with which infected host will infect another host
+	defineConstant("N", 2000); //constant host population size
+	defineConstant("c", 0.01); //contact rate, with which infected host will infect another host
 
 }
 
@@ -35,7 +35,7 @@ species host reproduction() {
 	offspring = subpop.addCloned(parent);
 	catn("OffspringID: " + offspring.pedigreeID);
 	//offspring.tagF = parent.tagF;
-	offspring.tag = 0;
+	offspring.tag = 0; //new offspring is not infected (no vertical transmission).
 	//offspring.color = parent.color;
 	self.active = 0;
 }
@@ -43,7 +43,7 @@ species host reproduction() {
 species pathogen reproduction() {
 	catn("\n - Pathogen reproduction/infection - ");
 	pathogenHosts = p2.individuals.tag;
-	cat("pathogenHosts: "); catn(pathogenHosts);
+	//cat("pathogenHosts: "); catn(pathogenHosts);
 	//cat("unique(pathogenHosts): "); catn(unique(pathogenHosts));
 	
 	//infected = p1.individuals[match(p1.individuals.pedigreeID, p2.individuals.tag) >= 0];
@@ -55,29 +55,22 @@ species pathogen reproduction() {
 	
 	for (ind in infected) {
 		if (runif(1) < c) { //contact rate decides if individual infects 
-		
-			susceptibles = p1.individuals[p1.individuals.tag == 0];
-			cat("Susceptibles: "); catn(susceptibles.pedigreeID);
-			//catn("N. susceptibles: " + length(susceptibles));
-			if (length(susceptibles) == 0) {
-				catn("All individuals infected already..."); 
-				community.simulationFinished();
-				break;}; //break the loop if all individuals are infected already...
-				
-			catn("* Infection from host " + ind.pedigreeID);
-			parasitoid = p2.individuals[p2.individuals.tag == ind.pedigreeID]; //pathogen individual infecting ind
-			//catn("	Number of individual pathogens in host " + ind.pedigreeID +": " + size(parasitoid)); //should be 1 (if not sample...)
-			parent = sample(parasitoid, 1);
 			
-			target = p1.sampleIndividuals(1, tag=0); //new individual to infect (choose only susceptible)
-			target.color = "red"; target.tag = 1; //mark host as infected
-			catn("	Infection from: " + ind.pedigreeID + " -> " + target.pedigreeID);
-			//catn("	Target individual: " + target.pedigreeID);
-			offspring = subpop.addCloned(parent); //reproduce pathogen to target host
-			offspring.tag = target.pedigreeID;
-			offspring.color = parent.color;
+			catn("*  Infection from host " + ind.pedigreeID);
+			pathogenInd = p2.individuals[p2.individuals.tag == ind.pedigreeID]; //pathogen individual infecting ind
+			
+			target = p1.sampleIndividuals(1); //new individual to infect
+			//catn(target);
+			
+			if (target.tag == 0) { //infect successfully if target is susceptible
+				target.color = "red"; target.tag = 1; //mark host as infected
+				catn("	** Infection from: " + ind.pedigreeID + " -> " + target.pedigreeID);
+				//catn("	Target individual: " + target.pedigreeID);
+				offspring = subpop.addCloned(pathogenInd); //reproduce pathogen to target host
+				offspring.tag = target.pedigreeID;
+				offspring.color = target.color; // keep pathogen color
+			}
 		}
-		//TODO Error when there is host with infected tag, that is from host reproduction. There is no pathogen, that can reproduce for this host. Fix for now by not allowing horizontal transmission. Infected not by tag, but by presence of pathogen.
 	}
 	
 	
@@ -108,34 +101,39 @@ ticks all 1 first() {
 
 ticks all 1: first() {
 	catn("\n -- first() --");
-	catn("HostIDs:"); catn(p1.individuals.pedigreeID);
+	//catn("HostIDs:"); catn(p1.individuals.pedigreeID);
 	//catn("PathogenIDs:"); catn(p2.individuals.pedigreeID);
 }
 
 
 ticks all 1: late() {
 	catn("\n-- late() --");
-	susceptibles = p1.individuals[p1.individuals.tag == 0];
-	catn("\nN. susceptibles: " + length(susceptibles));
 	infected = p1.individuals[p1.individuals.tag == 1];
-	catn("N. infected: " + length(infected));
 	
-	//if (length(susceptibles) == 0) {sim.simulationFinished();}
-	//if (length(infected) == 0) {sim.simulationFinished();}
-	//Choose one host to die	
+	
+	
+	//Choose one host to die (Kill pathogen if it hosts too)
 	victim = sample(p1.individuals, 1);
-	catn("Kill host: " + victim.pedigreeID);
+	catn("\nKill host: " + victim.pedigreeID);
 	host.killIndividuals(victim);
 	
 	killPathogen = p2.individuals[p2.individuals.tag == victim.pedigreeID];
 	catn("Kill Pathogen associated with host: " + killPathogen.tag);
 	pathogen.killIndividuals(killPathogen);
 	
+	susceptibles = p1.individuals[p1.individuals.tag == 0];
+	catn("\nN. susceptibles: " + length(susceptibles));
+	infected = p1.individuals[p1.individuals.tag == 1];
+	catn("N. infected: " + length(infected));
+	
+	if (length(infected) == 0) {
+		catn("Pathogen extinct!");
+		community.simulationFinished();}
+
 }
 
 
 //species host survival() {}
 //species parasitoid survival() {}
 
-ticks all 500 late() {
-}
+ticks all 3*N late() {}
