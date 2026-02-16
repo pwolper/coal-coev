@@ -5,6 +5,7 @@ species all initialize() {
 	
 	defineConstant("N", 2000); //constant host population size
 	defineConstant("c", 0.01); //contact rate, with which infected host will infect another host
+	defineConstant("s_I", 0.1); //cost of infection to reproduction in hosts
 	defineConstant("gamma", 0.005); //recovery rate of an infected individual
 
 }
@@ -31,11 +32,11 @@ species pathogen initialize() {
 species host reproduction() {
 	catn("\n - Host reproduction - ");
 	fitness = p1.cachedFitness(NULL);
+	catn(fitness);
 	parent = sample(p1.individuals, 1, weights=fitness);
 	catn("Reproducing host: " + parent.pedigreeID);
 	offspring = subpop.addCloned(parent);
 	catn("OffspringID: " + offspring.pedigreeID);
-	//offspring.tagF = parent.tagF;
 	offspring.tag = 0; //new offspring is not infected (no vertical transmission).
 	//offspring.color = parent.color;
 	self.active = 0;
@@ -106,6 +107,15 @@ ticks all 1: first() {
 	//catn("PathogenIDs:"); catn(p2.individuals.pedigreeID);
 }
 
+ticks all 1: early() {
+	catn("\n-- early() --");
+	catn("	fitnessScaling of Healthy");
+	
+	healthy = p1.individuals[p1.individuals.tag == 0];
+	healthy.fitnessScaling = 1 + s_I;
+	catn(healthy.fitnessScaling);
+
+}
 
 ticks all 1: late() {
 	catn("\n-- late() --");
