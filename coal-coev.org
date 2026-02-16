@@ -94,7 +94,6 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - Translating the deterministic host SI model of one coevolutionary "run" developed by [[cite:&zivkovic-2019-neutr-genom]] into a stochastic model of the host and pathogen lineages (both medium or long-term coevolution). How can the parameters of the model be incorporated in the SLiM forward in time model?
 - Ensure model can form equilibrium as observed for SIR model classes or similar.
 - how to handle fitness of infected vs. non-infected and resistant host types vs. susceptible host types.
-
 - Modelling host and pathogen fitness. Selection on viability or mortality of host/pathogen? Host: infection, cost of resistance. Pathogen: infectivity, cost of infectivity.
 - Pathogen genetic drift requires within-host pathogen reproduction or stochastic transmission modell
 
