@@ -3,9 +3,9 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	defineConstant("N", 2000); //constant host population size
-	defineConstant("c", 0.01); //contact rate, with which infected host will infect another host
-
+	defineConstant("N", 200); //constant host population size
+	defineConstant("c", 0.1); //contact rate, with which infected host will infect another host
+	defineConstant("s_I", 0.1); //cost of infection to reproduction in hosts
 }
 
 species host initialize() {
@@ -28,28 +28,28 @@ species pathogen initialize() {
 
 
 species host reproduction() {
-	catn("\n - Host reproduction - ");
+	catn("\n- Host reproduction - ");
 	fitness = p1.cachedFitness(NULL);
+	catn(fitness);
 	parent = sample(p1.individuals, 1, weights=fitness);
 	catn("Reproducing host: " + parent.pedigreeID);
 	offspring = subpop.addCloned(parent);
 	catn("OffspringID: " + offspring.pedigreeID);
-	//offspring.tagF = parent.tagF;
 	offspring.tag = 0; //new offspring is not infected (no vertical transmission).
 	//offspring.color = parent.color;
 	self.active = 0;
 }
 
 species pathogen reproduction() {
-	catn("\n - Pathogen reproduction/infection - ");
+	catn("\n- Pathogen reproduction/infection - ");
 	pathogenHosts = p2.individuals.tag;
-	//cat("pathogenHosts: "); catn(pathogenHosts);
+	//cat("	pathogenHosts: ["); cat(pathogenHosts); catn("]");
 	//cat("unique(pathogenHosts): "); catn(unique(pathogenHosts));
 	
 	//infected = p1.individuals[match(p1.individuals.pedigreeID, p2.individuals.tag) >= 0];
 	infected = p1.individuals[p1.individuals.tag == 1]; //will work when I add horizontal transmission.
 	//cat("Infected: "); catn(infected);
-	catn("Number of infected individuals: " + length(infected));
+	catn("	Number of infected individuals: " + length(infected));
 	//catn(infected.pedigreeID);
 	
 	
@@ -105,6 +105,16 @@ ticks all 1: first() {
 	//catn("PathogenIDs:"); catn(p2.individuals.pedigreeID);
 }
 
+ticks all 1: early() {
+	catn("\n-- early() --");
+	catn("	fitnessScaling of Healthy");
+	
+	healthy = p1.individuals[p1.individuals.tag == 0];
+	healthy.fitnessScaling = 1 + s_I;
+	catn(healthy.fitnessScaling);
+
+}
+
 
 ticks all 1: late() {
 	catn("\n-- late() --");
@@ -114,11 +124,11 @@ ticks all 1: late() {
 	
 	//Choose one host to die (Kill pathogen if it hosts too)
 	victim = sample(p1.individuals, 1);
-	catn("\nKill host: " + victim.pedigreeID);
+	catn("	Kill host: " + victim.pedigreeID);
 	host.killIndividuals(victim);
 	
 	killPathogen = p2.individuals[p2.individuals.tag == victim.pedigreeID];
-	catn("Kill Pathogen associated with host: " + killPathogen.tag);
+	catn("	Kill Pathogen associated with host: " + killPathogen.tag);
 	pathogen.killIndividuals(killPathogen);
 	
 	susceptibles = p1.individuals[p1.individuals.tag == 0];
@@ -136,4 +146,4 @@ ticks all 1: late() {
 //species host survival() {}
 //species parasitoid survival() {}
 
-ticks all 3*N late() {}
+ticks all 2*N late() {}
