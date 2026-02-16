@@ -80,6 +80,21 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - models of coevolution at different levels (epidemiological, ecological and evolutionary) ([[cite:&macpherson-2021-feedb-between]])
 - classical coevolution model used by [[cite:&zivkovic-2019-neutr-genom]],[[cite:&boots-2014-how-specif]],
 - discrete, evolutionary model such as [[cite:&tellier-2007-polym-multil]]
+- Moran infection model such as [[cite:&welch-2005-integ-geneal-epidem]].
+** Two-species Infection models in SLiM 5
+*** Moran Susceptible-Infected (Moran + SI)
+Model: [[./slim/TwoSpecies_Moran_SI.slim]]
+
+Moran model of $N$ host individuals; each generation 1 host is randomly chosen to reproduce and 1 random host is replaced and dies. The probability to be the reproducing host depends on the health of the individual, so that the probability of a healthy individual to reproduce is scaled by $1+s_{I}$, with $s_{I}$ being the reproductive (fitness) advantage the healthy individuals have over infected ones. All hosts produce healthy offspring, i.e. there is no vertical transmission of pathogens in this model. If a killed individual is infected, the pathogen that infects this host is killed as well. 
+
+The epidemiological dynamics of the pathogen popoulation is determined by a simple susceptible-infected (SI) model (similar to [[cite:&welch-2005-integ-geneal-epidem]]), starting with an initial infection in a random individual. Each generation, every infected host individual will infect another randomly chosen host with probability $c$, the contact rate, and if the target host is not yet infected the infection will be successful. For each successful infection the pathogen reproduces a clonal offspring, linked to the new host. Each host can only be infected by one pathogen individual simultaneously.
+*** Moran Susceptible-Infected-Susceptible (Moran + SIS)
+Model: [[./slim/TwoSpecies_Moran_SIS.slim]] 
+
+This model is simuilar to the Moran SI model, except, that each generation individuals can recover at rate $\gamma$. In this case, the pathogen they contain is killed and the host returns to being healthy. 
+
+NOTE: This implementation of Moran Infection models has all pathogen potential infecting each generation, although there is still generation overlap (as not all infect sucessfully), the timescale at which the pathogens reproduce is much faster than that at which the host reproduces (which is often biologically realistic as well). If we wanted a true Moran of hosts and pathogens it could be desirable to only let one random pathogen infect each generation. This would make the model very slow though, especially when studying coalescence. To speed up the dynamics and study the coalescence of both hosts and pathogens, we implement the above mentioned model without generation overlap as a Cannings-type model.
+*** Wright-Fisher Susceptible-Infected (WF + SI)
 ** SIR host model
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
@@ -125,7 +140,6 @@ Separation of literature on phylodynamics and of host-pathogen coevolution, even
 - From simulations of SIR we can follow genealogy of host, or analytically for pathogen too it we know the AISG (?). Is this useful in downstream analysis (eg. tskit? adding contact arrows, etc.). Is the intrisic presence of the pathogen in the R status of the SIR model enough to work with the pathogen genealogy, or would a two species model be more practical?
 - steady states of the SIR model might be reflected in heights of the coalescent trees pathogen/host? Metric from [[cite:&welch-2005-integ-geneal-epidem]]. Expected relative difference betwwen host and viral tree root age and Proportion in common between viral and host trees? Extend results of [[cite:&welch-2005-integ-geneal-epidem]] to resistant classes as well?
 - e3SIM generate SLiM code from SIR models? Can we use our dynamic coevolution model for this?  https://jaeheekimlab.github.io/pdfs/papers/2024-xu-episim.pdf
-
 * Further thoughts :noexport:
 First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
 * BarleyCOPA meeting, 2025: Research overview :noexport:
@@ -197,3 +211,5 @@ Coalescent theory provides the connection between sample genealogies and stochas
 
 * Bibliography
 [[printbibliography:]]
+
+
