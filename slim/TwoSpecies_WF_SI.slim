@@ -33,8 +33,12 @@ species host initialize() {
 species pathogen reproduction() {
 	catn("\n - Pathogen reproduction/infection - ");
 	catn("Host.tag: "); catn(p1.individuals.tag);
+	catn("Host.pedigreeIDs: "); catn(p1.individuals.pedigreeID);
 	catn("Infection Status: "); catn(p1.individuals.tagL0);
 	//catn("HostIDs:"); catn(p1.individuals.pedigreeID);
+	
+	infectedHosts = p1.individuals[p1.individuals.tagL0 == T];
+	cat("InfectedHosts: "); catn(infectedHosts);
 	
 	pathogens = p2.individuals;
 	//cat("Pathogens: "); catn(pathogens);
@@ -45,6 +49,25 @@ species pathogen reproduction() {
 	
 	// add vertical transmission from previous generation of hosts using pedigree parent ids...
 	
+	catn("\n ** Vertical transmissions **");
+	
+	//catn("Infection Status: "); catn(p1.individuals.tagL0);
+	//catn("Host.pedigreeParentIDs"); catn(p1.individuals.pedigreeParentIDs); 
+	
+	for (infected in infectedHosts) {
+		cat("	Host.pedgreeID: " + infected.pedigreeID + " "); cat("(" + infected.tagL0 + ") "); cat("Parents: "); 		catn(infected.pedigreeParentIDs);
+		parents = infected.pedigreeParentIDs;
+		//cat("	Parent: "); catn(parents[1]);
+		pathogenInd = p2.individuals[p2.individuals.tag == infected.pedigreeID];
+		cat("	PathogenInd: "); catn(pathogenInd.tag);
+		
+		if (parents[1] >= 0) {
+			cat("	PathogenInd: "); cat(pathogenInd.tag); cat(" vertically transmitted to Host "); catn(infected.pedigreeID);
+			pathogenInd.tag = infected.pedigreeID; 
+		}
+	
+	}
+	
 	catn("\n ** Horizontal transmissions **");
 	
 	for (i in seqLen(p2.individualCount)) {
@@ -52,8 +75,8 @@ species pathogen reproduction() {
 		cat("	Source.tag: "); catn(source.tag);
 		
 		target = p1.sampleIndividuals(1);
-		cat("	Target.tag: "); catn(target.tag);  
-		cat("	Target Infection Status: "); catn(target.tagL0);  
+		cat("	Target.tag: "); catn(target.tag);
+		cat("	Target Infection Status: "); catn(target.tagL0);
 		//target.tagL0 = T;
 		
 		//Reproduce pathogen if target.tagL0 == F (healthy)
@@ -61,10 +84,9 @@ species pathogen reproduction() {
 			catn("	* Infection from: " + source.tag + " -> " + target.tag);
 			offspring = subpop.addCloned(pathogens[i]);
 			offspring.tag = target.pedigreeID; offspring.color='red';
-			target.tagL0 = T; 
-			}
-		
-		// add target transmission horizontal. reproduce pathogen individual and manipulate the target.tagL0 value. Does it show up in the host reproduction, if host reproduction comes after?
+			target.tagL0 = T;
+		}
+	
 	
 	}
 	//infected = p1.individuals[match(p1.individuals.pedigreeID, p2.individuals.tag) >= 0];
@@ -96,13 +118,13 @@ species host reproduction() {
 		//offspring.tagL0 = F; //new offspring is not infected (no vertical transmission).
 		offspring.color = parents[i].color;
 		offspring.tag = parents[i].tag;
-		offspring.tagL0 = F;
+		offspring.tagL0 = parents[i].tagL0;
 	}
 	
 	
 	self.active = 0;
 }
-	
+
 
 
 
@@ -158,6 +180,7 @@ ticks all 1: late() {
 	catn("\n-- late() --");
 	//catn("HostIDs:"); catn(p1.individuals.pedigreeID);
 	catn("Hosts.tag: "); catn(p1.individuals.tag);
+	catn("Host.pedigreeIDs: "); catn(p1.individuals.pedigreeID);
 	catn("Infections: "); catn(p1.individuals.tagL0);
 	pathogenHosts = p2.individuals.tag;
 	cat("pathogenHosts (pathogen.tag): "); catn(pathogenHosts);

@@ -95,6 +95,7 @@ This model is simuilar to the Moran SI model, except, that each generation indiv
 
 NOTE: This implementation of Moran Infection models has all pathogen potential infecting each generation, although there is still generation overlap (as not all infect sucessfully), the timescale at which the pathogens reproduce is much faster than that at which the host reproduces (which is often biologically realistic as well). If we wanted a true Moran of hosts and pathogens it could be desirable to only let one random pathogen infect each generation. This would make the model very slow though, especially when studying coalescence. To speed up the dynamics and study the coalescence of both hosts and pathogens, we implement the above mentioned model without generation overlap as a Cannings-type model.
 *** Wright-Fisher Susceptible-Infected (WF + SI)
+Because generation do not overlap in the Wright-Fisher model, there needs to be some kind of vertical transmission mechansism, otherwise the pathogen will become extint within one generation. 
 ** SIR host model
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
