@@ -126,7 +126,7 @@ species all initialize() {
 	defineConstant("G_host", 1); // Relative generation time scale for hosts (compared to parasite which is 1)
 	defineConstant("b", 2.); // Host birth rate
 	defineConstant("d", 0.5); // Host death rate
-	defineConstant("K", 10000); // Host carrying capacity for the reproduction
+	defineConstant("K", 100); // Host carrying capacity for the reproduction
 	defineConstant("cH", c(0.05, 0)); // Vector of Fitness cost of host genotypes
 	defineConstant("cP", c(0, 0.05)); // Vector of Fitness cost of pathogen genotypes
 	// defineConstant("S", matrix(c(0.1,0.1,0.1,0.1), nrow=2)); // Fitness disavantage of infected hosts (birth rate 1-S)
