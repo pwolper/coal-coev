@@ -1,0 +1,151 @@
+// Keywords: multispecies, interaction
+
+species all initialize() {
+	initializeSLiMModelType("nonWF");
+	
+	defineConstant("N_host", 100); //constant host population size
+	defineConstant("N_pathogen", 1); //initialpathogen population size
+	defineConstant("c", 0.1); //horizontal transmission rate of pathogen.
+	//defineConstant("s_I", 0.1); //cost of infection to reproduction in hosts
+	//defineConstant("gamma", 0.005); //recovery rate of an infected individual
+
+}
+
+
+species host initialize() {
+	initializeSpecies(avatar="🌾", color="green");
+	initializeSLiMOptions(keepPedigrees=T);
+	
+	initializeMutationType("m1", 0.5, "f", 0.0); //resistance mutation with no fitness cost yet
+	m1.color = "cornflowerblue";
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElement(g1, 0, 0);
+	initializeMutationRate(0);
+	initializeRecombinationRate(0);
+
+}
+
+species pathogen initialize() {
+	initializeSpecies(avatar="🦠", color="red");
+	//initializeSLiMOptions(keepPedigrees=T); are pedigreeID of two species unique?
+
+}
+
+
+species host reproduction() {
+	catn("\n -- Host reproduction --");
+	// add host reproduction WF style
+	hosts = p1.individuals;
+	fitness = p1.cachedFitness(NULL);
+	parents = sample(hosts, N_host, replace=T,  weights=fitness);
+	cat(" Parents.pedigreeID: "); catn(parents.pedigreeID);
+	
+	offsprings = c(); //global list of offspring pedigreeIDs
+	
+	for (i in seqLen(p1.individualCount)) {
+		offspring = p1.addCloned(parents[i]);
+		offspring.tag = parents[i].tag;
+		offsprings = c(offsprings, offspring.pedigreeID); //add offspring.pedigreeID to global list
+	}
+	
+	cat(" Offsprings: "); catn(offsprings);
+	defineGlobal("hostOffspring", offsprings);
+	
+	self.active = 0;
+}
+
+
+species pathogen reproduction() {
+	catn("\n -- Pathogen reproduction --");
+	cat(" HostPedigreeIDs: "); catn(p1.individuals.pedigreeID);
+	cat(" HostOffsprings: "); catn(hostOffspring);
+	
+	targetHosts = sample(hostOffspring, p2.individualCount); //random sampled unique host for pathogens to infect in new generation. 
+	cat("\n TargetHosts: "); catn(targetHosts);
+	
+	pathogens = p2.individuals;
+	
+	for (i in seqLen(p2.individualCount)) {
+		// Each pathogen reproduces to the next generation and chooses random host from global list of hostOffspring (later, vertical reproduction?). 
+		offspring = subpop.addCloned(pathogens[i]);
+		offspring.tag = targetHosts[i];
+		catn("\n Pathogen " + pathogens[i].tag + " reproduced to host " + targetHosts[i]);
+		
+		
+		// additionally each pathogen transmits horizontally to a random host with probability c. 
+		if (runif(1) < c) {
+			horizontalTarget = sample(hostOffspring, 1); //random target host (remove later if already infected? modifyChild() callback?)
+			cat(" horizontalTarget: "); catn(horizontalTarget);
+			
+			if (match(horizontalTarget, targetHosts) < 0) { //-1 for no match. HorizontalTarget is not an individual, which will become infected already by random sampling.
+				targetHosts = c(targetHosts, horizontalTarget);
+				
+				//cat(" match(horizontalTarget, targetHosts): "); catn(match(horizontalTarget, targetHosts));
+				catn(" Pathogen " + pathogens[i].tag + " reproduced horizontally to " + horizontalTarget);
+				horizontalOffspring = subpop.addCloned(pathogens[i]);
+				horizontalOffspring.tag = horizontalTarget;
+				cat(" TargetHosts: "); catn(targetHosts); //add horizontal target to list of targeted hosts to avoid double horizontal transmission to the same individual...
+			}
+		
+		}
+	}
+	self.active = 0;
+}
+
+species host survival() {
+	return(individual.age == 0);
+}
+
+species pathogen survival() {
+	return(individual.age == 0);
+}
+
+//species pathogen modifyChild() {
+//	cat("\nHost.pedigreeID: "); catn(p1.individuals.pedigreeID);
+//	return T;
+//}
+
+ticks all 1 early() {
+	
+	host.addSubpop("p1", N_host);
+	p1.individuals.tag = seqLen(N_host);
+	cat("Host.tag: "); catn(p1.individuals.tag);
+	
+	//initial infection
+	pathogen.addSubpop("p2", N_pathogen);
+	p2.individuals.color = "red";
+	
+	newHost = p1.sampleIndividuals(1);
+	newHost.tag = 1; newHost.color = "red";
+	catn("Initial infection in host " + newHost.pedigreeID);
+	p2.individuals.tag = newHost.pedigreeID; //tag pathogen with host.pedigreeID
+
+
+}
+
+ticks all 2: first() {
+	catn("\n--- first() ---");
+	if (p1.individualCount == 0)
+		stop(host.avatar + " extinct");
+	if (pathogen.subpopulations.size() == 0)
+		stop(pathogen.avatar + " extinct");
+}
+
+
+ticks all 1: early() {
+	catn("\n--- early() ---");
+	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
+
+
+}
+
+
+ticks all 2: late() {
+	catn("\n--- late() ---");
+	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
+	cat("Pathogen.tag: "); catn(p2.individuals.tag);
+	
+	// change host.tags of offspring to infected/healthy. Apply fitness effects of infection/kill of hosts or recover them. 
+}
+
+ticks all 200 late() { }
