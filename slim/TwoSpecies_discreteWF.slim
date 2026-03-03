@@ -3,7 +3,7 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	defineConstant("N_host", 100); //constant host population size
+	defineConstant("N_host", 10); //constant host population size
 	defineConstant("N_pathogen", 1); //initialpathogen population size
 	defineConstant("c", 0.1); //horizontal transmission rate of pathogen.
 	//defineConstant("s_I", 0.1); //cost of infection to reproduction in hosts
@@ -15,9 +15,9 @@ species all initialize() {
 species host initialize() {
 	initializeSpecies(avatar="🌾", color="green");
 	initializeSLiMOptions(keepPedigrees=T);
+	initializeTreeSeq(checkCoalescence=T);
 	
 	initializeMutationType("m1", 0.5, "f", 0.0); //resistance mutation with no fitness cost yet
-	m1.color = "cornflowerblue";
 	initializeGenomicElementType("g1", m1, 1.0);
 	initializeGenomicElement(g1, 0, 0);
 	initializeMutationRate(0);
@@ -27,7 +27,14 @@ species host initialize() {
 
 species pathogen initialize() {
 	initializeSpecies(avatar="🦠", color="red");
+	initializeTreeSeq(checkCoalescence=T);
 	//initializeSLiMOptions(keepPedigrees=T); are pedigreeID of two species unique?
+
+initializeMutationType("m2", 0.5, "f", 0.0); 
+	initializeGenomicElementType("g2", m2, 1.0);
+	initializeGenomicElement(g2, 0, 0);
+	initializeMutationRate(0);
+	initializeRecombinationRate(0);
 
 }
 
@@ -100,7 +107,7 @@ species pathogen survival() {
 	return(individual.age == 0);
 }
 
-//species pathogen modifyChild() {
+//species pathogen modifyChild() { // new offspring is not available to the simualtion scope yet...
 //	cat("\nHost.pedigreeID: "); catn(p1.individuals.pedigreeID);
 //	return T;
 //}
@@ -110,8 +117,31 @@ ticks all 1 early() {
 	host.addSubpop("p1", N_host);
 	p1.individuals.tag = seqLen(N_host);
 	cat("Host.tag: "); catn(p1.individuals.tag);
+	}
+
+ticks all 2: first() {
+	catn("\n--- first() ---");
+
+}
+
+
+ticks all 1: late() {
+	catn("\n--- late() ---");
+	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
+	cat("Host.tag: "); catn(p1.individuals.tag);
+	//cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
 	
-	//initial infection
+	tags = p1.individuals.tag; // host tags to check coalescence in host ("Host burn-in")
+	
+	if (all(tags == tags[0])) {
+		defineConstant("hostCOALESCED", community.tick);
+		catn("Host coalesced in tick " + community.tick);
+		community.deregisterScriptBlock(self);
+	}
+}
+
+ticks all hostCOALESCED+1 first(){
+	//initial infection in random host once host coalescence is given.
 	pathogen.addSubpop("p2", N_pathogen);
 	p2.individuals.color = "red";
 	
@@ -119,33 +149,56 @@ ticks all 1 early() {
 	newHost.tag = 1; newHost.color = "red";
 	catn("Initial infection in host " + newHost.pedigreeID);
 	p2.individuals.tag = newHost.pedigreeID; //tag pathogen with host.pedigreeID
-
-
-}
-
-ticks all 2: first() {
-	catn("\n--- first() ---");
-	if (p1.individualCount == 0)
-		stop(host.avatar + " extinct");
-	if (pathogen.subpopulations.size() == 0)
-		stop(pathogen.avatar + " extinct");
 }
 
 
-ticks all 1: early() {
-	catn("\n--- early() ---");
-	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
+//ticks all 2: late() {
+//	// check coalescence and simulation state...
+//	if (host.treeSeqCoalesced()) {
+//		catn("HOST COALESCED: " + community.tick); // does not work with haploid model...
+//	}
+//}
 
-
-}
-
-
-ticks all 2: late() {
+ticks all hostCOALESCED+1: late() {
 	catn("\n--- late() ---");
+	
 	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
-	cat("Pathogen.tag: "); catn(p2.individuals.tag);
+	cat("Host.tag: "); catn(p1.individuals.tag);
+	//cat("Pathogen.tag: "); catn(p2.individuals.tag);
 	
 	// change host.tags of offspring to infected/healthy. Apply fitness effects of infection/kill of hosts or recover them. 
+	
+	
+	//	if (p1.individualCount == 0)
+	//		stop(host.avatar + " extinct");
+	//	if (pathogen.subpopulations.individualCount == 0)
+	//		stop(pathogen.avatar + " extinct");
+	
+	//catn(pathogen.subpopulations.individualCount);
+	catn("Checking pathogen fixation...");
+	if (pathogen.subpopulations.individualCount == N_host) {
+		catn(pathogen.avatar + " fixed in cycle " + community.tick);
+		
+		if (!exists("slimgui")) {
+			dir = paste0("trees/TwoSpecies_discrete_WF" + "_Nhost" + N_host + "_Npathogen" + N_pathogen + "_c" + c + "_" + getSeed());
+			catn("Dir: " + dir);
+			createDirectory(dir);
+			
+			hostFile = paste0(dir + "/" + "HostTreeSeq_" + getSeed() + ".trees");
+			host.treeSeqOutput(hostFile);
+			catn("Host File written:" + hostFile);
+			
+			pathogenFile = paste0(dir + "/" + "PathogenTreeSeq_" + getSeed() + ".trees");
+			pathogen.treeSeqOutput(pathogenFile);
+			catn("Pathogen File written: "  + pathogenFile);
+		}
+		community.simulationFinished();
+	}
+
+
 }
 
-ticks all 200 late() { }
+ticks all 100*N_host late() {
+
+
+}
