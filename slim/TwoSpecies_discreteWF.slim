@@ -19,7 +19,8 @@ species host initialize() {
 	
 	initializeMutationType("m1", 0.5, "f", 0.0); //resistance mutation with no fitness cost yet
 	initializeGenomicElementType("g1", m1, 1.0);
-	initializeGenomicElement(g1, 0, 0);
+	initializeChromosome(1, 1, type='H');
+	initializeGenomicElement(g1);
 	initializeMutationRate(0);
 	initializeRecombinationRate(0);
 
@@ -27,12 +28,13 @@ species host initialize() {
 
 species pathogen initialize() {
 	initializeSpecies(avatar="🦠", color="red");
+	initializeSLiMOptions(keepPedigrees=T); //are pedigreeID of two species unique?
 	initializeTreeSeq(checkCoalescence=T);
-	//initializeSLiMOptions(keepPedigrees=T); are pedigreeID of two species unique?
 
 initializeMutationType("m2", 0.5, "f", 0.0); 
 	initializeGenomicElementType("g2", m2, 1.0);
-	initializeGenomicElement(g2, 0, 0);
+	initializeChromosome(1, 1, type='H');
+	initializeGenomicElement(g2);
 	initializeMutationRate(0);
 	initializeRecombinationRate(0);
 
@@ -67,7 +69,7 @@ species pathogen reproduction() {
 	cat(" HostPedigreeIDs: "); catn(p1.individuals.pedigreeID);
 	cat(" HostOffsprings: "); catn(hostOffspring);
 	
-	targetHosts = sample(hostOffspring, p2.individualCount); //random sampled unique host for pathogens to infect in new generation. 
+	targetHosts = sample(hostOffspring, p2.individualCount); //random sampled unique hosts for pathogens to infect in new generation. 
 	cat("\n TargetHosts: "); catn(targetHosts);
 	
 	pathogens = p2.individuals;
@@ -81,10 +83,10 @@ species pathogen reproduction() {
 		
 		// additionally each pathogen transmits horizontally to a random host with probability c. 
 		if (runif(1) < c) {
-			horizontalTarget = sample(hostOffspring, 1); //random target host (remove later if already infected? modifyChild() callback?)
+			horizontalTarget = sample(hostOffspring, 1); //random target host to be targeted by horizontal transmission...
 			cat(" horizontalTarget: "); catn(horizontalTarget);
 			
-			if (match(horizontalTarget, targetHosts) < 0) { //-1 for no match. HorizontalTarget is not an individual, which will become infected already by random sampling.
+			if (match(horizontalTarget, targetHosts) < 0) { //-1 for no match. HorizontalTarget is not yet infected; will become infected.
 				targetHosts = c(targetHosts, horizontalTarget);
 				
 				//cat(" match(horizontalTarget, targetHosts): "); catn(match(horizontalTarget, targetHosts));
@@ -114,7 +116,7 @@ species pathogen survival() {
 
 ticks all 1 early() {
 	
-	host.addSubpop("p1", N_host);
+	host.addSubpop("p1", N_host, haploid=T);
 	p1.individuals.tag = seqLen(N_host);
 	cat("Host.tag: "); catn(p1.individuals.tag);
 	}
@@ -142,7 +144,7 @@ ticks all 1: late() {
 
 ticks all hostCOALESCED+1 first(){
 	//initial infection in random host once host coalescence is given.
-	pathogen.addSubpop("p2", N_pathogen);
+	pathogen.addSubpop("p2", N_pathogen, haploid=T);
 	p2.individuals.color = "red";
 	
 	newHost = p1.sampleIndividuals(1);
@@ -164,8 +166,12 @@ ticks all hostCOALESCED+1: late() {
 	
 	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
 	cat("Host.tag: "); catn(p1.individuals.tag);
-	//cat("Pathogen.tag: "); catn(p2.individuals.tag);
+
+    cat("Pathogen.pedigreeID: "); catn(p2.individuals.pedigreeID);
+	cat("Pathogen.tag: "); catn(p2.individuals.tag);
 	
+    pathPedigreeIDs = p2.individuals.pedigreeID;
+    pathHostIDs = p2.individuals.tag;
 	// change host.tags of offspring to infected/healthy. Apply fitness effects of infection/kill of hosts or recover them. 
 	
 	
@@ -178,7 +184,11 @@ ticks all hostCOALESCED+1: late() {
 	catn("Checking pathogen fixation...");
 	if (pathogen.subpopulations.individualCount == N_host) {
 		catn(pathogen.avatar + " fixed in cycle " + community.tick);
-		
+        
+        pathogens = p2.individuals;
+        infectionDict = Dictionary("PathogenPedigreeID", pathogens.pedigreeID, "PathogenHostIDs", pathogens.tag);
+        catn(infectionDict);
+
 		if (!exists("slimgui")) {
 			dir = paste0("trees/TwoSpecies_discrete_WF" + "_Nhost" + N_host + "_Npathogen" + N_pathogen + "_c" + c + "_" + getSeed());
 			catn("Dir: " + dir);
