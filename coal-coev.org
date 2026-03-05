@@ -107,15 +107,20 @@ The epidemiological dynamics of the pathogen popoulation is determined by a simp
 A variation of this exists as a Susceptible-Infected-Susceptible model, where a host can overcome the infection at a give rate $\gamma$. In this case, the pathogen they contain is killed and the host returns to being healthy. 
 Model: [[./slim/TwoSpecies_Moran_SIS.slim]] 
 
-The implementation of Moran Infection models has a set of pathogens infect in each generation with probability $c$. This leads to a pathogen model with generation overlap, the patogens killed can be from any generation. While the host follows a Moran model of one individual per generation ($d = 1/N$), the timescale at which the pathogens reproduce is much faster than that at which the host reproduces (which is often biologically realistic as well). If we wanted a true Moran of hosts and pathogens it could be desirable to only let one random pathogen infect each generation. This would make the model very slow though, especially when studying coalescence (and the biological meaning is also not clear). To speed up the dynamics and study the coalescence of both hosts and pathogens, we implement the above mentioned model without generation overlap as a Cannings-type model. 
+The implementation of Moran Infection models has a set of pathogens infect in each generation with probability $c$. This leads to a pathogen model with generation overlap, the pathogens killed can be from any generation. While the host follows a Moran model of one individual per generation ($d = 1/N$), the timescale at which the pathogens reproduce is much faster than that at which the host reproduces (which is often biologically realistic as well). If we wanted a true Moran of hosts and pathogens it could be desirable to only let one random pathogen infect each generation. This would make the model very slow though, especially when studying coalescence (and the biological meaning is also not clear). To speed up the dynamics and study the coalescence of both hosts and pathogens, we implement the above mentioned model without generation overlap as a Cannings-type model. This causes the coalescence timescales to be the simiar, compared to the Moran-based host pathogen models described above.
 
 *** Wright-Fisher Susceptible-Infected (WF + SI)
-Because generation do not overlap in the Wright-Fisher model, there needs to be some kind of vertical transmission mechansism, otherwise the pathogen will become extint within one generation.
+Because generation do not overlap in the Wright-Fisher model, there needs to be some kind of vertical transmission mechansism, otherwise the pathogen will become extint within one generation. WIth vertical transmission here we mean the transmission between discrete host generations, with pathogens either infecting random hosts or infecting the offspring of  their infected parents (classical vertical transmission). For sake of simplicity we model random vertical transmission for now, but hope to extend the model to include vertical transmission along lines of descent.
 
-Discrete generations Cannings model with Wright-Fisher host and pathogen reproduction. Host and pathogen offspring ($H_{t+1}$ and $P_{t+1}$) are sampled randomly with replacement from the current generation t. Individuals from t are then killed (non-overlapping generations).
+Discrete generations Cannings model with Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism. After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
 
-This causes the coalescence timescales to be the simiar, compared to the Moran-based host pathogen models described above.
-*Hypothesis*: Timescale ratio between Hosts and pathgoens will depend on transmission rate $c$ and hoost and pahogen population sizes.
+- [ ] add fitness scaling for infected hosts
+- [ ] Host resistance loci and pathogen virulence loci with alleles (i.e. multiple host and pathogen types). Mutation or standing variation? 
+- [ ] Infection matrix for infection outcomes between types
+- [ ] Recombination between host and parasite types?
+  
+*** Generalized model
+We aim to develop a model that generalizes some of the behaviours and limiting cases above. such as scaling between continuous and discrete parts, and pathogen-host interdependency (eg. lineage-constrained transmission vs free transmission)...
 
 ** Notes on considerations for the two Species model
 - Stochastic individual-based implementation of co-evolutionary 'SIR' model ([[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]), with separated host, and parasite birth/death (coalescent) model.
@@ -135,17 +140,19 @@ This causes the coalescence timescales to be the simiar, compared to the Moran-b
 *** SIR host model
 - host classes and frequencies and determining reproductive process of hosts. (might not need for agricultural application, ABC).
 - Differential reproduction of infected and non infected host classes (I and S,R?). Propagation of infection tags through the population, linking parasite individual to this host individual. Different parasite classes? Scale fitness of host by parasite virulence factor. Fitness in hosts? Tied to parasite trait? Add interaction matrices?
+  
 ** Coalescence timescale of host-pathogen co-genealogies
 #+name: couple-genealogies
 #+caption: Representations of genealogical trees and tree sequences from epidemiological to evolutionary settings. A) Transmission tree of infectious branching process (Figure adapted from [[cite:&kuehnert-2011-phylog-epidem]]). B) Pathogen genealogy is embedded in a host genealogy (Figure adapted from [[cite:&vienne-2013-cospec-vs]]). C) Pathogen and host genomes are recombining sequences of trees (ARGs) along both genomes.  
-#+attr_latex: :width 1\linewidth  :center t :placement [t]
+#+attr_latex: :width 1\linewidth  :center t :placement
 [[./figures/coupled_genealogies.png]]
 *** TODO Timescale in neutral host-pathogen models
 Analysis of neutral co-branching model of host and parasites. Comparison of different timescales for Moran/WF, continuous/discrete. Framework and statistics for understanding linked trees.
-- TODO create python model and slim structures to save and analyze co-treeSequences.
-*Hypothesis*
-- Coalescent tree of pathogen, scales with the contact rate/transmission rate? Show with equilibrium of host pathogen dynamics? Results of [[cite:&zivkovic-2019-neutr-genom]]. Coalescence in both genealogies is dependent on the relative time-scale of genetic drift in both the host and the pathogen?
-- add table for different cases of host-pathogen models. (eg. vertical/horizontal transmission, timescale of host vs. pathogen, etc.)
+- [X] create python model and slim structures to save and analyze co-treeSequences.
+- [ ] Run discrete WF host pathogen model for different parameters of $c$ and $s$. 
+- run c=0.01 for really slow transmission. 
+
+*Hypothesis*: Ration of coalescence times between hosts and parasites depends on the transmission rate $c$ and the cost of infection in the host $s$.
 **** Co-phylogeny resources
 Inspiration from co-phylogentic methods:
 - https://www.cell.com/action/showPdf?pii=S0169-5347%2806%2900378-8
