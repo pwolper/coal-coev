@@ -3,10 +3,10 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	defineConstant("N_host", 10); //constant host population size
-	defineConstant("N_pathogen", 1); //initialpathogen population size
-	defineConstant("c", 0.1); //horizontal transmission rate of pathogen.
-	//defineConstant("s_I", 0.1); //cost of infection to reproduction in hosts
+	if (!exists("N_host")) defineConstant("N_host", 100); //constant host population size
+	if (!exists("N0_pathogen")) defineConstant("N0_pathogen", 1); //initialpathogen population size
+	if (!exists("c")) defineConstant("c", 0.1); //horizontal transmission rate of pathogen.
+	if (!exists("s")) defineConstant("s", 0.1); //cost of infection to reproduction in hosts
 	//defineConstant("gamma", 0.005); //recovery rate of an infected individual
 
 }
@@ -30,8 +30,8 @@ species pathogen initialize() {
 	initializeSpecies(avatar="🦠", color="red");
 	initializeSLiMOptions(keepPedigrees=T); //are pedigreeID of two species unique?
 	initializeTreeSeq(checkCoalescence=T);
-
-initializeMutationType("m2", 0.5, "f", 0.0); 
+	
+	initializeMutationType("m2", 0.5, "f", 0.0);
 	initializeGenomicElementType("g2", m2, 1.0);
 	initializeChromosome(1, 1, type='H');
 	initializeGenomicElement(g2);
@@ -45,7 +45,9 @@ species host reproduction() {
 	catn("\n -- Host reproduction --");
 	// add host reproduction WF style
 	hosts = p1.individuals;
-	fitness = p1.cachedFitness(NULL);
+	fitness = p1.individuals.fitnessScaling; //cachedFitness(NULL)is different. Why?
+	//cat(" host.cachedFitness: "); catn(p1.cachedFitness(NULL));
+	cat("host.fitnessScaling: "); catn(p1.individuals.fitnessScaling);
 	parents = sample(hosts, N_host, replace=T,  weights=fitness);
 	cat(" Parents.pedigreeID: "); catn(parents.pedigreeID);
 	
@@ -77,7 +79,7 @@ species pathogen reproduction() {
 	for (i in seqLen(p2.individualCount)) {
 		// Each pathogen reproduces to the next generation and chooses random host from global list of hostOffspring (later, vertical reproduction?). 
 		offspring = subpop.addCloned(pathogens[i]);
-		offspring.tag = targetHosts[i];
+		offspring.tag = targetHosts[i]; offspring.color = pathogens[i].color;
 		catn("\n Pathogen " + pathogens[i].tag + " reproduced to host " + targetHosts[i]);
 		
 		
@@ -92,7 +94,7 @@ species pathogen reproduction() {
 				//cat(" match(horizontalTarget, targetHosts): "); catn(match(horizontalTarget, targetHosts));
 				catn(" Pathogen " + pathogens[i].tag + " reproduced horizontally to " + horizontalTarget);
 				horizontalOffspring = subpop.addCloned(pathogens[i]);
-				horizontalOffspring.tag = horizontalTarget;
+				horizontalOffspring.tag = horizontalTarget; horizontalOffspring.color = pathogens[i].color;
 				cat(" TargetHosts: "); catn(targetHosts); //add horizontal target to list of targeted hosts to avoid double horizontal transmission to the same individual...
 			}
 		
@@ -119,13 +121,14 @@ ticks all 1 early() {
 	host.addSubpop("p1", N_host, haploid=T);
 	p1.individuals.tag = seqLen(N_host);
 	cat("Host.tag: "); catn(p1.individuals.tag);
-	}
-
-ticks all 2: first() {
-	catn("\n--- first() ---");
-
 }
 
+ticks all 2: first() {
+	catn("\n\n--- first() ---");
+	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
+	cat("Host.tag: "); catn(p1.individuals.tag);
+	cat("Host.fitnessScaling: "); catn(p1.cachedFitness(NULL));
+}
 
 ticks all 1: late() {
 	catn("\n--- late() ---");
@@ -137,18 +140,19 @@ ticks all 1: late() {
 	
 	if (all(tags == tags[0])) {
 		defineConstant("hostCOALESCED", community.tick);
-		catn("Host coalesced in tick " + community.tick);
+		catn("Host coalesced in tick " + community.tick + "!");
 		community.deregisterScriptBlock(self);
 	}
 }
 
 ticks all hostCOALESCED+1 first(){
 	//initial infection in random host once host coalescence is given.
-	pathogen.addSubpop("p2", N_pathogen, haploid=T);
-	p2.individuals.color = "red";
+	catn("\n--- first() ---");
+	pathogen.addSubpop("p2", N0_pathogen, haploid=T);
+	p2.individuals.color = "red"; p2.individuals.age = 1;
 	
 	newHost = p1.sampleIndividuals(1);
-	newHost.tag = 1; newHost.color = "red";
+	newHost.color = "red";
 	catn("Initial infection in host " + newHost.pedigreeID);
 	p2.individuals.tag = newHost.pedigreeID; //tag pathogen with host.pedigreeID
 }
@@ -161,17 +165,31 @@ ticks all hostCOALESCED+1 first(){
 //	}
 //}
 
+ticks all hostCOALESCED+1: first() {
+	catn("\n--- first() ---");
+	
+	//cat("host.cachedFitness: "); catn(p1.cachedFitness(NULL));
+	infectedHosts = p1.individuals[match(p2.individuals.tag, p1.individuals.pedigreeID)];
+	cat("InfectedHosts.pedigreeIDs: "); catn(infectedHosts.pedigreeID);
+	
+	infectedHosts.fitnessScaling = 1-s;
+	cat("infectedHosts.fitnessScaling: "); catn(infectedHosts.fitnessScaling);
+	cat("Host.fitnessScaling: "); catn(p1.individuals.fitnessScaling);	
+	
+}
+
+
 ticks all hostCOALESCED+1: late() {
 	catn("\n--- late() ---");
 	
 	cat("Host.pedigreeID: "); catn(p1.individuals.pedigreeID);
 	cat("Host.tag: "); catn(p1.individuals.tag);
-
-    cat("Pathogen.pedigreeID: "); catn(p2.individuals.pedigreeID);
+	
+	cat("Pathogen.pedigreeID: "); catn(p2.individuals.pedigreeID);
 	cat("Pathogen.tag: "); catn(p2.individuals.tag);
 	
-    pathPedigreeIDs = p2.individuals.pedigreeID;
-    pathHostIDs = p2.individuals.tag;
+	pathPedigreeIDs = p2.individuals.pedigreeID;
+	pathHostIDs = p2.individuals.tag;
 	// change host.tags of offspring to infected/healthy. Apply fitness effects of infection/kill of hosts or recover them. 
 	
 	
@@ -184,13 +202,13 @@ ticks all hostCOALESCED+1: late() {
 	catn("Checking pathogen fixation...");
 	if (pathogen.subpopulations.individualCount == N_host) {
 		catn(pathogen.avatar + " fixed in cycle " + community.tick);
-        
-        pathogens = p2.individuals;
-        infectionDict = Dictionary("PathogenPedigreeID", pathogens.pedigreeID, "PathogenHostIDs", pathogens.tag);
-        catn(infectionDict);
-
+		
+		pathogens = p2.individuals;
+		infectionDict = Dictionary("PathogenPedigreeID", pathogens.pedigreeID, "PathogenHostIDs", pathogens.tag);
+		catn(infectionDict);
+		
 		if (!exists("slimgui")) {
-			dir = paste0("trees/TwoSpecies_discrete_WF" + "_Nhost" + N_host + "_Npathogen" + N_pathogen + "_c" + c + "_" + getSeed());
+			dir = paste0("trees/discrete_WF/TwoSpecies_discrete_WF" + "_Nhost" + N_host + "_N0pathogen" + N0_pathogen + "_c" + c + "_s" + s + "_" + getSeed());
 			catn("Dir: " + dir);
 			createDirectory(dir);
 			
@@ -204,11 +222,9 @@ ticks all hostCOALESCED+1: late() {
 		}
 		community.simulationFinished();
 	}
-
-
 }
 
-ticks all 100*N_host late() {
+ticks all 10*N_host late() {
 
 
 }
