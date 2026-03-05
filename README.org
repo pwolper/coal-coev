@@ -1,0 +1,9 @@
+#+title: Host-Pathogen coevolutionary genealogy models 
+
+* SLiM simulations
+Run the simulations with GNU parallel: 
+#+begin_src bash
+parallel --verbose slim -d c={1} -d N_host=1000 -d s=0 -d rep={2} slim/TwoSpecies_discreteWF.slim ::: 0.05 0.1 0.5 ::: $(seq 10)
+
+parallel --verbose slim -d c={1} -d N_host=1000 -d s=0.5 -d rep={2} TwoSpecies_discreteWF.slim ::: 0.05 0.1 0.5 :::  $(seq 50)
+#+end_src

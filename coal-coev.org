@@ -151,6 +151,7 @@ Analysis of neutral co-branching model of host and parasites. Comparison of diff
 - [X] create python model and slim structures to save and analyze co-treeSequences.
 - [ ] Run discrete WF host pathogen model for different parameters of $c$ and $s$. 
 - run c=0.01 for really slow transmission. 
+- [ ] pairwise plots of the coalescence times
 
 *Hypothesis*: Ration of coalescence times between hosts and parasites depends on the transmission rate $c$ and the cost of infection in the host $s$.
 **** Co-phylogeny resources
