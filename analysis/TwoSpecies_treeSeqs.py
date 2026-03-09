@@ -43,7 +43,7 @@ def read_host_pathogen_treeSeqs(dirs):
 ############################## 
 N_host = 1000
 N_pathogen = 1
-cValues = [0.05, 0.1, 0.5]
+cValues = [0.01, 0.1, 0.5]
 sValues = [0.0, 0.01, 0.1, 0.5]
 # sValues = [0.01, 0.1]
 
@@ -70,15 +70,36 @@ df = pd.DataFrame(rows)
 print(df)
 
 #############################
+# Data structure
+df_wide = df.pivot_table(
+    index=["c", "s"],
+    columns="species",
+    values="tmrca"
+).reset_index()
+
+print(df_wide)
+#############################
 # Plotting
  
-plt.figure()
-# sns.boxplot(data=df, x="c", y="tmrca", hue="species")
-g= sns.catplot(data=df,
-            x="c", y="tmrca", hue="species", col="s",
-            kind="box", sharey=True, showfliers=False)
-for ax in g.axes.flat:
-    ax.grid(True)
+# plt.figure()
+# # sns.boxplot(data=df, x="c", y="tmrca", hue="species")
+# g= sns.catplot(data=df,
+#             x="c", y="tmrca", hue="species", col="s",
+#             kind="box", sharey=True, showfliers=False)
+# for ax in g.axes.flat:
+#     ax.grid(True)
 
-plt.savefig(f"figures/discreteWF_HostvPathogenTMRCA_c{cValues}_s{sValues}_reps{len(simulations)}.png", dpi=300)
+# plt.savefig(f"figures/discreteWF_HostvPathogenTMRCA_c{cValues}_s{sValues}_reps{len(simulations)}.png", dpi=300)
+# plt.show()
+ 
+plt.figure()
+
+# g = sns.FacetGrid(df_wide, row="c", col="s", margin_titles=True)
+# g.map_dataframe(sns.scatterplot, x="host", y="pathogen")
+
+# # add grids
+# for ax in g.axes.flat:
+#     ax.grid(True, linestyle="--", alpha=0.5)
+
+sns.scatterplot(data=df_wide[df_wide["s"] == 0.0], x="host", y="pathogen", hue="c")
 plt.show()
