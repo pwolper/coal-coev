@@ -114,7 +114,8 @@ Because generation do not overlap in the Wright-Fisher model, there needs to be 
 
 Discrete generations Cannings model with Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism. After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
 
-- [ ] add fitness scaling for infected hosts
+- [ ] add vertical transmission along lineages? Tuneable somehow?
+- [X] add fitness scaling for infected hosts. Host offspring sampling weighted by 1-s.
 - [ ] Host resistance loci and pathogen virulence loci with alleles (i.e. multiple host and pathogen types). Mutation or standing variation? 
 - [ ] Infection matrix for infection outcomes between types
 - [ ] Recombination between host and parasite types?
