@@ -63,43 +63,60 @@ for c in cValues:
             host_tmrcas = [tree.time(tree.root) for tree in host_ts.trees()][0]
             pathogen_tmrcas = [tree.time(tree.root) for tree in pathogen_ts.trees()][0]
 
-            rows.append({"c": c, "s": s, "species": "host", "tmrca": host_tmrcas})
-            rows.append({"c": c, "s": s, "species": "pathogen", "tmrca": pathogen_tmrcas})
+            rows.append({"c": c, "s": s, "tmrca_host": host_tmrcas, "tmrca_pathogen": pathogen_tmrcas})
 
 df = pd.DataFrame(rows)
 print(df)
 
 #############################
-# Data structure
-df_wide = df.pivot_table(
-    index=["c", "s"],
-    columns="species",
-    values="tmrca"
-).reset_index()
+# # Data structure
+df_long = df.melt(id_vars=["c", "s"],
+                  value_vars=["tmrca_host", "tmrca_pathogen"],
+                  var_name="species",
+                  value_name="tmrca")
+df_long["species"] = df_long["species"].str.replace("tmrca_", "")
 
-print(df_wide)
+print(df_long)
 #############################
 # Plotting
  
-# plt.figure()
-# # sns.boxplot(data=df, x="c", y="tmrca", hue="species")
-# g= sns.catplot(data=df,
-#             x="c", y="tmrca", hue="species", col="s",
-#             kind="box", sharey=True, showfliers=False)
-# for ax in g.axes.flat:
-#     ax.grid(True)
+row_colors = {"host": "tab:blue", "pathogen": "tab:orange"}
+# sns.boxplot(data=df, x="c", y="tmrca", hue="species")
+g = sns.catplot(data=df_long,
+               x="c", y="tmrca", hue="species", row="species", col="s",
+                kind="box", sharey='row', boxprops={"alpha": 0.4}, showfliers=False, width=0.6)
+# g.map_dataframe(sns.stripplot, x="c", y="tmrca", jitter=True)
+# loop over rows (species) and columns (s values)
+species_order = ["host", "pathogen"]
+s_values = sorted(df_long["s"].unique())
 
-# plt.savefig(f"figures/discreteWF_HostvPathogenTMRCA_c{cValues}_s{sValues}_reps{len(simulations)}.png", dpi=300)
-# plt.show()
+for row_idx, species in enumerate(species_order):
+    for col_idx, s_val in enumerate(s_values):
+        ax = g.axes[row_idx, col_idx]
+        # select only the subset for this facet
+        df_facet = df_long[(df_long["species"] == species) & (df_long["s"] == s_val)]
+        sns.stripplot(
+            data=df_facet,
+            x="c",
+            y="tmrca",
+            # jitter=0.25,
+            alpha=0.8,
+            color=row_colors[species],
+            ax=ax, legend=False)
+
+for ax in g.axes.flat:
+    ax.grid(True)
+
+g.fig.savefig(f"{here("analysis")}/figures/discreteWF_HostvPathogenTMRCA_c{cValues}_s{sValues}_reps{len(simulations)}.png", dpi=300)
  
-plt.figure()
+# plt.figure()
 
-# g = sns.FacetGrid(df_wide, row="c", col="s", margin_titles=True)
-# g.map_dataframe(sns.scatterplot, x="host", y="pathogen")
+# g = sns.FacetGrid(df, row="c", col="s", margin_titles=True)
+# g.map_dataframe(sns.scatterplot, x="tmrca_host", y="tmrca_pathogen")
 
 # # add grids
 # for ax in g.axes.flat:
 #     ax.grid(True, linestyle="--", alpha=0.5)
 
-sns.scatterplot(data=df_wide[df_wide["s"] == 0.0], x="host", y="pathogen", hue="c")
-plt.show()
+# # sns.scatterplot(data=df_wide[df_wide["s"] == 0.0], x="host", y="pathogen", hue="c")
+# plt.show()
