@@ -112,7 +112,7 @@ The implementation of Moran Infection models has a set of pathogens infect in ea
 *** Wright-Fisher Susceptible-Infected (WF + SI)
 Because generation do not overlap in the Wright-Fisher model, there needs to be some kind of vertical transmission mechansism, otherwise the pathogen will become extint within one generation. WIth vertical transmission here we mean the transmission between discrete host generations, with pathogens either infecting random hosts or infecting the offspring of  their infected parents (classical vertical transmission). For sake of simplicity we model random vertical transmission for now, but hope to extend the model to include vertical transmission along lines of descent.
 
-Discrete generations Cannings model with Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism. After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
+Discrete generations Cannings model with Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism. The host parents are sampled weighted based on their infection status. If an individual is infected, its probability to be a parent is $1-s$, with $s$ being the cost of infection.  After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
 
 - [ ] add vertical transmission along lineages? Tuneable somehow?
 - [X] add fitness scaling for infected hosts. Host offspring sampling weighted by 1-s.
@@ -153,6 +153,11 @@ Analysis of neutral co-branching model of host and parasites. Comparison of diff
 - [ ] Run discrete WF host pathogen model for different parameters of $c$ and $s$. 
 - run c=0.01 for really slow transmission. 
 - [ ] pairwise plots of the coalescence times
+
+#+name: discrete_WF_host_pathogen_tmrcas
+#+caption: Host and pathogen TMRCAs for discrete WF SI Infection model. Starting from one initial infection in a coalesced host population, the pathogens are resampled randomly each discrete generation and transmit to an uninfected host individual horizontally with probability $c$. Host reproduce randomly (multinomial draw) with the probability that an infected host is chosen scaled by $1-s$, the cost of infection. Simulation with a haploid host population size $N=1000$. Host and pathogens reproduce clonally.  
+#+attr_latex: :width 1\linewidth :center t 
+[[./analysis/figures/discreteWF_HostvPathogenTMRCA_c\[0.01, 0.1, 0.5\]_s\[0.0, 0.01, 0.1, 0.5\]_reps50.png]]
 
 *Hypothesis*: Ration of coalescence times between hosts and parasites depends on the transmission rate $c$ and the cost of infection in the host $s$.
 **** Co-phylogeny resources

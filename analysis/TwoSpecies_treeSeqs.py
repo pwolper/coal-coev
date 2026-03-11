@@ -107,7 +107,7 @@ for row_idx, species in enumerate(species_order):
 for ax in g.axes.flat:
     ax.grid(True)
 
-g.fig.savefig(f"{here("analysis")}/figures/discreteWF_HostvPathogenTMRCA_c{cValues}_s{sValues}_reps{len(simulations)}.png", dpi=300)
+g.fig.savefig(f"{here('analysis')}/figures/discreteWF_HostvPathogenTMRCA_c{cValues}_s{sValues}_reps{len(simulations)}.png", dpi=300)
  
 # plt.figure()
 
