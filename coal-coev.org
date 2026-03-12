@@ -114,16 +114,26 @@ Because generation do not overlap in the Wright-Fisher model, there needs to be 
 
 Discrete generations Cannings model with Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism. The host parents are sampled weighted based on their infection status. If an individual is infected, its probability to be a parent is $1-s$, with $s$ being the cost of infection.  After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
 
-- [ ] add vertical transmission along lineages? Tuneable somehow?
-- [X] add fitness scaling for infected hosts. Host offspring sampling weighted by 1-s.
-- [ ] Host resistance loci and pathogen virulence loci with alleles (i.e. multiple host and pathogen types). Mutation or standing variation? 
-- [ ] Infection matrix for infection outcomes between types
-- [ ] Recombination between host and parasite types?
-  
 *** Generalized model
 We aim to develop a model that generalizes some of the behaviours and limiting cases above. such as scaling between continuous and discrete parts, and pathogen-host interdependency (eg. lineage-constrained transmission vs free transmission)...
+#+name: generalized_vertical_model
+#+caption: Two Species host and pathogen model with discrete generations and horizontal and vertical pathogen transmission. The model is in two phases: host reproduction and pathogen reproduction. Host reproduction proceeds by WF sampling and determines pathogen vertical transmission (each pathogen transmits vertically to the host offspring with probability $c{v}$). If the host does not produce any offspring, the pathogen infecting it dies as well. Host reproduction is followed by pathogen reproduction (within the host), with each pathogen producing $X_{i}$ offspring, which can each migrate (horizontal infection) to another random host with probability $c_{h}$. 
+#+attr_latex: :width 1\linewidth  :center t :placement
+[[./figures/TwoSpecies_discrete_vertical.png]]
 
-** Notes on considerations for the two Species model
+\noindent *Limiting cases and Behaviours:*
+- *$c_{v} = 1$, $X_{i} = 1$; $c_{h} = 1$:* discrete WF (pathogens find new random host each generation. Difference: pathogen population growth depends on host reproduction)
+- *$c_{v} = 1$; $X_{i} = 1$; $c_{h} = 0$:* vertical WF (pathogens follow host lineages exactly. No horizontal transmission.)
+- *$X_{i} \sim P(X \ge k)$; $c_{h} > 0$:* super-spreading, infection heterogeneity. Various pathogen offspring distributions.
+- *$n > 1$:* Polycyclic model. $n$ pathogen reproduction cycles per host reproduction. Seasonality?
+
+\noindent *Further questions and behaviours to consider:*
+- Generation overlap? Overlapping generations, so vertical transmission can be $c_{v} = 0$.
+- Multiple infections. Especially important in the regime $X_{i} > 1$. Also regarding whom to infect horizontally to. Single infections to healthy subclass keeps SI density dependent growth assumptions.  Intra-host selection or filter?
+- Recombination between pathogen types. Within multiply infected hosts?  
+- Host resistance and pathogen virulence types? Infection matrix for determining the outcome of the interaction. Mutation of types (reversible or uni-directional?) or standing genetic variation? 
+  
+** Notes on considerations for the two Species model :noexport:
 - Stochastic individual-based implementation of co-evolutionary 'SIR' model ([[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]), with separated host, and parasite birth/death (coalescent) model.
 - Variable population sizes to follow coevolutionary dynamics ([[cite:&zivkovic-2019-neutr-genom]]).
 - Translating the deterministic host SI model of one coevolutionary "run" developed by [[cite:&zivkovic-2019-neutr-genom]] into a stochastic model of the host and pathogen lineages (both medium or long-term coevolution). How can the parameters of the model be incorporated in the SLiM forward in time model?
@@ -147,12 +157,8 @@ We aim to develop a model that generalizes some of the behaviours and limiting c
 #+caption: Representations of genealogical trees and tree sequences from epidemiological to evolutionary settings. A) Transmission tree of infectious branching process (Figure adapted from [[cite:&kuehnert-2011-phylog-epidem]]). B) Pathogen genealogy is embedded in a host genealogy (Figure adapted from [[cite:&vienne-2013-cospec-vs]]). C) Pathogen and host genomes are recombining sequences of trees (ARGs) along both genomes.  
 #+attr_latex: :width 1\linewidth  :center t :placement
 [[./figures/coupled_genealogies.png]]
-*** TODO Timescale in neutral host-pathogen models
+*** Timescale in neutral host-pathogen models
 Analysis of neutral co-branching model of host and parasites. Comparison of different timescales for Moran/WF, continuous/discrete. Framework and statistics for understanding linked trees.
-- [X] create python model and slim structures to save and analyze co-treeSequences.
-- [ ] Run discrete WF host pathogen model for different parameters of $c$ and $s$. 
-- run c=0.01 for really slow transmission. 
-- [ ] pairwise plots of the coalescence times
 
 #+name: discrete_WF_host_pathogen_tmrcas
 #+caption: Host and pathogen TMRCAs for discrete WF SI Infection model. Starting from one initial infection in a coalesced host population, the pathogens are resampled randomly each discrete generation and transmit to an uninfected host individual horizontally with probability $c$. Host reproduce randomly (multinomial draw) with the probability that an infected host is chosen scaled by $1-s$, the cost of infection. Simulation with a haploid host population size $N=1000$. Host and pathogens reproduce clonally.  
@@ -160,16 +166,7 @@ Analysis of neutral co-branching model of host and parasites. Comparison of diff
 [[./analysis/figures/discreteWF_HostvPathogenTMRCA_c\[0.01, 0.1, 0.5\]_s\[0.0, 0.01, 0.1, 0.5\]_reps50.png]]
 
 *Hypothesis*: Ration of coalescence times between hosts and parasites depends on the transmission rate $c$ and the cost of infection in the host $s$.
-**** Co-phylogeny resources
-Inspiration from co-phylogentic methods:
-- https://www.cell.com/action/showPdf?pii=S0169-5347%2806%2900378-8
-- https://www.annualreviews.org/content/journals/10.1146/annurev-ecolsys-102320-112823
-- https://academic.oup.com/cz/article/62/4/393/1745416?login=false
-- https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.12150
-- https://onlinelibrary.wiley.com/doi/full/10.1111/j.1420-9101.2007.01340.x
-- https://www.numericalecology.com/Reprints/ParaFit_paper.pdf
-
-** Further reading: Connecting coalescent models to epidemiology
+** Further reading: Connecting coalescent models to epidemiology :noexport: 
 - Offspring distributions from epidemiologcal models: negative binomial ([[cite:&lloyd-smith-2005-super-effec]]) with the parameters $R_{0}$ and $k$.
 - [[cite:&li-2017-quant-trans]] show that the dispersion paramter of the epidemiological offspring distribution $k$ can be estimated from the pathogen phylogeny, using a formulation of of the Kingman coalescent with arbitrary offspring distributions ($N_{e} = N/\sigma^{2}$,[[cite:&koelle-2011-rates-coales]], [[cite:&fraser-2017-coales]]). How valid is this assumption for MMC?
 - Multifurcating skyline plot [[cite:&hoscheit-2019-multif-skylin-plot]] uses Beta-coalescent to infer the effective population size through time, and show that the estimation of \alpha correlates with the degree of superspreading $k$ in an epidemiological model. What is the direct connection between \alpha and $k$?
@@ -178,6 +175,15 @@ Inspiration from co-phylogentic methods:
 - From simulations of SIR we can follow genealogy of host, or analytically for pathogen too it we know the AISG (?). Is this useful in downstream analysis (eg. tskit? adding contact arrows, etc.). Is the intrisic presence of the pathogen in the R status of the SIR model enough to work with the pathogen genealogy, or would a two species model be more practical?
 - steady states of the SIR model might be reflected in heights of the coalescent trees pathogen/host? Metric from [[cite:&welch-2005-integ-geneal-epidem]]. Expected relative difference betwwen host and viral tree root age and Proportion in common between viral and host trees? Extend results of [[cite:&welch-2005-integ-geneal-epidem]] to resistant classes as well?
 - e3SIM generate SLiM code from SIR models? Can we use our dynamic coevolution model for this?  https://jaeheekimlab.github.io/pdfs/papers/2024-xu-episim.pdf
+*** Co-phylogeny resources
+Inspiration from co-phylogentic methods: \\
+https://www.cell.com/action/showPdf?pii=S0169-5347%2806%2900378-8 \\
+https://www.annualreviews.org/content/journals/10.1146/annurev-ecolsys-102320-112823 \\
+https://academic.oup.com/cz/article/62/4/393/1745416?login=false \\
+https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.12150 \\
+https://onlinelibrary.wiley.com/doi/full/10.1111/j.1420-9101.2007.01340.x \\
+https://www.numericalecology.com/Reprints/ParaFit_paper.pdf \\
+
 * Further thoughts :noexport:
 First, we need a basic model to describe the interaction of host and pathogen genealogies and study 'neutral' forces involved (i.e. constant population size, etc). How would we describe the infectivity/prevalence from the coalescent tree? Higher infectivity and increased transmission would result in a kind of offspring skew, because of higher fitness and more spores/offspring produced. Can we describe this offspring skew as a multiple merger genealogy. Then we are looking for local multiple merger signatures in the genome of pathogens, as a signal of a gene conferring a advantage contributing to it's increased spread (or any signal of positive selection in this sense). How do we know the selection is the result of coevolution (i.e. is associated with a variant in the host)? If this multiple merger siganture is still detectable in the pathogen genealogy, if we sample only pathogens found in the host carrying the variant, and not in the pathogens found in other variants, this means the selective advantage is only conferred by this particular host variant?
 * BarleyCOPA meeting, 2025: Research overview :noexport:
