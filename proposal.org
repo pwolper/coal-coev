@@ -78,10 +78,11 @@ This project aims to establish ancestral recombination graphs (ARGs) as a unifyi
 
 *Guiding Questions:*
 - How do coevolution and epidemiology jointly shape ARGs of hosts and pathogens?
-- Can ARG-derived statistics be used to infer genetic interactions, infection matrices, or epidemiological parameters from sampled data? 
+- How do inferred host and pathogen ARGs capture known genomic signatures of coevolutions and epidemiological dynamics?
+- Can ARG-derived statistics be used to infer GxG interactions and infection matrices from data?   
 - Can we extend tree-based phylodynamic inference to full ARGs?
-- Do ARGs capture known genomic signatures of coevolutions and epidemiological dynamics?
-- How can we apply coevolutionary models and inference to data beyond using simple summary statistics? 
+- Guiding joint host-pathogen demographic inferences? (co-demography, see [[cite:&zivkovic-2019-neutr-genom]]?)
+- How can we apply coevolutionary models and inference to data beyond using simple summary statistics? (eg. beyond pairwise comparisons).  
   
 **  Joint host-pathogen ARGs
 *Aim:* To characterize the joint ARGs of hosts and their infecting pathogen samples and the role they could play in improving inference of host-pathogen interactions.
