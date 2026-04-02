@@ -99,16 +99,12 @@ This project aims to establish ancestral recombination graphs (ARGs) as a unifyi
 - How does recombination, selection and epidemiological demography affect the inference of ARGs?
 - Which ARG-derived statistics are robust for downstream inference?
 
-* Models and Methods
+* Models 
 - Sketch ARGs models, branching process models and coevolutionary models that can be used to describe host and pathogen ARGs. Simulation with SLiM. Develop and extend coevolutionary model to be lineage-explicit (capable of describing genealogies forward or backwards in-time).
 - A joint ARG is a pair of host and pathogen ARGs whose branching, coalescence, and recombination events are statistically dependent through infection and transmission processes.
-- GxG ABC inference outline.
-- Data availability of crop and pathogen data. Barley-Fusarium and Ramularia.
+
+#+INCLUDE: "./models.org" :lines "12-"
   
-#+name: host-pathogen-hybrid-model
-#+caption: Host pathogen model with both horizontal and vertical transmission and host and pathogen reproduction. This model aims to describe explicitly the reproduction of both hosts and pathogens and their genealogies using a two-step process of (1.) host reproduction and (2.) pathogen reproduction. The probability of vertical transmission is given by $c_{v}$ and a pathogen offspring (propagule) transmits to a random host horizontally with probability $c_{h}$.
-#+attr_latex: :width 1\linewidth  :center t :placement [t]
-[[./figures/TwoSpecies_discrete_vertical.png]]
 * Course of action 
 ** Simulation framework
 Develop a simulation framework to simulate joint host and pathogen ARGs with SLiM; This should include realistic epidemiology (transmission and infection); reproduction in hosts and pathogens; coevolutionary dynamcis (including costs, frequency-dependent selection and infection matrices); population structure; as well as population genetic processes, such as mutation and recombination.
