@@ -54,7 +54,7 @@ At the epidemic timescale, following the infectious branching process of an epid
 
 #+name: couple-genealogies
 #+caption: Representations of genealogical trees and tree sequences from epidemiological to evolutionary settings. A) Transmission tree of infectious branching process (Figure adapted from [[cite:&kuehnert-2011-phylog-epidem]]). B) Pathogen genealogy is embedded in a host genealogy (Figure adapted from [[cite:&vienne-2013-cospec-vs]]). C) Pathogen and host genomes are recombining sequences of trees (ARGs) along both genomes.  
-#+attr_latex: :width 1\linewidth  :center t :placement [t]
+#+attr_latex: :width 1\linewidth  :center t :placement [b]
 [[./figures/coupled_genealogies.png]]
 
 Within this framework, ancestral recombination graphs can be used in several distinct ways, prompting different questions: ARGs as /explanatory/ objects (How does epidemiology and coevolution shape ARGs?); ARGs as /descriptive/ summaries (What information do genealogies encode about the epidemiological and coevolutionary processes?); ARGs as /inference/ targets (Can we reconstruct ARGs robustly under realistic population dynamics and coevolutionary models?) As there is a duality between genealogies and genomes ([[cite:&ralph-2020-effic-summar]]), the ARGs will contain many classical genetic diversity statistics, as well as genetic linkage along the genome (see list of statistics in [[cite:&ebert-2020-host]]).
