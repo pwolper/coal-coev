@@ -48,13 +48,17 @@ The epidemiological dynamics of the pathogen popoulation is determined by a simp
 
 For a simple WF with host and pathognes we model random horizontal transmission of pathogens between host generations; no vertical transmission along lines of descent yet. Discrete generation stochastic model of Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism (or other type of Canning's offspring distribution). The host parents are sampled weighted based on their infection status: If an individual is infected, its probability to be a parent is $1-s$, with $s$ being the cost of infection.  After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
 
+#+latex: \pagebreak
 *** Generalized host-pathogen model with vertical and horizontal epidemiology
+
+Aim to construct a nested Canning's model with host and $n \times$ pathogen reproduction steps (see Fig. [[generalized_vertical_model]]). *Add* host reproduction via some kind of Canning's or WF offspring process.
+The model is in two phases: host reproduction and pathogen reproduction. Host reproduction proceeds by WF sampling and determines pathogen vertical transmission (each pathogen transmits vertically to the host offspring with probability $c_{v}$). If the host does not produce any offspring, the pathogen infecting it dies as well. Host reproduction is followed by pathogen reproduction (within the host), with each pathogen producing $X_{i}$ offspring, which can each migrate (horizontal infection) to another random host with probability $c_{h}$. 
+
 #+name: generalized_vertical_model
-#+caption: Two Species host and pathogen model with discrete generations and horizontal and vertical pathogen transmission. The model is in two phases: host reproduction and pathogen reproduction. Host reproduction proceeds by WF sampling and determines pathogen vertical transmission (each pathogen transmits vertically to the host offspring with probability $c_{v}$). If the host does not produce any offspring, the pathogen infecting it dies as well. Host reproduction is followed by pathogen reproduction (within the host), with each pathogen producing $X_{i}$ offspring, which can each migrate (horizontal infection) to another random host with probability $c_{h}$. 
+#+caption: Two species, host-pathogen nested Canning's model with horizontal and vertical pathogen transmission. 
 #+attr_latex: :width 1\linewidth  :center t :placement [h!]
 [[./figures/TwoSpecies_discrete_vertical.png]]
 
-Aim to construct a nested Canning's model with host and $n \times$ pathogen reproduction steps (see Fig. [[generalized_vertical_model]]). *Add* host reproduction via some kind of Canning's or WF offspring process.
 
 \noindent *Limiting cases and Behaviours:*
 We aim to develop a model that generalizes some of the behaviours and limiting cases above. such as scaling between continuous and discrete parts, and pathogen-host transmission system (eg. lineage-constrained transmission vs free transmission)...
@@ -64,6 +68,7 @@ We aim to develop a model that generalizes some of the behaviours and limiting c
 - *$n >> 1$:* Polycyclic model. $n$ pathogen reproduction cycles per host reproduction. Seasonality? Epidemiological dynamics only (how to translate pathogen offspring and migration to SIR with superspreading model (eg. [[cite:&lloyd-smith-2005-super-effec]]).)
 
 \noindent *Further questions and behaviours to consider:*
+Further biological model features necessary genetics.
 - Generation overlap? Overlapping generations, so vertical transmission can be $c_{v} = 0$.
 - Multiple infections. Especially important in the regime $X_{i} > 1$. Also regarding whom to infect horizontally to. Single infections to healthy subclass keeps SI density dependent growth assumptions.  Intra-host selection or filter?
 - Recombination between pathogen types. Within multiply infected hosts?  
