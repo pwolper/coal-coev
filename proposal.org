@@ -103,6 +103,7 @@ This project aims to establish ancestral recombination graphs (ARGs) as a unifyi
 - Sketch ARGs models, branching process models and coevolutionary models that can be used to describe host and pathogen ARGs. Simulation with SLiM. Develop and extend coevolutionary model to be lineage-explicit (capable of describing genealogies forward or backwards in-time).
 - A joint ARG is a pair of host and pathogen ARGs whose branching, coalescence, and recombination events are statistically dependent through infection and transmission processes.
 
+  
 #+INCLUDE: "./models.org" :lines "12-"
   
 * Course of action 
