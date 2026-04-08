@@ -3,7 +3,8 @@
 #+setupfile: ~/.doom.d/setup-files/latex.setup
 #+OPTIONS: toc:t author:nil
 
-#+LATEX_HEADER: \author[1]{Philip L. Wolper}
+#+LATEX_HEADER: \author[1]{Philip Wolper}
+#+LATEX_HEADER: \author[1]{Aurélien Tellier}
 #+LATEX_HEADER: \affil[1]{Chair of Population Genetics, Technical University of Munich, Germany}
 
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
@@ -12,6 +13,8 @@
 A major property of a host-pathogen model is the differences in time scale between the species. This reflects in the different analytical and modelling approaches we can take. Importantly, the choice of model depends on host-pathogen system under study. We aim to provide some recommendations and overview for which model type to use to describe the biological reality of host-pathogen interactions and life cycles we observe in nature? Beyond this we wish to connect some classically known coevolutionary models and population dynamics from host and pathogen epidemiology and ecology to models of genealogical branching and coalescence.  
 
 ** Continuous time-models
+
+#+LATEX: \vspace{10pt}
 #+ATTR_LATEX: :options [enhanced, title={Continuous-time coevolutionary model based on differential equations}]
 #+begin_tcolorbox
 A well-known class of coevolutionary models is built on the works of [[cite:&anderson-1979-popul-biolog]] and epidemiological differential equations. The most simple case includes one host and one parasite, as described by the following model. $H$ represents the number of healthy individuals, while $I$ represents the infected indivudals in a population of $N = H+I$ hosts. 
@@ -39,9 +42,9 @@ Extensions of this model to include multiple pathogen stains can be found in [[c
 
 Here $\alpha_{ij}$ represents the infection matrix determining the infection outcome. Host recovery as well as costs of infection, resistance and a reduction in fecundity when infected are omitted here for simplicity (see [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]).
 #+end_tcolorbox
+#+LATEX: \vspace{10pt}
 
 Additionally, continuous models of coevolution include models such as birth-death processes and Moran population models (eg. models from [[cite:&macpherson-2020-coevol-does]] and [[cite:&macpherson-2021-feedb-between]]) or the Moran Infection process used by [[cite:&welch-2005-integ-geneal-epidem]]. 
-
 Other models aim to investigate the role of eco-evolutionary feedbacks, such as [[cite:&ashby-2019-under-role]]. (Large class of continuous models, eg. Nuismer book, that are not necessarily related to Anderson and May equations)?
 *** [[cite:&zivkovic-2019-neutr-genom]] Model :noexport:
 Model follows from [[cite:&zivkovic-2019-neutr-genom]]. 
@@ -63,23 +66,24 @@ Similar models are given in [[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-
 #+end_tcolorbox
 
 ** TODO Discrete-time models
-- evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
+Evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
   
-** Semi-discrete
-- combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
-* Host/parasite genealogical branching models
+** TODO Semi-discrete
+Combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
+* Host and parasite genealogical branching models
 Linking epidemiological dynamic models with population genetic models and branching processes is essential to using genealogies because it requires consideration of the backwards model (i.e. coalescent model) with which the sample genealogies were constructed. Therefore it would be helpful to have a general coaescent model to describe these dynamics backwards in time or forward through simulation. IDEA: Can we do ARG inference for a sample genealogy from informed forward in-time simulations? 
 ** TODO Outline phylodynamics models
 Eg. [[cite:&featherstone-2022-epidem-infer]] 
 SIR-based coalescents and Phylodynamic models
-** TODO Sketch Welch et al., Ancestral infection and selection graph
-Approach to formulate a coalescent for host and pathogens for a Moran Infection process [[cite:&welch-2005-integ-geneal-epidem]]. 
-*  Host-pathogen genealogy-explicit co-evolutionary models
-To our knowledge most epidemiological and continuous coevolutionary models do not explicitly model both the pathogen and the host. Typically the population size of the pathogen is proxied with the number of infected hosts from the 'Infected' compartment of the epidemiological model. We believe, that the increased mathematical developments of non-standard coalescent models and genealogy-derived methods together with powerful population-genetic simulation toolkits capable of two Species individual-based model (eg. SLiM 5) will allow us to model the biological reality of host and pathogen system from the perspective of both hosts and pathogens.
+** TODO Ancestral infection and selection graph, [[cite:&welch-2005-integ-geneal-epidem]]
+Approach to formulate a coalescent for host and pathogens for a Moran Infection process [[cite:&welch-2005-integ-geneal-epidem]].
+** TODO Co-phylogenetics for tree associations
 
+* Genealogy-explicit co-evolutionary models
+To our knowledge most epidemiological and continuous coevolutionary models do not explicitly model both the pathogen and the host. Typically the population size of the pathogen is proxied with the number of infected hosts from the 'Infected' compartment of the epidemiological model. We believe, that the increased mathematical developments of non-standard coalescent models and genealogy-derived methods together with powerful population-genetic simulation toolkits capable of two Species individual-based model (eg. SLiM 5) will allow us to model the biological reality of host and pathogen system from the perspective of both hosts and pathogens.
 The following sections describe different Two-species infection models in increasing complexity. We try highlight important characteristics and mechanisms of the models and how they might be related to other host-pathogen models, such as epidemiological models and coevolutionary models. 
 
-** SUMMARIZE Moran Susceptible-Infected (Moran + SI)
+** TODO Moran Susceptible-Infected (Moran + SI)
 We start with the Moran model, as this model most closely reflects rate-based birth death processes which approximate the differential equations of epidemiological dynamic models. This model is closely related to many SI-models, including [[cite:&welch-2005-integ-geneal-epidem]], which the only difference being, that we explicitly incorporate the pathogen as a species in SLiM, to enable parallel ancestry recording of the ARGs (tskit,  [[cite:&haller-2019-tree-recor]]).
 
 Moran model of $N$ host individuals; each generation one host is randomly chosen to reproduce and one random host is replaced and dies. The probability to be the reproducing host depends on the health of the individual, so that the probability of a healthy individual to reproduce is scaled by $1+s_{I}$, with $s_{I}$ being the reproductive (fitness) advantage the healthy individuals have over infected ones. All hosts produce healthy offspring, i.e. there is no vertical transmission of pathogens in this model. If a killed individual is infected, the pathogen that infects this host is killed as well. 
@@ -89,7 +93,7 @@ The epidemiological dynamics of the pathogen popoulation is determined by a simp
 
 /Time scale of host and pathogens./ Importantly, the implementation of Moran Infection models has all pathogens can infect in each generation with probability $c$. This leads to a pathogen model with generation overlap, the pathogens killed can be from any generation. Adittionally, while the host follows a Moran model of one individual per generation ($d = 1/N$), the timescale at which the pathogens reproduce is much faster than that at which the host reproduces (biologically realistic anyway?). If we wanted a true Moran of hosts and pathogens it could be desirable to only let one random pathogen infect each generation. This would make the model very slow though, especially when studying coalescence (and the biological meaning is also not clear). To speed up the dynamics and study the coalescence of both hosts and pathogens, we implement the above mentioned model without generation overlap as a Cannings-type model. This results in a Moran-type host reproduction and a pathogen reproductive system described by a model of generation overlap ($d$ given by the probability $c$; [[cite:&alexandre-2025-bridg-wrigh]]). This causes the coalescence timescales to be the simiar, compared to the Moran-based host pathogen models described above.
 
-** SUMMARIZE Wright-Fisher Susceptible-Infected (WF + SI)
+** TODO Wright-Fisher Susceptible-Infected (WF + SI)
 /Vertical transmission mechanisms./ We might wish to write the model in terms of discrete, non-overlapping generations, as this is the basics of the Wright-Fisher  (WF) model and much of population genetics theory. For a two-species host-pathogen models this has the consequence of requiring vertical transmission: If host generations do not overlap in the Wright-Fisher model, there needs to be some kind of vertical transmission mechansism, or the pathogen will become extint within one generation. We distinguish between two types of of vertical transmission (i.e. mechanisms by which pathogens are transmitted between discrete (non-overlapping) generations of hosts);  /random/ vertical transmission, where pathogens infect randomly chosen host offspring and /ancestral/ vertical transmission, with host offspring being infected by their parents. Both types of vertial transmission have their biological justification; random vertical transmission might be common for dormant free-living pathogens and seasonal epidemics, while ancestral vertical transmission applies to the more classical mother-offspring vertical transmission known from clinical epidemiology. This distinction should be considered when designing a model of host-pathogen coevolution.
 
 For a simple WF with host and pathognes we model random horizontal transmission of pathogens between host generations; no vertical transmission along lines of descent yet. Discrete generation stochastic model of Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism (or other type of Canning's offspring distribution). The host parents are sampled weighted based on their infection status: If an individual is infected, its probability to be a parent is $1-s$, with $s$ being the cost of infection.  After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
@@ -97,11 +101,13 @@ For a simple WF with host and pathognes we model random horizontal transmission 
 ** A host-pathogen nested-Canning's models
 To set up a generalized genealogy-specific host pathogen model we propose a nested Canning's model including infection and horizontal/vertical transmission. This can be described as separate Canning's reproduction processes for host and pathogen. To account for timescale differences such as differences in speed of evolution and reproduction the reproductive process of the pathogen can happen $n \times$ more rapidly than the host reproductive process (see Fig. [[generalized_vertical_model]]).
 
-The model is in two phases: host reproduction and pathogen reproduction. Host reproduction proceeds by a Canning's-type reproduction, with each host $i \in N_{host}$ producing $Y_{i}$ offspring, with this number following an offspring distribution $\mathcal{D}_{Host}$. Each host $i$ can be infected by a pathogen $j$; one for now. During the host reproduction the parasite individuals follow their hosts with a probability $c_v$ of vertical transmission. As we consider a reproducing pathogen inside the host, the pathogen can duplicate if $Y_{i} < 1$. If a host dies, the pathogen that infected it dies as well
+The model is in two phases: host reproduction and pathogen reproduction. Host reproduction proceeds by a Canning's-type reproduction, with each host $i \in N_{host}$ producing $Y_{i}$ offspring, with this number following an offspring distribution $\mathcal{D}_{Host}$. Each host $i$ can be infected by a pathogen $j$; one for now. During the host reproduction the parasite individuals follow their hosts with a probability $c_v$ of vertical transmission. As we consider a reproducing pathogen inside the host, the pathogen can duplicate if $Y_{i} < 1$. If a host dies, the pathogen that infected it, dies as well.
 Host reproduction is followed by pathogen reproduction, with  the pathogen $j$ in each host producing $X_j$ propagules or offspring. This offspring can either stay within the host (allowing one pathogen per host or selective filtering) or can each migrate to another random host with probability $c_{h}$ of horizontal transmission 
 
-#+ATTR_LATEX: :options [enhanced, title={}]
-#+begin_tcolorbox
+#+LATEX: \vspace{10pt}
+
+# TODO add tcolorbox to defined functions to change colors.
+#+begin_tcolorbox :options 
 \large *_Host-pathogen nested Canning's model_*
 
 #+name: generalized_vertical_model
@@ -110,6 +116,8 @@ Host reproduction is followed by pathogen reproduction, with  the pathogen $j$ i
 [[./figures/TwoSpecies_discrete_vertical.png]]
 
 #+end_tcolorbox
+
+#+LATEX: \vspace{10pt}
 
 \noindent *Limiting cases and Behaviours:* \\
 We aim to develop a model that generalizes some of the behaviours and limiting cases above. such as scaling between continuous and discrete parts, and pathogen-host transmission system (eg. lineage-constrained transmission vs free transmission)...
@@ -172,3 +180,5 @@ https://academic.oup.com/cz/article/62/4/393/1745416?login=false \\
 https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.12150 \\
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1420-9101.2007.01340.x \\
 https://www.numericalecology.com/Reprints/ParaFit_paper.pdf \\
+* Bibliography
+[[printbibliography:]]
