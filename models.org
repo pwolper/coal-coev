@@ -72,6 +72,7 @@ Similar models are given in [[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-
 * Existing approaches to host-parasite genealogical models
 Linking epidemiological dynamic models with population genetic models and branching processes is essential to using genealogies because it requires consideration of the backwards model (i.e. coalescent model) with which the sample genealogies were constructed. Therefore it would be helpful to have a general coaescent model to describe these dynamics backwards in time or forward through simulation. IDEA: Can we do ARG inference for a sample genealogy from informed forward in-time simulations? 
 ** TODO Outline phylodynamics models
+Eg. [[cite:&featherstone-2022-epidem-infer]] 
 ** TODO Sketch Welch et al., Ancestral infection and selection graph
   
 * Two-species lineage-explicit conevolutionary models
