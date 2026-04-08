@@ -9,12 +9,44 @@
 #+LATEX_HEADER: \addbibresource{~/biblio/pop-gen.bib}
 
 * Existing coevolutionary models in discrete and continuous time
-A major propoerty of a host-pathogen model is the differences in time scale between the species. This reflects in the different analytical and modelling approaches we can take. Importantly, the choice of model depends on host-pathogen system under study. We aim to provide some recommendations and overview for which model type to use to describe the biological reality of host-pathogen interactions and life cycles we observe in nature? Beyond this we wish to connect some classically known coevolutionary models and population dynamics from host and pathogen epidemiology and ecology to models of genealogical branching and coalescence.  
+A major property of a host-pathogen model is the differences in time scale between the species. This reflects in the different analytical and modelling approaches we can take. Importantly, the choice of model depends on host-pathogen system under study. We aim to provide some recommendations and overview for which model type to use to describe the biological reality of host-pathogen interactions and life cycles we observe in nature? Beyond this we wish to connect some classically known coevolutionary models and population dynamics from host and pathogen epidemiology and ecology to models of genealogical branching and coalescence.  
 
-Linking epidemiological dynamic models with population genetic models and branching processes is essential to using genealogies because it requires consideration of the backwards model (i.e. coalescent model) with which the sample genealogies were constructed. Therefore it would be helpful to have a general coaescent model to describe these dynamics backwards in time or forward through simulation. IDEA: Can we do ARG inference for a sample genealogy from informed forward in-time simulations? 
 
 ** Continuous time-models
-#+ATTR_LATEX: :options [title={Continuous-time coevolutionary model based on epidemiological differential equations}]
+#+ATTR_LATEX: :options [enhanced, title={Continuous-time coevolutionary model based on differential equations}]
+#+begin_tcolorbox
+A well-known class of coevolutionary models is built on the works of [[cite:&anderson-1979-popul-biolog]] and epidemiological differential equations. The most simple case includes one host and one parasite, as described by the following model. $H$ represents the number of healthy individuals, while $I$ represents the infected indivudals in a population of $N = H+I$ hosts. 
+
+\begin{equation}
+\frac{dH}{dt} = bN - dH + \beta IH 
+\end{equation}
+
+\begin{equation}
+\frac{dI}{dt} = \beta HI - dI - \delta I
+\end{equation}
+
+Here the birth rate at which all individuals reproduce (unaffected by infection) is $b$, and the natural death rate of healthy and infected is both $d$. Infected additionally die with disease indiced mortality rate $\delta$. The rate of transmission is $\beta$. 
+
+
+Extensions of this model to include multiple pathogen stains can be found in [[cite:&may-1983-epidem-genet]] and subsequently with multiple host types in [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]] and [[cite:&macpherson-2021-feedb-between]] (see epidemiological model therein). Other notable extensions in the aforementioned works include costs of infection and resistance and density-dependent population growth (?). Generally the model with multiple hosts of type $i$ and pathogens of type $j$ takes the form: 
+
+\begin{equation}
+\frac{dH_i}{dt} = b_{i}H_{i} - d_{i}H_{i} - \sum_{j=1}^{A_P}\sum_{k=1}^{A_H}\alpha_{ij}\beta_{ij}H_{i}I_{kj}
+\end{equation}
+
+\begin{equation}
+\frac{dI_{ij}}{dt} = \alpha_{ij}\beta_{ij}H_{i}\sum_{k=1}^{A_H}I_{kj} - d_{ij} - \delta_{ij}
+\end{equation}
+
+Here $\alpha_{ij}$ represents the infection matrix determining the infection outcome. Host recovery as well as costs of infection, resistance and a reduction in fecundity when infected are omitted here for simplicity (see [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]).
+#+end_tcolorbox
+
+Additionally, continuous models of coevolution include models such as birth-death processes and Moran population models (eg. models from [[cite:&macpherson-2020-coevol-does]] and [[cite:&macpherson-2021-feedb-between]]) or the Moran Infection process used by [[cite:&welch-2005-integ-geneal-epidem]]. 
+
+Other models aim to investigate the role of eco-evolutionary feedbacks, such as [[cite:&ashby-2019-under-role]]. (Large class of continuous models, eg. Nuismer book, that are not necessarily related to Anderson and May equations)?
+*** Model examples :noexport:
+Model follows from [[cite:&zivkovic-2019-neutr-genom]]. 
+#+ATTR_LATEX: :options [enhanced, title={Continuous-time coevolutionary model based on epidemiological differential equations}]
 #+begin_tcolorbox
 Host-pathogen model from [[cite:&zivkovic-2019-neutr-genom]]. $H_i$ is the number of healthy hosts of genotype $i$, and $I_{ij}$ the number of hosts of genotype $i$, infected with pathogens of genotype $j$.
 \begin{equation}
@@ -31,16 +63,18 @@ In this model, $b_i$ and $d_i$ are the birth and natural (disease-independent) d
 Similar models are given in [[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]] and [[cite:&macpherson-2021-feedb-between]] (see epidemiological model).  
 #+end_tcolorbox
 
-\noindent Additionally, continuous models of coevolution include models such as birth-death processes and Moran population models (eg. models from [[cite:&macpherson-2020-coevol-does]] and [[cite:&macpherson-2021-feedb-between]]) or the Moran Infection process used by [[cite:&welch-2005-integ-geneal-epidem]]. 
 
-** Discrete-time models
-- evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2006-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
+** TODO Discrete-time models
+- evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
   
 ** Semi-discrete
-  - combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
-* Approaches to host-parasite branching models
+- combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
+* Existing approaches to host-parasite genealogical models
+Linking epidemiological dynamic models with population genetic models and branching processes is essential to using genealogies because it requires consideration of the backwards model (i.e. coalescent model) with which the sample genealogies were constructed. Therefore it would be helpful to have a general coaescent model to describe these dynamics backwards in time or forward through simulation. IDEA: Can we do ARG inference for a sample genealogy from informed forward in-time simulations? 
+** TODO Outline phylodynamics models
+** TODO Sketch Welch et al., Ancestral infection and selection graph
   
-* Two-species Infection models
+* Two-species lineage-explicit conevolutionary models
 To our knowledge most epidemiological and continuous coevolutionary models do not explicitly model both the pathogen and the host. Typically the population size of the pathogen is proxied with the number of infected hosts from the 'Infected' compartment of the epidemiological model. We believe, that the increased mathematical developments of non-standard coalescent models and genealogy-derived methods together with powerful population-genetic simulation toolkits capable of two Species individual-based model (eg. SLiM 5) will allow us to model the biological reality of host and pathogen system from the perspective of both hosts and pathogens.
 
 The following sections describe different Two-species infection models in increasing complexity. We try highlight important characteristics and mechanisms of the models and how they might be related to other host-pathogen models, such as epidemiological models and coevolutionary models. 
@@ -60,7 +94,6 @@ The epidemiological dynamics of the pathogen popoulation is determined by a simp
 
 For a simple WF with host and pathognes we model random horizontal transmission of pathogens between host generations; no vertical transmission along lines of descent yet. Discrete generation stochastic model of Wright-Fisher host and pathogen reproduction. Each generation host produce offspring sampled randomly with replacement, which will make up the hosts in the new generation $t+1$, leading to a Wright-Fisher multipnomial reproduction mechanism (or other type of Canning's offspring distribution). The host parents are sampled weighted based on their infection status: If an individual is infected, its probability to be a parent is $1-s$, with $s$ being the cost of infection.  After host offspring are generated the pathogens each reproduce to a random unique (drawn without replacement) host offspring. This causes a reshuffling of the infected hosts each generation, due to each pathogen choosing a new host to infect. In addition to vertical transmission of pathogens between discrete host generations, each pathogen individual also can reproduce horizontally to a random host. If this host is not infected previously by vertical or horizontal tranmsiion events, then the horizontal transmitting pathogen will reproduce to the choosen host.   
 
-#+latex: \pagebreak
 ** Generalized host-pathogen model with vertical and horizontal epidemiology
 
 Aim to construct a nested Canning's model with host and $n \times$ pathogen reproduction steps (see Fig. [[generalized_vertical_model]]). *Add* host reproduction via some kind of Canning's or WF offspring process.
@@ -116,6 +149,7 @@ Analysis of neutral co-branching model of host and parasites. Comparison of diff
 
 *Hypothesis*: Ration of coalescence times between hosts and parasites depends on the transmission rate $c$ and the cost of infection in the host $s$.
 * Further reading: Connecting coalescent models to epidemiology :noexport: 
+** Random notes
 - Offspring distributions from epidemiologcal models: negative binomial ([[cite:&lloyd-smith-2005-super-effec]]) with the parameters $R_{0}$ and $k$.
 - [[cite:&li-2017-quant-trans]] show that the dispersion paramter of the epidemiological offspring distribution $k$ can be estimated from the pathogen phylogeny, using a formulation of of the Kingman coalescent with arbitrary offspring distributions ($N_{e} = N/\sigma^{2}$,[[cite:&koelle-2011-rates-coales]], [[cite:&fraser-2017-coales]]). How valid is this assumption for MMC?
 - Multifurcating skyline plot [[cite:&hoscheit-2019-multif-skylin-plot]] uses Beta-coalescent to infer the effective population size through time, and show that the estimation of \alpha correlates with the degree of superspreading $k$ in an epidemiological model. What is the direct connection between \alpha and $k$?
@@ -132,5 +166,3 @@ https://academic.oup.com/cz/article/62/4/393/1745416?login=false \\
 https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.12150 \\
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1420-9101.2007.01340.x \\
 https://www.numericalecology.com/Reprints/ParaFit_paper.pdf \\
-
-
