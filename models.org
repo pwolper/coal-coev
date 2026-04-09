@@ -12,7 +12,7 @@
 * Existing coevolutionary models
 A major property of a host-pathogen model is the differences in time scale between the species. This reflects in the different analytical and modelling approaches we can take. Importantly, the choice of model depends on host-pathogen system under study. We aim to provide some recommendations and overview for which model type to use to describe the biological reality of host-pathogen interactions and life cycles we observe in nature? Beyond this we wish to connect some classically known coevolutionary models and population dynamics from host and pathogen epidemiology and ecology to models of genealogical branching and coalescence.  
 
-** Continuous time-models
+** Continuous time models
 
 #+LATEX: \vspace{10pt}
 #+ATTR_LATEX: :options [enhanced, title={Continuous-time coevolutionary model based on differential equations}]
@@ -40,34 +40,25 @@ Extensions of this model to include multiple pathogen stains can be found in [[c
 \frac{dI_{ij}}{dt} = \alpha_{ij}\beta_{ij}H_{i}\sum_{k=1}^{A_H}I_{kj} - d_{ij} - \delta_{ij}
 \end{equation}
 
-Here $\alpha_{ij}$ represents the infection matrix determining the infection outcome. Host recovery as well as costs of infection, resistance and a reduction in fecundity when infected are omitted here for simplicity (see [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]).
+Here $\alpha_{ij}$ represents the infection matrix determining the infection outcome and A being the number of host and pathogen alleles, respectively. Costs of infection, resistance and a reduction in fecundity when infected are omitted here for simplicity (see [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]).
 #+end_tcolorbox
 #+LATEX: \vspace{10pt}
 
 Additionally, continuous models of coevolution include models such as birth-death processes and Moran population models (eg. models from [[cite:&macpherson-2020-coevol-does]] and [[cite:&macpherson-2021-feedb-between]]) or the Moran Infection process used by [[cite:&welch-2005-integ-geneal-epidem]]. 
 Other models aim to investigate the role of eco-evolutionary feedbacks, such as [[cite:&ashby-2019-under-role]]. (Large class of continuous models, eg. Nuismer book, that are not necessarily related to Anderson and May equations)?
-*** [[cite:&zivkovic-2019-neutr-genom]] Model :noexport:
-Model follows from [[cite:&zivkovic-2019-neutr-genom]]. 
-#+ATTR_LATEX: :options [enhanced, title={Continuous-time coevolutionary model based on epidemiological differential equations}]
-#+begin_tcolorbox
-Host-pathogen model from [[cite:&zivkovic-2019-neutr-genom]]. $H_i$ is the number of healthy hosts of genotype $i$, and $I_{ij}$ the number of hosts of genotype $i$, infected with pathogens of genotype $j$.
-\begin{equation}
-\frac{dH_i}{dt} = H_i \left[ b_i(1-c_{H_i}) - d_i - \sum_{j=1}^{A_P}\alpha_{ij}\beta_{ij}(1-c_{P_j}) \sum_{k=1}^{A_H}I_{kj} \right] + b_i(1-c_{H_i})\sum_{j=1}^{A_P}(1-s_{ij})I_{ij}
-\end{equation}
-
-\begin{equation}
-\frac{dI_{ij}}{dt} = I_{ij}(-d_{ij} - \delta_{ij}) + H_i \left[ \alpha_{ij} \beta_{ij}(1-c_{P_j}) \sum_{k=1}^{A_H}\right]
-\end{equation}
-
-In this model, $b_i$ and $d_i$ are the birth and natural (disease-independent) death rates of host genotype $i$, respectively, with $\delta_{ij}$ being the disease induced death rate and $s_{ij}$ the reduction in fecundity in host $i$ infected with pathogen $j$. $\beta_{ij}$ is the disease transmission rate of a host $i$ infected with pathogen $j$ and $\alpha_{ij}$ is the infection matrix determining the disease outcome between host and pathogen genotypes $i$ and $j$. $c_{H_i}$ and $c_{P_j}$ and the costs of resistance and infectivity, respectively in the host and pathogen. The parameter $A$ gives the number of alleles (i.e. genotypes) of the host and pathogen (typically $A=2$). 
-
-
-Similar models are given in [[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]] and [[cite:&macpherson-2021-feedb-between]] (see epidemiological model).  
-#+end_tcolorbox
-
-** TODO Discrete-time models
-Evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
+** TODO Discrete time models
+Evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)
+[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
   
+#+LATEX: \vspace{10pt}
+#+ATTR_LATEX: :options [enhanced, title={Discrete time population genetics models of coevolutions}]
+#+begin_tcolorbox
+Population genetic models of coevolution are used to describe the change in frequencies of host and parasite alleles under selection.  
+
+\begin{equation}
+W_{H,i} = \sum_{j=1}^{A_P} P_j (1 - \alpha_{i,j} + (1-s_H)\alpha_{i,j}).
+\end{equation}
+#+end_tcolorbox
 ** TODO Semi-discrete
 Combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
 * Host and parasite genealogical branching models
@@ -180,5 +171,24 @@ https://academic.oup.com/cz/article/62/4/393/1745416?login=false \\
 https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.12150 \\
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1420-9101.2007.01340.x \\
 https://www.numericalecology.com/Reprints/ParaFit_paper.pdf \\
+** [[cite:&zivkovic-2019-neutr-genom]] Model :noexport:
+Model follows from [[cite:&zivkovic-2019-neutr-genom]]. 
+#+ATTR_LATEX: :options [enhanced, title={Continuous-time coevolutionary model based on epidemiological differential equations}]
+#+begin_tcolorbox
+Host-pathogen model from [[cite:&zivkovic-2019-neutr-genom]]. $H_i$ is the number of healthy hosts of genotype $i$, and $I_{ij}$ the number of hosts of genotype $i$, infected with pathogens of genotype $j$.
+\begin{equation}
+\frac{dH_i}{dt} = H_i \left[ b_i(1-c_{H_i}) - d_i - \sum_{j=1}^{A_P}\alpha_{ij}\beta_{ij}(1-c_{P_j}) \sum_{k=1}^{A_H}I_{kj} \right] + b_i(1-c_{H_i})\sum_{j=1}^{A_P}(1-s_{ij})I_{ij}
+\end{equation}
+
+\begin{equation}
+\frac{dI_{ij}}{dt} = I_{ij}(-d_{ij} - \delta_{ij}) + H_i \left[ \alpha_{ij} \beta_{ij}(1-c_{P_j}) \sum_{k=1}^{A_H}\right]
+\end{equation}
+
+In this model, $b_i$ and $d_i$ are the birth and natural (disease-independent) death rates of host genotype $i$, respectively, with $\delta_{ij}$ being the disease induced death rate and $s_{ij}$ the reduction in fecundity in host $i$ infected with pathogen $j$. $\beta_{ij}$ is the disease transmission rate of a host $i$ infected with pathogen $j$ and $\alpha_{ij}$ is the infection matrix determining the disease outcome between host and pathogen genotypes $i$ and $j$. $c_{H_i}$ and $c_{P_j}$ and the costs of resistance and infectivity, respectively in the host and pathogen. The parameter $A$ gives the number of alleles (i.e. genotypes) of the host and pathogen (typically $A=2$). 
+
+
+Similar models are given in [[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]] and [[cite:&macpherson-2021-feedb-between]] (see epidemiological model).  
+#+end_tcolorbox
+
 * Bibliography
 [[printbibliography:]]
