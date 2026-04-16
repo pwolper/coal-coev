@@ -15,7 +15,7 @@ A major property of a host-pathogen model is the differences in time scale betwe
 ** Continuous time models
 
 #+LATEX: \vspace{10pt}
-#+ATTR_LATEX: :options [enhanced, title={Continuous time coevolutionary model based on differential equations}]
+#+ATTR_LATEX: :options [enhanced, title={Continuous time coevolutionary model based on epidemiological models}]
 #+begin_tcolorbox
 A well-known class of coevolutionary models is built on the works of [[cite:&anderson-1979-popul-biolog]] and epidemiological differential equations. The most simple case includes one host and one parasite, as described by the following model. $H$ represents the number of healthy individuals, while $I$ represents the infected indivudals in a population of $N = H+I$ hosts. 
 
@@ -39,12 +39,15 @@ Extensions of this model to include multiple pathogen stains can be found in [[c
 \frac{dI_{ij}}{dt} = \alpha_{ij}\beta_{ij}H_{i}\sum_{k=1}^{A_H}I_{kj} - d_{ij} - \delta_{ij}
 \end{equation}
 
-Here $\alpha_{ij}$ represents the infection matrix determining the infection outcome and A being the number of host and pathogen alleles, respectively. Costs of infection, resistance and a reduction in fecundity when infected are omitted here for simplicity (see [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]).
+Here $\alpha_{ij}$ represents the infection matrix determining the infection outcome and A being the number of host and pathogen alleles, respectively. Costs of infection, resistance and a reduction in fecundity when infected are omitted here for simplicity (see [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]). 
 #+end_tcolorbox
 #+LATEX: \vspace{10pt}
 
+Because the epidmiological differntial equations describe the dynamics of host compatments (i.e. susceptible and infected hosts), they do not model the pathogen population explicitly; usually the number of infected individuals TODO add citation for proxy of N_P. 
 Additionally, continuous models of coevolution include models such as birth-death processes and Moran population models (eg. models from [[cite:&macpherson-2020-coevol-does]] and [[cite:&macpherson-2021-feedb-between]]) or the Moran Infection process used by [[cite:&welch-2005-integ-geneal-epidem]]. 
-Other models aim to investigate the role of eco-evolutionary feedbacks, such as [[cite:&ashby-2019-under-role]]. (Large class of continuous models, eg. Nuismer book, that are not necessarily related to Anderson and May equations)?
+Other models aim to investigate the role of eco-evolutionary feedbacks, such as [[cite:&ashby-2019-under-role]], or continuous coevolutionary models with ecological dynamics, such as in  [[cite:&nuismer-2017-introd]].
+
+
 ** TODO Discrete time models
 Evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)
 [[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
