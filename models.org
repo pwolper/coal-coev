@@ -15,7 +15,7 @@ A major property of a host-pathogen model is the differences in time scale betwe
 ** Continuous time models
 
 #+LATEX: \vspace{10pt}
-#+ATTR_LATEX: :options [enhanced, title={Continuous-time coevolutionary model based on differential equations}]
+#+ATTR_LATEX: :options [enhanced, title={Continuous time coevolutionary model based on differential equations}]
 #+begin_tcolorbox
 A well-known class of coevolutionary models is built on the works of [[cite:&anderson-1979-popul-biolog]] and epidemiological differential equations. The most simple case includes one host and one parasite, as described by the following model. $H$ represents the number of healthy individuals, while $I$ represents the infected indivudals in a population of $N = H+I$ hosts. 
 
@@ -28,7 +28,6 @@ A well-known class of coevolutionary models is built on the works of [[cite:&and
 \end{equation}
 
 Here the birth rate at which all individuals reproduce (unaffected by infection) is $b$, and the natural death rate of healthy and infected is both $d$. Infected additionally die with disease indiced mortality rate $\delta$. The rate of transmission is $\beta$. 
-
 
 Extensions of this model to include multiple pathogen stains can be found in [[cite:&may-1983-epidem-genet]] and subsequently with multiple host types in [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]] and [[cite:&macpherson-2021-feedb-between]] (see epidemiological model therein). Other notable extensions in the aforementioned works include costs of infection and resistance and density-dependent population growth (?). Generally the model with multiple hosts of type $i$ and pathogens of type $j$ takes the form: 
 
@@ -51,17 +50,40 @@ Evolutionary models rely on discrete models, that assume constant population siz
 [[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
   
 #+LATEX: \vspace{10pt}
-#+ATTR_LATEX: :options [enhanced, title={Discrete time population genetics models of coevolutions}]
+#+ATTR_LATEX: :options [enhanced, title={Discrete time population genetics models of coevolution}]
 #+begin_tcolorbox
-Population genetic models of coevolution are used to describe the change in frequencies of host and parasite alleles under selection.  
+Population genetic models of coevolution describe the change in frequencies of host and parasite alleles under selection ([[cite:&leonard-1977-selec-press]], [[cite:&tellier-2007-stabil-genet]], Nuismer book). 
+Assume the frequency of host allele $i$ in the current generation is defined as $H_{i}$. Following the Wright-Fisher model with selection the frequency of $i$ in the next generation depends on the host genotype fitness $W_{H,i}$ and the population mean fitness $W_{H}$:
 
 \begin{equation}
-W_{H,i} = \sum_{j=1}^{A_P} P_j (1 - \alpha_{i,j} + (1-s_H)\alpha_{i,j}).
+H'_{i} = \frac{H_{i}W_{H,i}}{W_H}
+\end{equation}
+
+The fitness of hosts with genotype $i$ depends on the interaction with the pathogen, as infection will reduce the fitness of the host by $s_H$. Assuming each host encounters a random pathogen with any allele $j$ each generation, the host genotype fitness also depends on the summed product of the frequency of pathogen gentypes $j$ and their ability to infect host $i$, which is determined by the infection matrix $\alpha_{i,j}$.  
+
+\begin{equation}
+W_{H,i} = 1- s_H \sum_{j=1}^{A_P} P_{j} \alpha_{i,j}
+\end{equation}
+
+The same logic can be applied to the pathogen, with the fitness of the pathogen genotype $j$ depending on the hosts $i$ it is able to infect successfully. (Why only $H_{i}\alpha_{i,j}$?)
+
+\begin{equation}
+W_{P,j} = \sum_{i=1}^{A_H} H_{i} \alpha_{i,j}
+\end{equation}
+
+Putting all together we end up with recurrence expressions for the evolution of host and pathogen allele frequencies $H_{i}$ and $P_{j}$, respectively.
+
+\begin{equation}
+H'_{i} = \left[ H_{i} (1 - S_H(\sum_{j=1}^{A_P} P_{j} \alpha_{i,j})) \right]/W_H
+\end{equation}
+
+\begin{equation}
+P'_{j} = \left[ P_{j} \sum_{i=1}^{A_H}\alpha_{i,j} \right] / W_P
 \end{equation}
 #+end_tcolorbox
 ** TODO Semi-discrete
 Combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
-* Host and parasite genealogical branching models
+* Host and parasite ancestral branching models
 Linking epidemiological dynamic models with population genetic models and branching processes is essential to using genealogies because it requires consideration of the backwards model (i.e. coalescent model) with which the sample genealogies were constructed. Therefore it would be helpful to have a general coaescent model to describe these dynamics backwards in time or forward through simulation. IDEA: Can we do ARG inference for a sample genealogy from informed forward in-time simulations? 
 ** TODO Outline phylodynamics models
 Eg. [[cite:&featherstone-2022-epidem-infer]] 
