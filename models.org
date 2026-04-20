@@ -13,6 +13,8 @@
 A major property of a host-pathogen model is the differences in time scale between the species. This reflects in the different analytical and modelling approaches we can take. Importantly, the choice of model depends on host-pathogen system under study. We aim to provide some recommendations and overview for which model type to use to describe the biological reality of host-pathogen interactions and life cycles we observe in nature? Beyond this we wish to connect some classically known coevolutionary models and population dynamics from host and pathogen epidemiology and ecology to models of genealogical branching and coalescence.  
 
 ** Continuous time models
+Generally coevolutionary models differ by their inclusion of population dynamics (i.e. population size changes), which is known as eco-evolutionary feedback ([[cite:&ashby-2019-under-role]]). 
+Constant population size models can be constructed with Moran-type birth death processes ([[cite:&macpherson-2020-coevol-does]] and [[cite:&macpherson-2021-feedb-between]]) or the Moran Infection process ([[cite:&welch-2005-integ-geneal-epidem]]), while existing ecological coevolutionary model builds upon ecological models such as Lotka-Volterra dynamics (eg.  [[cite:&frank-1993-specif-versus]]; [[cite:&nuismer-2017-introd]], Chapter 4; and [[cite:&macpherson-2021-feedb-between]], see Ecological Model) and includes density-dependent growth regulation. Coevolutionary models of epidemiology can be considered a form of ecological model, that is based on epidemiological compartmental model, such as the SI models (see Box below).
 
 #+LATEX: \vspace{10pt}
 #+ATTR_LATEX: :options [enhanced, title={Continuous time coevolutionary model based on epidemiological models}]
@@ -43,10 +45,7 @@ Here $\alpha_{ij}$ represents the infection matrix determining the infection out
 #+end_tcolorbox
 #+LATEX: \vspace{10pt}
 
-Because the epidmiological differntial equations describe the dynamics of host compatments (i.e. susceptible and infected hosts), they do not model the pathogen population explicitly; usually the number of infected individuals TODO add citation for proxy of N_P. 
-Additionally, continuous models of coevolution include models such as birth-death processes and Moran population models (eg. models from [[cite:&macpherson-2020-coevol-does]] and [[cite:&macpherson-2021-feedb-between]]) or the Moran Infection process used by [[cite:&welch-2005-integ-geneal-epidem]]. 
-Other models aim to investigate the role of eco-evolutionary feedbacks, such as [[cite:&ashby-2019-under-role]], or continuous coevolutionary models with ecological dynamics, such as in  [[cite:&nuismer-2017-introd]].
-
+Because the epidmiological differntial equations describe the dynamics of host compatments (i.e. susceptible and infected hosts), they do not model the pathogen population explicitly; usually the number of infected individuals serves as a proxy for the number of parasite individuals with the number $P_{j}$ of parasite of genotype $j$ being $P_{j} = \sum_{i=1}^{A_H} I_{ij}$, assuming one parasite per infected genotype. The total population size of the parasite is then given by $N_{P} = \sum_{j=1}^{A_j} P_{j}$. 
 
 ** TODO Discrete time models
 Evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)
@@ -85,6 +84,7 @@ P'_{j} = \left[ P_{j} \sum_{i=1}^{A_H}\alpha_{i,j} \right] / W_P
 \end{equation}
 #+end_tcolorbox
 ** TODO Semi-discrete
+
 Combine both approaches with a semi-deterministic model? ([[cite:&mailleret-2009-note-semi]], [[cite:&hamelin-2011-season-evolut]]). Eg. seasonality.
 * Host and parasite ancestral branching models
 Linking epidemiological dynamic models with population genetic models and branching processes is essential to using genealogies because it requires consideration of the backwards model (i.e. coalescent model) with which the sample genealogies were constructed. Therefore it would be helpful to have a general coaescent model to describe these dynamics backwards in time or forward through simulation. IDEA: Can we do ARG inference for a sample genealogy from informed forward in-time simulations? 
