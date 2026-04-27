@@ -1,0 +1,14 @@
+#+title: BarleyCOPA Progress Report 2025 - WP1
+#+setupfile: ~/.doom.d/setup-files/latex.setup
+#+options: toc:nil date:nil
+
+In anticipation of the data aquisition phase the efforts of our work for WP1 has centered around developing the theoretical framework necessary to analyze and interpret host and pathogen genomic data. 
+As there is currently no generalized framework of how host and pathogen coevolution gives rise to ancestral genealogies across their respective genomes it has been a major focus of ours to develop such a theoretical framework. This is necessary because modern high-throughput population sequencing technologies allow us to generate large amounts of data, which has caused a paradigm shift in modern population genomics focusing more on the evolutionary histories on the genome (genealogy-based) than the classic site-based approach which focuses on individual DNA mutations (citation?). Carried by algorithmic and computational advances of inferring and simulating genome-wide ancestries (ancestral recombination graphs, ARG), the genealogical approach promises to provide a model-based, complete evolutionary picture of genomic data, that does not rely on summary statistics. Additionally a theory of host-pathogen co-genealogies could allow us to connect host-pathogen evolution to established theory and methods of phylodynamics, which use trees and genealogies to infer pathogen epidemiological dynamics. Thus, we expect such phylodynamics inference can be extend from epidemic to coevolutionary settings and single phylogenies to recombining genealogies.
+
+At the time of this progress reporting we have successfully developed a generalized stochastic model of coevolution, that describes the genomic ancestral histories of both host and pathogens. We refer to our model as a host-pathogen nested Canning's model, and it includes the possibility for horizontal and vertical transmission. Currently we are actively collaborating with several mathematicians (including Johannes Müller, Department of Mathematics at TUM; Cornelia Pokalyuk, Uni Lübeck and Fabian Freund, University of Leicester, UK) in order to further understand the properties of our model from a mathematical perspective. Additionally we have begun to implement our model in the genomic simulation framework SLiM (citation), and are exploring the behaviour of simulated host and pathogen genealogies under different coevolutionary and epidemiological scenarios.
+
+We anticipate that this work will lead to the identification of robust genomic summaries that represent the coevolutionary process at both the level of genealogies and sites. Further we plan on using Approximate Bayesian Computation to identify parameters of our model from simulations. We hope that in the future these theoretical advances can be applied to ARGs inferred from host and pathogen DNA data. 
+
+
+
+ 

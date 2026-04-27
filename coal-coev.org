@@ -76,7 +76,7 @@ On the other hand, there is a large body of work on host-parasite coevolution, f
 
 Separation of literature on phylodynamics and of host-pathogen coevolution, even though both make use of models of disease epidemiology. Why? Phylodynamic-based models of coevolution could help with developing co-genomic perspective of coevolution? Why does the infection matrix disappear when moving to phylodynamics work at the epidemiological timescale? Both coevolutionary literature and phylogenetic epidemiology mainly start from differential equation of SI(R) host clases, which describe the parasite implicitly in the infected hosts. Explicit models of pathogen? What is the connection between the deterministic models of coevolution and the stochastic ones. Do we need stochastic models to describe the observed branching processes (genealogies) of host and pathogen?
 
-* The models
+* The models :noexport:
 - models of coevolution at different levels (epidemiological, ecological and evolutionary) ([[cite:&macpherson-2021-feedb-between]])
 - classical coevolution model used by [[cite:&zivkovic-2019-neutr-genom]],[[cite:&boots-2014-how-specif]],
 - discrete, evolutionary model such as [[cite:&tellier-2007-polym-multil]]
