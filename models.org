@@ -1,7 +1,7 @@
 #+title: Mathematical models from epidemiology to coevolution
 #+subtitle: Developing a genealogical model of host-pathogen coevolutionary epidemiology
 #+setupfile: ~/.doom.d/setup-files/latex.setup
-#+OPTIONS: toc:t author:nil
+#+OPTIONS: toc:t author:nil date:nil
 
 #+LATEX_HEADER: \author[1]{Philip Wolper}
 #+LATEX_HEADER: \author[1]{Aurélien Tellier}
