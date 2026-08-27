@@ -77,7 +77,7 @@ species pathogen reproduction() {
 	pathogens = p2.individuals;
 	
 	for (i in seqLen(p2.individualCount)) {
-		// Each pathogen reproduces to the next generation and chooses random host from global list of hostOffspring (later, vertical reproduction?). 
+		// Each pathogen reproduces to the next generation and chooses random host from global list of hostOffspring (later, ancestral vertical reproduction?). 
 		offspring = subpop.addCloned(pathogens[i]);
 		offspring.tag = targetHosts[i]; offspring.color = pathogens[i].color;
 		catn("\n Pathogen " + pathogens[i].tag + " reproduced to host " + targetHosts[i]);
@@ -141,7 +141,7 @@ ticks all 1: late() {
 	if (all(tags == tags[0])) {
 		defineConstant("hostCOALESCED", community.tick);
 		catn("Host coalesced in tick " + community.tick + "!");
-		community.deregisterScriptBlock(self);
+		community.deregisterScriptBlock(self); // turn  off block once hosts have coalesced
 	}
 }
 
@@ -157,13 +157,6 @@ ticks all hostCOALESCED+1 first(){
 	p2.individuals.tag = newHost.pedigreeID; //tag pathogen with host.pedigreeID
 }
 
-
-//ticks all 2: late() {
-//	// check coalescence and simulation state...
-//	if (host.treeSeqCoalesced()) {
-//		catn("HOST COALESCED: " + community.tick); // does not work with haploid model...
-//	}
-//}
 
 ticks all hostCOALESCED+1: first() {
 	catn("\n--- first() ---");
