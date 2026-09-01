@@ -147,8 +147,12 @@ Further biological model features necessary genetics.
 - Generation overlap? Overlapping generations, so vertical transmission can be $c_{v} = 0$.
 - Multiple infections. Especially important in the regime $X_{i} > 1$. Also regarding whom to infect horizontally to. Single infections to healthy subclass keeps SI density dependent growth assumptions.  Intra-host selection or filter?
 - Recombination between pathogen types. Within multiply infected hosts?  
-- Host resistance and pathogen virulence types? Infection matrix for determining the outcome of the interaction. Mutation of types (reversible or uni-directional?) or standing genetic variation? 
-  
+- Host resistance and pathogen virulence types? Infection matrix for determining the outcome of the interaction. Mutation of types (reversible or uni-directional?) or standing genetic variation?
+* Host pathogen epidemiological model with horizontal and vertical transmission (with Johannes Müller)
+** TODO put introduction
+** TODO insert drawing and mathematics
+
+
 * Notes on considerations for the two Species model :noexport:
 - Stochastic individual-based implementation of co-evolutionary 'SIR' model ([[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]], [[cite:&zivkovic-2019-neutr-genom]]), with separated host, and parasite birth/death (coalescent) model.
 - Variable population sizes to follow coevolutionary dynamics ([[cite:&zivkovic-2019-neutr-genom]]).
