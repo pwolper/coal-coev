@@ -1,0 +1,190 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global}
+    \entry{lipsitch-1995-popul-dynam}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=30d93188d01ed0a75284d60fdf366301}{%
+           family={Lipsitch},
+           familyi={L\bibinitperiod},
+           given={Marc},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6b63180e77466ce81c34087d70a19cb9}{%
+           family={Nowak},
+           familyi={N\bibinitperiod},
+           given={Martin\bibnamedelima A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=68f5266c52ea6918791b04d9f4e3b02e}{%
+           family={Ebert},
+           familyi={E\bibinitperiod},
+           given={Dieter},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=46f392962803b157f2a2666260d8c593}{%
+           family={May},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima M.},
+           giveni={R\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {The Royal Society}%
+      }
+      \strng{namehash}{acd6f6d8c984e7d9418c2ad8de2b5ffe}
+      \strng{fullhash}{ce02bf73a64e61fa48e928c948899787}
+      \strng{bibnamehash}{acd6f6d8c984e7d9418c2ad8de2b5ffe}
+      \strng{authorbibnamehash}{acd6f6d8c984e7d9418c2ad8de2b5ffe}
+      \strng{authornamehash}{acd6f6d8c984e7d9418c2ad8de2b5ffe}
+      \strng{authorfullhash}{ce02bf73a64e61fa48e928c948899787}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We analyse a model of the transmission dynamics of a parasite transmitted both vertically and horizontally. The basic reproductive ratio (R0) of the parasite is shown to be a sum of horizontal and vertical components. We derive expressions for the equilibrium prevalence of infection for a mixture of horizontal and vertical transmission; prevalence can reach 100 \% if transmission is sufficiently high. At the endemic equilibrium, if prevalence is high, most transmission will in general be vertical, but horizontal transmission rates must be high to reach and stably maintain such an equilibrium. Surprisingly, for such parasites the highest equilibrium rates of vertical transmission are observed when horizontal transmission is very effective. We discuss the implications for assessing the importance of horizontal v. vertical transmission from field data, and we suggest some implications for the evolution of virulence.}
+      \field{issn}{09628452}
+      \field{journaltitle}{Proceedings: Biological Sciences}
+      \field{number}{1359}
+      \field{title}{The Population Dynamics of Vertically and Horizontally Transmitted Parasites}
+      \field{urlday}{7}
+      \field{urlmonth}{9}
+      \field{urlyear}{2026}
+      \field{volume}{260}
+      \field{year}{1995}
+      \field{urldateera}{ce}
+      \field{pages}{321\bibrangedash 327}
+      \range{pages}{7}
+      \verb{urlraw}
+      \verb http://www.jstor.org/stable/50194
+      \endverb
+      \verb{url}
+      \verb http://www.jstor.org/stable/50194
+      \endverb
+    \endentry
+    \entry{plessis-2015-gettin-to}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=cded0b6f123d39fbb677dfd62a27fc39}{%
+           family={Plessis},
+           familyi={P\bibinitperiod},
+           given={Louis},
+           giveni={L\bibinitperiod},
+           givenun=0,
+           prefix={du},
+           prefixi={d\bibinitperiod},
+           prefixun=0}}%
+        {{un=0,uniquepart=base,hash=37406125f618eeb29b8d6855e2d89388}{%
+           family={Stadler},
+           familyi={S\bibinitperiod},
+           given={Tanja},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{598bf0c336901a418d7ea0b0c62bf1dc}
+      \strng{fullhash}{598bf0c336901a418d7ea0b0c62bf1dc}
+      \strng{bibnamehash}{598bf0c336901a418d7ea0b0c62bf1dc}
+      \strng{authorbibnamehash}{598bf0c336901a418d7ea0b0c62bf1dc}
+      \strng{authornamehash}{598bf0c336901a418d7ea0b0c62bf1dc}
+      \strng{authorfullhash}{598bf0c336901a418d7ea0b0c62bf1dc}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Trends in Microbiology}
+      \field{number}{7}
+      \field{title}{Getting To the Root of Epidemic Spread With Phylodynamic Analysis of Genomic Data}
+      \field{volume}{23}
+      \field{year}{2015}
+      \field{pages}{383\bibrangedash 386}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1016/j.tim.2015.04.007
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.1016/j.tim.2015.04.007
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1016/j.tim.2015.04.007
+      \endverb
+    \endentry
+    \entry{welch-2005-integ-geneal-epidem}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=629ebac104654770f464d8f62aafb5ef}{%
+           family={Welch},
+           familyi={W\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=df3a0d3601cabb2077aa926ce2b896da}{%
+           family={Nicholls},
+           familyi={N\bibinitperiod},
+           given={Geoff\bibnamedelima K.},
+           giveni={G\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=71836cbaa32f705e55ecd71fd2bbe5c5}{%
+           family={Rodrigo},
+           familyi={R\bibinitperiod},
+           given={Allen},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=309b5eac544ab12a6d8d5ef30a60b26f}{%
+           family={Solomon},
+           familyi={S\bibinitperiod},
+           given={Wiremu},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{beb69c2a01a405b6868780f814de7559}
+      \strng{fullhash}{e41748bdb31917603348965432ef4768}
+      \strng{bibnamehash}{beb69c2a01a405b6868780f814de7559}
+      \strng{authorbibnamehash}{beb69c2a01a405b6868780f814de7559}
+      \strng{authornamehash}{beb69c2a01a405b6868780f814de7559}
+      \strng{authorfullhash}{e41748bdb31917603348965432ef4768}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Theoretical Population Biology}
+      \field{number}{1}
+      \field{title}{Integrating Genealogy and Epidemiology: the Ancestral Infection and Selection Graph As a Model for Reconstructing Host Virus Histories}
+      \field{volume}{68}
+      \field{year}{2005}
+      \field{pages}{65\bibrangedash 75}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1016/j.tpb.2005.03.003
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.1016/j.tpb.2005.03.003
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1016/j.tpb.2005.03.003
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

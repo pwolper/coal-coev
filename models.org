@@ -49,7 +49,7 @@ Because the epidmiological differntial equations describe the dynamics of host c
 
 ** TODO Discrete time models
 Evolutionary models rely on discrete models, that assume constant population size. Allele frequency dynamics is only by the frequencies of host and pathogen types (density independent?)
-[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cycllic or monocyclic diseases? 
+[[cite:&tellier-2007-polym-multil]], [[cite:&tellier-2007-stabil-genet]]. Poly-cyclic or monocyclic diseases? 
   
 #+LATEX: \vspace{10pt}
 #+ATTR_LATEX: :options [enhanced, title={Discrete time population genetics models of coevolution}]
