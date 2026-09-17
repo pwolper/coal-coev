@@ -1,0 +1,92 @@
+#+title: Host-pathogen embedded co-genealogies in the context of epidemiology and coevolution 
+#+options: toc:nil num:nil
+
+#+begin_src python :session :results output :exports none
+import numpy as np
+import matplotlib.pyplot as plt
+#+end_src
+
+Exploration of the nested Host-Pathogen WF-SI model.
+
+* TODO Host coalescent model with vertical pathogen transmission  
+- Question: What happens to pathogen coalescence for only vertical transmission with probability $c_v < 1$?
+* Epidemic pathogen model betwen host generation
+We describe the horizontal epidemiological process $\mathcal{J}_t$ pathogen during host generations $n+1$ as an SI infection model with contact rate $\beta$, occuring for time $G$ as
+
+\begin{equation}
+\mathcal{J}_t: \quad J_0  \rightarrow J_G \quad \text{at rate } \beta(N-J_t)J_t/N.
+\end{equation}
+
+with intital conditions $\mathcal{J}_0 = I_n+1$ as the number of infected host offspring. The fraction of infected hosts $i(t) = J_t/N$ follows the the ODE
+
+\begin{equation}
+\frac{di}{dt} = \beta i(1-i), \quad \text{with } i(0) = J_0/N
+\end{equation}
+
+that has the solution
+
+\begin{equation}
+i(t) = \frac{i_0}{e^{-\beta t}(1-i_0) + i_0}.
+\end{equation}
+
+For one intial infection this system looks like the following: with the number of infected growing faster in time depending on the transmission rate $\beta$.
+
+
+#+begin_src python :session :results output :exports none
+N = 1000 # Host population size
+betas = [0.01, 0.05, 0.1, 0.3, 0.5, 1] # contact rate
+G = 100
+t = np.linspace(0, G, 100) # time from 0 -> G
+I_0 = 1
+
+def SI_process(t, N, beta, I_0):
+    i_0 = I_0 / N
+    i_t = i_0 / (np.exp(-beta * t)*(1 - i_0) + i_0)
+    return(i_t)
+#+end_src
+
+#+begin_src python :session :results output :exports none
+plt.figure(figsize=(5, 4))
+
+for beta in betas:
+    i_t = SI_process(t, N, beta, I_0)
+    plt.plot(t, i_t, label=f'$\\beta = {beta}$')
+
+# 4. Apply standard formatting
+plt.xlabel('Time (t)')
+plt.ylabel('Infected Individuals I(t)')
+plt.title('SI Model Trajectories for Different Transmission Rates ($\\beta$)')
+plt.legend()
+plt.grid(True)
+plt.show()
+#+end_src
+
+#+RESULTS:
+
+* Semi-discrete model with vertical and horizontal transmission 
+Assuming the number of infected at the end of the generation $n+1$ to be
+
+\begin{equation}
+X_{n+1} = I_{n+1} + K_{n+1}
+\end{equation}
+
+where $I_{n+1}$ is the number of infected host offspring and $K_{n+1}$ individuals are newly infected due to the epidemiological process $\matchcal{J}_G$ in generation $n+1$.
+
+If we take $N$ to infinity, we get the deterministic limit of the model, and with $x_n = X_n/N$ we have $I_{n+1}/N \approx c_v x_n$. For the stationary solution $x_n = x_{n+1} = x$ we get
+
+\begin{equation}
+x = x^* = \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})}
+\end{equation}
+
+TODO plot heatmap
+#+begin_src python :session :results output :exports none
+cVs = [0.1, 0.25, 0.5, 0.75, 1]
+
+
+# Deterministic approximation
+def x_equilibrium(cV,beta, G):
+    x = (cV-(1-cV)*np.exp(-beta*G))/(cV**2+(1+cV)*cV*(1-np.exp(-beat*G)))
+    return(x)
+
+
+#+end_src

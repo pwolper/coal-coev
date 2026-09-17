@@ -24,7 +24,7 @@ Phylodynamic inference of disease dyamics relies on connecting epidemiological d
 In real world host-pathogen systems though these assumptions can often be violated due to reciprocal host-pathogen interactions, complex disease-life cycles, including varying transmission modes, vectors and environmental factors. Importantly, evolutionary time scales of host and pathogens likely play a role in all but the most explosive epidemics.
 Many diseases have the ability to pass from infected to offspring through vertical transmission, in addition to horizontal epidemic infection dynamics. As infected hosts act as vessels for pathogens, it follows that the pathogen coalescent trees are embedded into a host genealogy, determined through vertical and horizontal transmission dynamics. The behaviour of joint host-pathogen genealogical processes is not well understood, as to our knowledge there is no generalized coalescent model based on the reproductive processes of hosts and pathogens, and the infection process that connects them ([[cite:&ebert-2020-host]]).
 
-* Phylodynamics
+* Presentation, CoNeMEsSA Sep. '26
 ** Phylodynamics: Inferring epidemiological parameters from pathogen genetic sequences. 
 *** :BMCOL:
 :PROPERTIES:
