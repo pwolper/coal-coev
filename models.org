@@ -215,5 +215,5 @@ In this model, $b_i$ and $d_i$ are the birth and natural (disease-independent) d
 Similar models are given in [[cite:&may-1983-epidem-genet]], [[cite:&boots-2014-how-specif]] and [[cite:&macpherson-2021-feedb-between]] (see epidemiological model).  
 #+end_tcolorbox
 
-* Bibliography
+* Bibliography :noexport:
 [[printbibliography:]]

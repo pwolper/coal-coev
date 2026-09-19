@@ -1,7 +1,7 @@
 #+title: Understanding host-pathogen interactions and (co)evolution through coalescent genealogies and ancestral recombination graphs
 #+subtitle: Linking epidemiological dynamics, (co)evolution and genomic ancestry of host-pathogen interactions
 #+setupfile: ~/.doom.d/setup-files/latex.setup
-#+OPTIONS: toc:t author:nil
+#+OPTIONS: toc:nil author:nil
 
 #+LATEX_HEADER: \author[1]{Philip L. Wolper}
 #+LATEX_HEADER: \affil[1]{Chair of Population Genetics, Technical University of Munich, Germany}
@@ -13,6 +13,8 @@
 \begin{abstract}
 Host-pathogen coevolutionary systems are shaped by a complex interplay of epidemiological, ecological and evolutionary processes. Disease transmission, recovery and population dynamics of hosts and pathogens interact with mutation, selection, recombination and genetic drift to generate feedbacks that operate across  multiple timescales. Understanding how these processes jointly shape genomic variation and the genealogies (i.e evolutionary ancestral trees) along the genomes of populations remains a central challenge for the fields of coevolution and molecular epidemiology, and requires theoretical frameworks that can integrate short-term epidemiological dynamics with long-term evolutionary processes. The ultimate goal is an understanding of host and pathogen evolution within a ancestral framework of genealogies and ancestral recombination graphs. The following presents a short proposal introducing a PhD thesis, beginning to tacke these ideas.  
 \end{abstract}
+
+#+latex: \tableofcontents
 
 * Background and Motivation
 ** Epidemiology and (co)evolution across scales and life cycles
