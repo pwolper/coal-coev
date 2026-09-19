@@ -1,14 +1,22 @@
 #+title: Host-pathogen embedded co-genealogies in the context of epidemiology and coevolution 
-#+options: toc:nil num:nil
+#+setupfile: ~/.doom.d/setup-files/latex_preview.setup
+#+OPTIONS: toc:t author:nil date:nil
+
+#+LATEX_HEADER_EXTRA: \author[1]{Philip Wolper}
+#+LATEX_HEADER_EXTRA: \author[1]{Aurélien Tellier}
+#+LATEX_HEADER_EXTRA: \affil[1]{Chair of Population Genetics, Technical University of Munich, Germany}
+
+#+LATEX_HEADER_EXTRA: \addbibresource{~/biblio/pop-gen.bib}
 
 #+begin_src python :session :results output :exports none
 import numpy as np
 import matplotlib.pyplot as plt
 #+end_src
 
+
 Exploration of the nested Host-Pathogen WF-SI model.
 
-* TODO Host coalescent model with vertical pathogen transmission  
+* TODO Host coalescent model with vertical pathogen transmission :noexport: 
 - Question: What happens to pathogen coalescence for only vertical transmission with probability $c_v < 1$?
 * Epidemic pathogen model betwen host generation
 We describe the horizontal epidemiological process $\mathcal{J}_t$ pathogen during host generations $n+1$ as an SI infection model with contact rate $\beta$, occuring for time $G$ as
@@ -34,22 +42,23 @@ For one intial infection this system looks like the following: with the number o
 
 #+begin_src python :session :results output :exports none
 N = 1000 # Host population size
-betas = [0.01, 0.05, 0.1, 0.3, 0.5, 1] # contact rate
-G = 100
+betas = [0.1, 0.3, 0.5, 1] # contact rate
+G = 50
 t = np.linspace(0, G, 100) # time from 0 -> G
-I_0 = 1
+i_0 = 0.4
 
-def SI_process(t, N, beta, I_0):
-    i_0 = I_0 / N
+def SI_process(t, N, beta, i_0):
     i_t = i_0 / (np.exp(-beta * t)*(1 - i_0) + i_0)
     return(i_t)
 #+end_src
+
+#+RESULTS:
 
 #+begin_src python :session :results output :exports none
 plt.figure(figsize=(5, 4))
 
 for beta in betas:
-    i_t = SI_process(t, N, beta, I_0)
+    i_t = SI_process(t, N, beta, i_0)
     plt.plot(t, i_t, label=f'$\\beta = {beta}$')
 
 # 4. Apply standard formatting
@@ -70,23 +79,248 @@ Assuming the number of infected at the end of the generation $n+1$ to be
 X_{n+1} = I_{n+1} + K_{n+1}
 \end{equation}
 
-where $I_{n+1}$ is the number of infected host offspring and $K_{n+1}$ individuals are newly infected due to the epidemiological process $\matchcal{J}_G$ in generation $n+1$.
+where $I_{n+1}$ is the number of infected host offspring and $K_{n+1}$ individuals are newly infected due to the epidemiological process $\mathcal{J}_G$ in generation $n+1$.
 
 If we take $N$ to infinity, we get the deterministic limit of the model, and with $x_n = X_n/N$ we have $I_{n+1}/N \approx c_v x_n$. For the stationary solution $x_n = x_{n+1} = x$ we get
 
-\begin{equation}
-x = x^* = \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})}
-\end{equation}
+\begin{align}
+x = x^* &= \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})} \\
+&= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v + c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
+\end{align}
 
-TODO plot heatmap
+# possibly simplify $\frac{x-y+xy}{x+xy+x^2y}$
+
 #+begin_src python :session :results output :exports none
-cVs = [0.1, 0.25, 0.5, 0.75, 1]
+cVs = [1, 0.75, 0.5, 0.25, 0.1] # probability of vertical transmission
+betas = [0.05, 0.1, 0.3, 0.5, 1] # contact rate
+Gs = [1, 5, 10, 20, 50] # epidemic time
 
+cV_cont = np.linspace(min(cVs), max(cVs), 100)
+beta_cont = np.linspace(min(betas), max(betas), 100)
+G_cont = np.linspace(min(Gs), max(Gs), 100)
 
 # Deterministic approximation
 def x_equilibrium(cV,beta, G):
-    x = (cV-(1-cV)*np.exp(-beta*G))/(cV**2+(1+cV)*cV*(1-np.exp(-beat*G)))
+    x = (cV-(1-cV)*np.exp(-beta*G))/(cV**2+(1-cV)*cV*(1-np.exp(-beta*G)))
     return(x)
-
-
 #+end_src
+
+** Equilibrium infected $x^*$
+The following plots show how $x^*$ behaves in relation to $\beta$, $G$ and $c_V$ based on the above deterministic limit. Improve heatmaps to regular cline plots and $x^*$?
+
+*** Figures :noexport:
+#+begin_src python :session :results graphics file value :exports results :file xheatmap_beta_G_per_cV.pdf
+beta_grid, G_grid = np.meshgrid(beta_cont, G_cont)
+Xs = [x_equilibrium(cV, beta_grid, G_grid) for cV in cVs]
+
+fig, axes = plt.subplots(1, len(cVs), figsize=(4*len(cVs), 3), sharey=True, layout='constrained')
+
+for i, (cV, x) in enumerate(zip(cVs, Xs)):
+    ax = axes[i]
+    
+    im = ax.pcolormesh(G_grid, beta_grid, x, cmap='viridis', shading='auto', vmin=0, vmax=1)
+    ax.set_title(rf'$c_V = {cV}$')
+    ax.set_xlabel(r'$G$')
+    ax.set_ylabel(r'$\beta$')
+
+fig.colorbar(im, ax=axes.ravel().tolist(), label=r'$x^*$')
+# plt.gcf()
+#+end_src
+
+#+attr_latex: :width \textwidth
+#+RESULTS:
+[[file:xheatmap_beta_G_per_cV.pdf]]
+
+#+begin_src python :session :results graphics file value :exports results :file xheatmap_G_cV_per_beta.pdf
+G_grid, cV_grid = np.meshgrid(G_cont, cV_cont)
+Xs = [x_equilibrium(cV_grid, beta, G_grid) for beta in betas]
+
+fig, axes = plt.subplots(1, len(betas), figsize=(4*len(betas), 3), sharey=True, layout='constrained')
+
+for i, (beta, x) in enumerate(zip(betas, Xs)):
+    ax = axes[i]
+    
+    im = ax.pcolormesh(G_grid, cV_grid, x, cmap='viridis', shading='auto', vmin=0, vmax=1)
+    ax.set_title(rf'$\beta = {beta}$')
+    ax.set_xlabel(r'$G$')
+    ax.set_ylabel(r'$c_V$')
+
+fig.colorbar(im, ax=axes.ravel().tolist(), label=r'$x^*$')
+# plt.gcf()
+#+end_src
+
+#+attr_latex: :width \textwidth
+#+RESULTS:
+[[file:xheatmap_G_cV_per_beta.pdf]]
+
+#+begin_src python :session :results graphics file value :exports results :file xheatmap_beta_cV_per_G.pdf
+beta_grid, cV_grid = np.meshgrid(beta_cont, cV_cont)
+Xs = [x_equilibrium(cV_grid, beta_grid, G) for G in Gs]
+
+fig, axes = plt.subplots(1, len(Gs), figsize=(4*len(Gs), 3), sharey=True, layout='constrained')
+
+for i, (G, x) in enumerate(zip(Gs, Xs)):
+    ax = axes[i]
+    
+    im = ax.pcolormesh(beta_grid, cV_grid, x, cmap='viridis', shading='auto', vmin=0, vmax=1)
+    ax.set_title(rf'$G = {G}$')
+    ax.set_xlabel(r'$\beta$')
+    ax.set_ylabel(r'$c_V$')
+
+fig.colorbar(im, ax=axes.ravel().tolist(), label=r'$x^*$')
+# plt.gcf()
+#+end_src
+
+#+attr_latex: :width \textwidth
+** TODO Pairwise coalescent probability
+- put formula for $p_c$.
+
+** Ancestral process $A_n$
+# started with ChatGPT derivation
+Ancestral process $A_n$ denotes the number of pathogen lineages $n$ generations backwards in time, decreating whenever two lineages coalesce. Suppose you start with $k$ pathogen samples at the present generation, the number of lineages starts  $A_0=k$, and goes through the process $k \rightarrow k-1 \rightarrow k-2 \rightarrow \cdots \rightarrow2 \rightarrow1$. If $N$ is large that higher order terms disappear $p_c = \mathcal{O}(N^{-1}) << 1$, the ancestral process can be defined as
+
+
+$$P(A_{n+1}=A_n-1\mid A_n) \approx p_c {A_n\choose2}$$
+gives you the *transition probability of the lineage-counting process*.
+
+From that, you can construct the entire ancestral process:
+$$ n \xrightarrow{\lambda_n} n-1 \xrightarrow{\lambda_{n-1}} n-2 \rightarrow \cdots \xrightarrow{\lambda_2} 1.$$
+
+where $\lambda_k$ is the coalescence rate when there are $k$ ancestral lineages.
+Suppose there are currently $k$ ancestral lineages. There are ${k\choose2}$ possible pairs, and each pair coalesces with probability $p_c$. Therefore, the probability of *a coalescence in the next generation* is
+
+$$\lambda_k = p_c {k\choose 2} = p_c\frac{k(k-1)}{2}$$
+
+with waiting times $T_k$ until the next coalescence approximately geometric distributed
+
+$$P(T_k=t\mid A=k) = (1-\lambda_k)^{t-1}\lambda_k, \qquad t=1,2, \ldots $$
+
+and consequently
+
+$$E[T_k] = \frac{1}{\lambda_k} = \frac{2}{p_c k(k-1)}.$$
+
+Define $T_{n}$ as the time backwards to the most recent common ancestor of $n$ samples, where $T_k$ is the waiting time distribution for the process to go from $k$ lineages to $k-1$. Therefore, it follows for large sample size $n$
+
+\begin{align}
+E[T_{n}] &= \sum_{k=2}^n E[T_k] \\
+&= \frac{2}{p_c}\sum_{k=2}^n\frac{1}{k(k-1)} = \frac{2}{p_c} \left(1-\frac1n\right) \approx \frac{2}{p_c}.
+\end{align}
+
+
+
+
+#+ATTR_LATEX: :options [title=The Wright-Fisher model and Kingman's coalescent]
+#+begin_tcolorbox
+If, as in a haploid Wright--Fisher model,
+$$
+p_c=\frac{1}{N},
+$$
+then
+$$
+P(A_{n+1}=k-1\mid A_n=k)
+\simeq \frac{k(k-1)}{2N}.
+$$
+and
+$$
+E[T_k]=\frac{2N}{k(k-1)}.
+$$
+The time to the most recent common ancestor becomes:
+$$E[T_n] = 2N\left(1-\frac1n\right).$$
+And for large sample size $n$, this is the familiar Kingman coalescent result.
+$$E[T_{n}]\approx 2N.$$
+#+end_tcolorbox
+
+**** 3. More generally: the distribution of the MRCA time
+
+You can go beyond its expectation. For large $N$, the geometric waiting times can be approximated by exponential random variables:
+
+$$ T_k\sim \operatorname{Exp}(\lambda_k),$$
+
+with
+
+$$
+\lambda_k
+=
+p_c {k\choose2}.
+$$
+
+Thus
+
+$$
+T_{\mathrm{MRCA}}
+\approx
+\sum_{k=2}^n
+\operatorname{Exp}
+\left(
+p_c {k\choose2}
+\right).
+$$
+
+This is a *hypoexponential distribution*.
+
+For the diploid Wright--Fisher case,
+
+$$
+\lambda_k
+=
+\frac{k(k-1)}{4N},
+$$
+
+so
+
+$$
+T_{\mathrm{MRCA}}
+\approx
+\sum_{k=2}^n
+\operatorname{Exp}
+\left(
+\frac{k(k-1)}{4N}
+\right).
+$$
+
+Consequently,
+
+$$
+\frac{T_{\mathrm{MRCA}}}{4N}
+\approx
+\sum_{k=2}^n
+\operatorname{Exp}\left({k\choose2}\right),
+$$
+
+where the exponentials on the right have rates ${k\choose2}$.
+
+**** 4. The important distinction for your model
+
+There are actually *two levels* here.
+
+The MRCA time is simply the *hitting time of state 1*:
+
+$$
+T_{\mathrm{MRCA}}
+=
+\inf\{t:A_t=1\}.
+$$
+
+Its expectation follows by summing the waiting times between successive states.
+
+**** 5. Important caveat
+
+The approximation
+
+$$
+P(A_{t+1}=k-1\mid A_t=k)
+\simeq p_c {k\choose2}
+$$
+
+assumes that coalescence events are sufficiently rare that *multiple pairwise collisions in the same generation can be neglected*.
+
+For fixed $k$ and $N\to\infty$, this is exactly the regime leading to Kingman's coalescent.
+
+If your pathogen model has substantial offspring skew, however, this approximation can break down: you can have $k\to k-2$, $k\to k-3$, etc. in a single generation.
+
+In that case the MRCA calculation needs the *full transition distribution of $A_n$* rather than just the pairwise coalescence probability.
+
+That distinction is particularly important if your $A_n$ is intended to describe a non-Kingman pathogen genealogy.
+
+
+
