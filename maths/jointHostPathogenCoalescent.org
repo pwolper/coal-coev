@@ -11,10 +11,19 @@
 #+LATEX_HEADER_EXTRA: \addbibresource{~/biblio/pop-gen.bib}
 
 
-Exploration of the nested Host-Pathogen WF-SI model.
-* TODO Host coalescent model with vertical pathogen transmission :noexport: 
-- Question: What happens to pathogen coalescence for only vertical transmission with probability $c_v < 1$?
-* Epidemic pathogen model betwen host generation
+
+Pathogen epidemic model embedded within Host reproduction -- a model of coevolution through horitonal and vertical transmission. 
+
+_Semi-discrete host-pathogen WF-SI model_
+# #+attr_latex: \width :textwidth
+#+attr_latex:
+[[./nestedHostPathogen_WF_SI.png]]
+
+* Semi-discrete model with vertical and horizontal transmission 
+** Vertical pathogen transmission through host generations
+Question: What happens to pathogen coalescence for only vertical transmission with probability $c_v < 1$?
+See boundary condition for $\beta G = 0$.
+** Epidemic pathogen dynamics within host generations
 We describe the horizontal epidemiological process $\mathcal{J}_t$ pathogen during host generations $n+1$ as an SI infection model with contact rate $\beta$, occuring for time $G$ as
 
 \begin{equation}
@@ -35,7 +44,7 @@ i(t) = \frac{i_0}{e^{-\beta t}(1-i_0) + i_0}.
 
 For one intial infection this system looks like the following: with the number of infected growing faster in time depending on the transmission rate $\beta$.
 
-* Semi-discrete model with vertical and horizontal transmission 
+** Deterministic equilibrium of the number of infected hosts
 Assuming the number of infected at the end of the generation $n+1$ to be
 
 \begin{equation}
@@ -48,19 +57,33 @@ If we take $N$ to infinity, we get the deterministic limit of the model, and wit
 
 \begin{align}
 x = x^* &= \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})} \\
-&= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v + c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
+&= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v - c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
 \end{align}
 
-_Boundary conditions_: \\
-We wish to understand the boundary conditions for pathogen extinction, as the non-trivial equilibrium above can yield $x^* < 0$. The value of $x^*$ is positive for all positive values of the numerator, as the denominator is positive for all $c_v$, $\beta$ and $G$ greater than 0. As the numerator is positive under $c_v > (1-c_v)e^{-\beta G}$, we get the boundary condition for persistence of the pathogen as
+#+attr_latex: :width \textwidth :placement [H]
+#+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
+[[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
+
+*** Boundary conditions
+We wish to understand the boundary conditions for pathogen extinction, as the non-trivial equilibrium above can yield $x^* < 0$, which is un-meanigful, as $x = X / N \in [0,1]$. The value of $x^*$ is positive for all positive values of the numerator, as the denominator is positive for all $c_v$, $\beta$ and $G$ greater than 0. As the numerator is positive under $c_v > (1-c_v)e^{-\beta G}$, we get the boundary condition for persistence of the pathogen as
 
 $$c_v > \frac{1}{1+e^{\beta G}}$$
 
-As $\beta G > 0$, the r.h.s is strictly smaller than 0.5, meaning the boundary condition for persistence of the disease is $c_v \ge 0.5$, regardless of how low $\beta G$ become. By the same logic, if the vertical contact rate $c_v < 0.5$, we get the minimum horizontal transmission $\beta G$ required to avoid extinction as
+As $\beta G \ge 0$, the r.h.s is always smaller than or equal $0.5$, which means that $c_v > 0.5$ guarantees the equivalence to be true; this amount of vertical transmission is always enough for the deterministic persistence of the pathogen, regardless of how low the horizontal transmission $\beta G$ drops. By the same logic, if the vertical contact rate $c_v < 0.5$, we get the minimum horizontal transmission $\beta G$ required to avoid extinction as
 
 $$\beta G > \ln \left(\frac{1-c_v}{c_v}\right)$$ 
 
-# possibly simplify $\frac{x-y+xy}{x+xy+x^2y}$
+As the rate of vertical transmission $c_v\rightarrow 0$ the, r.h.s grows to $\infty$, which makes sense, as no amount of horizontal transmission can overcome lack of transmission between generations.
+
+#+ATTR_LATEX: :options [title= The case of strict vertical transmission]
+#+begin_tcolorbox
+For the case of a pathogen following strict vertical transmission, the boundary equilibrium as $\beta G = 0$, is defines as
+
+$$x^{*0}:=  \left. x^* \right|_{\beta G=0}=\frac{2c_v-1}{c_v^2}$$.
+
+As the probability of vertical transmission $c_v \in [0,1]$, this results in $x^{*0} > 0$ only if $c_v > 0.5$, and $x^{*0} = 1$ for $c_v = 1$. In strict absence of vertical transmission the pathogen tracks the $N$ hosts coalescent tree with a number of infected $X = x^{*0}/N = \left(\frac{2c_v -1}{c^2_v}\right)N$, as a function of the probability of vertical transmission. 
+#+end_tcolorbox
+
 ** Pairwise coalescent probability
 The probability that two randomly sampled pathogen lineages coalesce depends on both hoizontal and vertical transmission. Coalescence can happen either within an epidemic clade deriving from each founding offspring infected (with probability $\pi$) or following host coalescence with vertical transmission in both host infected offspring. In the later case the probability is $1/N$, such that
 
@@ -133,7 +156,6 @@ import pandas as pd
 import itertools
 #+end_src
 
-
 ** SI process
 #+begin_src python :session :results output :exports none 
 N = 1000 # Host population size
@@ -180,56 +202,56 @@ G_cont = np.linspace(min(Gs), max(Gs), 100)
 # Deterministic approximation
 def x_equilibrium(cV,beta, G):
     x = (cV-(1-cV)*np.exp(-beta*G))/(cV**2+(1-cV)*cV*(1-np.exp(-beta*G)))
-    return(x)
+    return(np.maximum(x,0))
 #+end_src
 
 #+RESULTS:
 
 #+begin_src python :session :results output :exports none :eval no-export
-data = []
-for cV, beta, G in itertools.product(cVs, betas, Gs):
-    x_star = x_equilibrium(cV, beta, G)
-    data.append({'cV': cV, 'beta': beta, 'G': G, 'x_star': x_star})
+cVs = [1, 0.75, 0.5, 0.25, 0.1, 0.0001] # probability of vertical transmission
+betas = [0, 0.1, 0.3, 0.5, 1] # contact rate
+Gs = [1, 5, 10, 20, 50] # epidemic time
 
-df = pd.DataFrame(data)
-print(df)
+palette = 'dark:blue'
+fig, axes = plt.subplots(1, len(Gs), figsize=(3*len(Gs), 3), sharey=True, sharex=True)
+
+cV_continuous = np.linspace(min(cVs), max(cVs), 1000)
+
+for i, Gval in enumerate(Gs): # by panels for G
+    ax = axes[i]
+    row = []
+    for cV, beta, G in itertools.product(cV_continuous, betas, [Gval]):
+        x_star = x_equilibrium(cV, beta, G)
+        row.append({'cV': cV, 'beta': beta, 'G': G, 'x_star':x_star})
+    df = pd.DataFrame(row)
+    df = df[df['x_star'] >= 0]
+    
+    sns.lineplot(data=df, x='cV', y='x_star', ax=ax,
+                 hue='beta', style='beta', palette=palette,
+#                 hue_order=betas, style_order=betas,
+                 lw=2, legend=(i==0))
+    ax.set_ylabel(r"$x^*$")
+    ax.set_xlabel(r"$c_v$")
+    ax.set_title(fr"{chr(65+i)}) G = {Gval}", loc='left')
+    ax.grid(True)
+    
+fig.legend(loc='right', bbox_to_anchor=(0.96, 0.5), title=r'$\beta$')
+axes[0].get_legend().remove()
+
+plt.savefig(f"figures/x_equilibrium_vs_cv_perBeta_G.pdf", bbox_inches='tight', dpi=300)
 #+end_src
 
 #+RESULTS:
-#+begin_example
-     cV  beta   G    x_star
-0   1.0   0.1   1  1.000000
-1   1.0   0.1   5  1.000000
-2   1.0   0.1  10  1.000000
-3   1.0   0.1  20  1.000000
-4   1.0   0.1  50  1.000000
-..  ...   ...  ..       ...
-95  0.1   1.0   1 -3.454755
-96  0.1   1.0   5  0.945090
-97  0.1   1.0  10  0.999632
-98  0.1   1.0  20  1.000000
-99  0.1   1.0  50  1.000000
 
-[100 rows x 4 columns]
-#+end_example
-
-#+begin_src python :session :results output :exports none :eval no-export
-g1 = sns.relplot(
-    data=df, kind="line",
-    x="G", y="x_star", hue="beta", col="cV",
-    palette="viridis", marker=None, height=3.5, aspect=1
-)
-g1.fig.suptitle('Equilibrium ($x^*$) vs Epidemic Time (G)', y=1.05)
-plt.show()
-#+end_src
-
-#+RESULTS:
+#+attr_latex: :with \textwidth
+#+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
+[[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
 *** Heatmaps (not working...)
 
 The following plots show how $x^*$ behaves in relation to $\beta$, $G$ and $c_V$ based on the above deterministic limit. Improve heatmaps to regular cline plots and $x^*$?
 
-#+begin_src python :session :results graphics file value :exports results :file xheatmap_beta_G_per_cV.pdf :eval no-export
+#+begin_src python :session :results graphics file value :exports results :file xheatmap_beta_G_per_cV.pdf :eval no
 beta_grid, G_grid = np.meshgrid(beta_cont, G_cont)
 Xs = [x_equilibrium(cV, beta_grid, G_grid) for cV in cVs]
 
@@ -251,7 +273,7 @@ fig.colorbar(im, ax=axes.ravel().tolist(), label=r'$x^*$')
 #+RESULTS:
 [[file:xheatmap_beta_G_per_cV.pdf]]
 
-#+begin_src python :session :results graphics file value :exports results :file xheatmap_G_cV_per_beta.pdf :eval no-export
+#+begin_src python :session :results graphics file value :exports results :file xheatmap_G_cV_per_beta.pdf :eval no
 G_grid, cV_grid = np.meshgrid(G_cont, cV_cont)
 Xs = [x_equilibrium(cV_grid, beta, G_grid) for beta in betas]
 
@@ -273,7 +295,7 @@ fig.colorbar(im, ax=axes.ravel().tolist(), label=r'$x^*$')
 #+RESULTS:
 [[file:xheatmap_G_cV_per_beta.pdf]]
 
-#+begin_src python :session :results graphics file value :exports results :file xheatmap_beta_cV_per_G.pdf :eval no-export
+#+begin_src python :session :results graphics file value :exports results :file xheatmap_beta_cV_per_G.pdf :eval no
 beta_grid, cV_grid = np.meshgrid(beta_cont, cV_cont)
 Xs = [x_equilibrium(cV_grid, beta_grid, G) for G in Gs]
 
