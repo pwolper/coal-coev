@@ -12,6 +12,8 @@
 
 
 
+
+* Semi-discrete model with vertical and horizontal transmission 
 Pathogen epidemic model embedded within Host reproduction -- a model of coevolution through horitonal and vertical transmission. 
 
 _Semi-discrete host-pathogen WF-SI model_
@@ -19,12 +21,12 @@ _Semi-discrete host-pathogen WF-SI model_
 #+attr_latex:
 [[./nestedHostPathogen_WF_SI.png]]
 
-* Semi-discrete model with vertical and horizontal transmission 
 ** Vertical pathogen transmission through host generations
-Question: What happens to pathogen coalescence for only vertical transmission with probability $c_v < 1$?
-See boundary condition for $\beta G = 0$.
+The host population reproduces in discrete generations and non-overlapping generation, following a Wright-Fisher process of size $N$. At the end of each generation $n$, there are $X_n$ hosts infected. The generation $n+1$ begins with host reproduction, during which infected host have the probability $c_v$ to pass the pathogen on to their offspring, infecting vertically. 
 ** Epidemic pathogen dynamics within host generations
-We describe the horizontal epidemiological process $\mathcal{J}_t$ pathogen during host generations $n+1$ as an SI infection model with contact rate $\beta$, occuring for time $G$ as
+Alternating host reproduction, we have a continuous epidemiological process within each generation, representing horizontal transmission of infectious disease. This process runs for time $G$, which describes the length of the epidemic phase between host reproduction, and is well suited to describe seasonal epidemics for example in plants. Depending on the length of $G$, we can also adjust the relative speed of evolution of hosts to pathogens (for later?).
+
+In the following, we describe the horizontal epidemiological process $\mathcal{J}_t$ pathogen during host generations $n+1$ as an SI infection model with contact rate $\beta$, occuring for time $G$ as
 
 \begin{equation}
 \mathcal{J}_t: \quad J_0  \rightarrow J_G \quad \text{at rate } \beta(N-J_t)J_t/N.
