@@ -124,7 +124,7 @@ with waiting times $T_k$ until the next coalescence approximately geometric (?) 
 
 $$E[T_k] = \frac{1}{\lambda_k} = \frac{2}{p_c k(k-1)}.$$
 
-Define $T_{n}$ as the time backwards to the most recent common ancestor of $n$ samples, where $T_k$ is the waiting time distribution for the process to go from $k$ lineages to $k-1$. The expectation $E[T_n]$ derives from summing over all $T_k$ down to $k=1$ lineage. For a large sample size $n$, we get the following *footnote* where the final equality follows from $\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}$.
+Define $T_{n}$ as the time backwards to the most recent common ancestor of $n$ samples, where $T_k$ is the waiting time distribution for the process to go from $k$ lineages to $k-1$. The expectation $E[T_n]$ derives from summing over all $T_k$ down to $k=1$ lineage. For a large sample size $n$, we get the following [fn:: where the final equality follows from $\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}$]:
 
 \begin{align}
 E[T_{n}] &= \sum_{k=2}^n E[T_k] = \frac{2}{p_c}\sum_{k=2}^n\frac{1}{k(k-1)} = \frac{2}{p_c} \left(1-\frac1n\right).
