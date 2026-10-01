@@ -1,6 +1,6 @@
-#+title: Host-pathogen embedded co-genealogies in the context of epidemiology and coevolution 
+#+title: Host-pathogen embedded co--genealogies in the context of epidemiology and coevolution 
 #+setupfile: ~/.doom.d/setup-files/latex_preview.setup
-#+OPTIONS: toc:nil author:nil date:nil
+#+OPTIONS: toc:nil author:nil date:t
 
 #+LATEX_HEADER_EXTRA: \author[1]{Philip Wolper}
 #+LATEX_HEADER_EXTRA: \author[2]{Johannes Müller}
@@ -12,21 +12,26 @@
 
 
 
-Pathogen epidemic model embedded within Host reproduction -- a model of coevolution through horizontal and vertical transmission. 
-
-#+attr_latex: :options [title=Semi-discrete host-pathogen WF-SI model]
-#+begin_tcolorbox
-#+attr_latex: :width \textwidth :float nil
-#+caption: Semi-discrete host-pathogen model with $N^{\text{H}}$ hosts and $N^{\text{P}} = X_n$ pathogens corresponding to the number of infected individuals at the end of generation $n$. Pathogen have a probability $c_v$ to transmit vertically, following the host lineages. Within each host generation there is a continuous epidemiological process, modelling horizontal transmission through an SI infection model, determined by the contact rate $\beta$ and the duration of the epidemic $G$. 
-[[./nestedHostPathogen_WF_SI.png]]
-#+end_tcolorbox
+* Introduction
+Phylodynamic inference of disease dyamics relies on connecting epidemiological dynamical models to a coalescent model of a sample of genetic sequences, often done heuristically. In order for the pathogen tree to relate to the host-measured SI process this typically employes several assumptions: (i) host evolution occurs on a much slower time scale (i.e. is neglegible) than the epidemic and (ii) each host is only infected with one pathogen individual. If these are given then we can construct the pathogen coalescent from $N_{\text{pathogen}} \sim I$.
+ 
+In real world host-pathogen systems though these assumptions can often be violated due to reciprocal host-pathogen interactions, complex disease-life cycles, including varying transmission modes, vectors and environmental factors. Importantly, evolutionary time scales of host and pathogens likely play a role in all but the most explosive epidemics.
+Many diseases have the ability to pass from infected to offspring through vertical transmission, in addition to horizontal epidemic infection dynamics. As infected hosts act as vessels for pathogens, it follows that the pathogen coalescent trees are embedded into a host genealogy, determined through vertical and horizontal transmission dynamics. The behaviour of joint host-pathogen genealogical processes is not well understood, limited to approaches by [[cite:&welch-2005-integ-geneal-epidem]], as to our knowledge there is no generalized coalescent model based on the reproductive processes of hosts and pathogens, and the infection process that connects them ([[cite:&ebert-2020-host]]).
 
 * Semi-discrete model with vertical and horizontal transmission 
+Pathogen epidemic model embedded within Host reproduction -- a model of coevolution through horizontal and vertical transmission. 
+
+#+attr_latex: :width \textwidth 
+#+caption: Semi-discrete host-pathogen model with $N^{\text{H}}$ hosts and $N^{\text{P}} = X_n$ pathogens corresponding to the number of infected individuals at the end of generation $n$. Pathogen have a probability $c_v$ to transmit vertically, following the host lineages. Within each host generation there is a continuous epidemiological process, modelling horizontal transmission through an SI infection model, determined by the contact rate $\beta$ and the duration of the epidemic $G$. 
+[[./nestedHostPathogen_WF_SI.png]]
+
 ** Vertical pathogen transmission through host generations
-Question: What happens to pathogen coalescence for only vertical transmission with probability $c_v < 1$?
-See boundary condition for $\beta G = 0$.
+The host population reproduces in discrete generations and non-overlapping generation, following a Wright-Fisher process of size $N$. At the end of each generation $n$, there are $X_n$ hosts infected. We transition to the next generation by host reproduction, during which infected host have the probability $c_v$ to pass the pathogen on to their offspring, infecting vertically.  At the beginning of each generation $n+1$ there are $I_{n+1}$ infected host offspring, that are the founding individuals for the epidemiological process. 
+
 ** Epidemic pathogen dynamics within host generations
-We describe the horizontal epidemiological process $\mathcal{J}_t$ pathogen during host generations $n+1$ as an SI infection model with contact rate $\beta$, occuring for time $G$ as
+Alternating host reproduction, we have a continuous epidemiological process within each generation, representing horizontal transmission of infectious disease. This process runs for time $G$, which describes the length of the epidemic phase between host reproduction, and is well suited to describe seasonal epidemics for example in plants. Depending on the length of $G$, we can also adjust the relative speed of evolution of hosts to pathogens (for later?).
+
+In the following, we describe the horizontal epidemiological process $\mathcal{J}_t$ pathogen during host generations $n+1$ as an SI infection model with contact rate $\beta$, occuring for time $G$. For more details and derivation of the model see notes 'SI_coalV3.pdf'.
 
 \begin{equation}
 \mathcal{J}_t: \quad J_0  \rightarrow J_G \quad \text{at rate } \beta(N-J_t)J_t/N.
@@ -55,18 +60,21 @@ X_{n+1} = I_{n+1} + K_{n+1}
 
 where $I_{n+1}$ is the number of infected host offspring and $K_{n+1}$ individuals are newly infected due to the epidemiological process $\mathcal{J}_G$ in generation $n+1$.
 
-If we take $N$ to infinity, we get the deterministic limit of the model, and with $x_n = X_n/N$ we have $I_{n+1}/N \approx c_v x_n$. For the stationary solution $x_n = x_{n+1} = x$ we get
+If we take $N$ to infinity, we get the deterministic limit of the model, and with $x_n = X_n/N$ we have $I_{n+1}/N \approx c_v x_n$. See notes for further details. For the stationary solution $x_n = x_{n+1} = x$ we get
 
 \begin{align}
 x = x^* &= \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})} \\
 &= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v - c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
 \end{align}
 
+The value of $x^*$ for values of $c_v$, $\beta$ and $G$ are shown below. Values of $x^* < 0$ are set to 0, as biologically, we require a positive fraction $x$.
 #+attr_latex: :width \textwidth :placement [H]
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
 *** Boundary conditions
+{{{color(red, Check my work on boundary condition? Is $x^*$ derived under assumptions $\beta G > 0$?)}}}
+
 We wish to understand the boundary conditions for pathogen extinction, as the non-trivial equilibrium above can yield $x^* < 0$, which is un-meanigful, as $x = X / N \in [0,1]$. The value of $x^*$ is positive for all positive values of the numerator, as the denominator is positive for all $c_v$, $\beta$ and $G$ greater than 0. As the numerator is positive under $c_v > (1-c_v)e^{-\beta G}$, we get the boundary condition for persistence of the pathogen as
 
 $$c_v > \frac{1}{1+e^{\beta G}}$$
@@ -124,7 +132,7 @@ with waiting times $T_k$ until the next coalescence approximately geometric (?) 
 
 $$E[T_k] = \frac{1}{\lambda_k} = \frac{2}{p_c k(k-1)}.$$
 
-Define $T_{n}$ as the time backwards to the most recent common ancestor of $n$ samples, where $T_k$ is the waiting time distribution for the process to go from $k$ lineages to $k-1$. The expectation $E[T_n]$ derives from summing over all $T_k$ down to $k=1$ lineage. For a large sample size $n$, we get the following *footnote* where the final equality follows from $\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}$.
+Define $T_{n}$ as the time backwards to the most recent common ancestor of $n$ samples, where $T_k$ is the waiting time distribution for the process to go from $k$ lineages to $k-1$. The expectation $E[T_n]$ derives from summing over all $T_k$ down to $k=1$ lineage. For a large sample size $n$, we get the following [fn:: where the final equality follows from $\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}$]:
 
 \begin{align}
 E[T_{n}] &= \sum_{k=2}^n E[T_k] = \frac{2}{p_c}\sum_{k=2}^n\frac{1}{k(k-1)} = \frac{2}{p_c} \left(1-\frac1n\right).
@@ -244,9 +252,10 @@ axes[0].get_legend().remove()
 plt.savefig(f"figures/x_equilibrium_vs_cv_perBeta_G.pdf", bbox_inches='tight', dpi=300)
 #+end_src
 
-#+RESULTS:
-
 #+attr_latex: :with \textwidth
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
+
+* Bibliography
+[[printbibliography:]]
