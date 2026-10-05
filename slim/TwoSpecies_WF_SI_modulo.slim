@@ -1,0 +1,168 @@
+// Keywords: multispecies, interaction
+
+species all initialize() {
+	initializeSLiMModelType("nonWF");
+	
+	defineConstant("N_Host", 10); //constant host population size
+	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
+	defineConstant("c_v", 1); //probability of vertical transmission
+	defineConstant("G", 5); //relative epidemic time
+}
+
+species host initialize() {
+	initializeSpecies(tickModulo=G+1, avatar="🌾", color='green');
+	initializeSLiMOptions(keepPedigrees=T);
+}
+
+species pathogen initialize() {
+	initializeSpecies(tickModulo=1, avatar="🦠", color='red');
+	//initializeSLiMOptions(keepPedigrees=T); are pdeigreeID of two species unique?
+}
+
+
+
+
+species host reproduction() {
+	catn("-- Host reproduction callback -- ");
+	hostLineageDict = Dictionary();
+	// Host WF reproduction step
+	parents = p1.sampleIndividuals(N_Host, replace=T);
+	for (parent in parents) {
+		offspring = subpop.addCloned(parent);
+		offspring.color = parent.color;
+		offspring.tagL0 = parent.tagL0;
+		
+		parentID = asString(parent.pedigreeID);
+		hostLineageDict.setValue(parentID, c(hostLineageDict.getValue(parentID), offspring.pedigreeID)); // Host Parent Offspring Dict
+	}
+	defineGlobal("hostLineageDict", hostLineageDict);
+	catn(hostLineageDict);
+	self.active = 0;
+}
+
+species pathogen reproduction() {
+	catn("-- Pathogen reproduction callback --");
+	
+	//vertical transmission after host reproduction
+	if (g == 0) {
+		catn("- Vertical transmission (g = 0)");
+		//catn(hostLineageDict);
+		pathogens = p2.individuals;
+		
+		for (pathInd in p2.individuals) {
+			HostOffspringID = hostLineageDict.getValue(asString(pathInd.tag));   // offspring pedigreeIDs of this host
+			catn("\t" + pathInd.tag + " --> "  +  HostOffspringID + "\n");
+			
+			for (offspring in HostOffspringID) {
+				verticalPathogen = subpop.addCloned(pathInd);
+				verticalPathogen.tag = offspring;
+				verticalPathogen.color = pathInd.color;
+			}
+		}
+	}
+	
+	else {
+		// Horizontal transmission
+		catn("- Horizontal transmission - ");
+	}
+	
+	self.active = 0;
+}
+
+
+
+ticks all 1 early() {
+	
+	host.addSubpop("p1", N_Host, haploid=T);
+	p1.individuals.tagL0 = F; //Infection status. F for healthy, T for infected
+	p1.individuals.color = colors(p1.individualCount, "turbo");
+	p1.individuals.tag = seqLen(p1.individualCount);
+	catn("Hosts: "); catn(p1.individuals.tag);
+	
+	//initial infection
+	pathogen.addSubpop("p2", 1);
+	newHost = p1.sampleIndividuals(1);
+	newHost.tagL0 = T; //newHost.color = "red";
+	catn("Initial infection in host " + newHost.pedigreeID);
+	p2.individuals.color = newHost.color;
+	p2.individuals.tag = newHost.pedigreeID; //tag pathogen with host.pedigreeID
+
+}
+
+ticks all 1: first() {
+	defineGlobal("g", (community.tick - 1) % (G+1));
+	catn("\n\n\n--- " + host.cycle + "." + asInteger(g) + " first() ---");
+	// catn("Hosts: "); catn(p1.individuals.tag);
+	//catn("Infections: "); catn(p1.individuals.tagL0);
+	//cat("HostIDs:"); catn(p1.individuals.pedigreeID);
+	//catn("PathogenIDs:"); catn(p2.individuals.pedigreeID);
+}
+
+ticks all 1: early() {
+	catn("-- early() --");
+	catn("Hosts: "); catn(p1.individuals.pedigreeID);
+	cat("Host Age: "); catn(p1.individuals.age);
+	// // 	catn("	fitnessScaling of Healthy");
+	// catn("Host.pedigreeIDs: "); catn(p1.individuals.pedigreeID);
+	pathogenHosts = p2.individuals.tag;
+	cat("pathogenHosts (pathogen.tag): "); catn(pathogenHosts);
+	// pathogens = p2.individuals;
+	// // 	healthy = p1.individuals[p1.individuals.tag == 0];
+	// // 	healthy.fitnessScaling = 1 + s_I;
+	// // 	catn(healthy.fitnessScaling);
+	// 
+	// hosts_parents_offspring_tags = p1.individuals.pedigreeID;
+	// 
+	// PathogensToKill  = pathogens[match(pathogens.tag, p1.individuals.pedigreeID) < 0];
+	// cat("PathogensToKill: "); catn(PathogensToKill.tag);
+	// 
+	// pathogen.killIndividuals(PathogensToKill);
+
+}
+
+
+//species pathogen survival() {
+//	catn("Pathogen " + individual.tag + ", age: " + individual.age);
+//	return(individual.age < 2);
+//}
+
+
+species host survival() {
+	// non-overlapping host generations
+	return (individual.age == 0);
+}
+
+species pathogen survival() {
+	return (g != 0) | (individual.age == 0); // pathogens die only at tick g=0 or if their age is older than 1. 
+	// return (g != 0);    // T = survives; all old pathogens die at the vertical tick
+}
+
+ticks all 1: late() {
+	catn("-- late() --");
+	catn("HostPedigreeIDs:"); catn(p1.individuals.pedigreeID);
+	// catn("Hosts.tag: "); catn(p1.individuals.tag);
+	// catn("Host.pedigreeIDs: "); catn(p1.individuals.pedigreeID);
+	// 
+	// pathogenHosts = p2.individuals.tag;
+	cat("pathogenHosts (pathogen.tag): "); catn(p2.individuals.tag);
+	// //cat("Host Age: "); catn(p1.individuals.age);
+	// //infected = p1.individuals[p1.individuals.tag == 1];
+	// 
+	// 
+	// 
+	// catn("Infections: "); catn(p1.individuals.tagL0);
+	// //susceptibles = p1.individuals[p1.individuals.tag == 0];
+	// //catn("\nN. susceptibles: " + length(susceptibles));
+	// //infected = p1.individuals[p1.individuals.tag == 1];
+	// //catn("N. infected: " + length(infected));
+	// 
+	// //if (length(infected) == 0) {
+	// //	catn("Pathogen extinct!");
+	// //	community.simulationFinished();}
+
+}
+
+//species host survival() {}
+//species parasitoid survival() {}
+
+ticks all 5*N_Host late() {}
