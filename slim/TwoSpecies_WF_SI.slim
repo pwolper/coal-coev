@@ -21,7 +21,6 @@ species host initialize() {
 	initializeSLiMOptions(keepPedigrees=T);
 	
 	initializeMutationType("m1", 0.5, "f", 0.0); //resistance mutation with no fitness cost yet
-	m1.color = "cornflowerblue";
 	initializeGenomicElementType("g1", m1, 1.0);
 	initializeGenomicElement(g1, 0, 0);
 	initializeMutationRate(0);
@@ -55,7 +54,7 @@ species pathogen reproduction() {
 	//catn("Host.pedigreeParentIDs"); catn(p1.individuals.pedigreeParentIDs); 
 	
 	for (infected in infectedHosts) {
-		cat("	Host.pedgreeID: " + infected.pedigreeID + " "); cat("(" + infected.tagL0 + ") "); cat("Parents: "); 		catn(infected.pedigreeParentIDs);
+		cat("	Host.pedgreeID: " + infected.pedigreeID + " "); cat("(" + infected.tagL0 + ") "); cat("Parents: "); catn(infected.pedigreeParentIDs);
 		parents = infected.pedigreeParentIDs;
 		//cat("	Parent: "); catn(parents[1]);
 		pathogenInd = p2.individuals[p2.individuals.tag == parents[1]];
