@@ -62,17 +62,27 @@ where $I_{n+1}$ is the number of infected host offspring and $K_{n+1}$ individua
 
 If we take $N$ to infinity, we get the deterministic limit of the model, and with $x_n = X_n/N$ we have $I_{n+1}/N \approx c_v x_n$. See notes for further details. For the stationary solution $x_n = x_{n+1} = x$ we get
 
-\begin{align}
-x = x^* &= \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})} \\
-&= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v - c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
-\end{align}
+# \begin{align}
+# x = x^* &= \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})} \\
+# &= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v - c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
+# \end{align}
+
+\begin{equation}
+x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
+\end{equation}
 
 The value of $x^*$ for values of $c_v$, $\beta$ and $G$ are shown below. Values of $x^* < 0$ are set to 0, as biologically, we require a positive fraction $x$.
+
 #+attr_latex: :width \textwidth :placement [H]
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
-*** Boundary conditions
+*** TODO Boundary conditions and limiting behaviour
+We are only interested in the cases $x^*>0$ (and smaller 1), as other solutions are not biological. Hereby, $x^* = 0$ represents the boundary disease-free equilibrium, while $x^* = 1$ is the absorbing state of total infection. The cases inbetween represent the endemic disease equilibrium $0 < x^* < 1$. 
+
+The denominator in $x^*$ is positive for $c_v \ge e^{-\beta G}$. 
+
+*** TODO Boundary conditions :noexport:
 {{{color(red, Check my work on boundary condition? Is $x^*$ derived under assumptions $\beta G > 0$?)}}}
 
 We wish to understand the boundary conditions for pathogen extinction, as the non-trivial equilibrium above can yield $x^* < 0$, which is un-meanigful, as $x = X / N \in [0,1]$. The value of $x^*$ is positive for all positive values of the numerator, as the denominator is positive for all $c_v$, $\beta$ and $G$ greater than 0. As the numerator is positive under $c_v > (1-c_v)e^{-\beta G}$, we get the boundary condition for persistence of the pathogen as
@@ -93,7 +103,6 @@ $$x^{*0}:=  \left. x^* \right|_{\beta G=0}=\frac{2c_v-1}{c_v^2}$$.
 
 As the probability of vertical transmission $c_v \in [0,1]$, this results in $x^{*0} > 0$ only if $c_v > 0.5$, and $x^{*0} = 1$ for $c_v = 1$. In strict absence of vertical transmission the pathogen tracks the $N$ hosts coalescent tree with a number of infected $X = x^{*0}/N = \left(\frac{2c_v -1}{c^2_v}\right)N$, as a function of the probability of vertical transmission. 
 #+end_tcolorbox
-
 ** Pairwise coalescent probability
 The probability that two randomly sampled pathogen lineages coalesce depends on both hoizontal and vertical transmission. Coalescence can happen either within an epidemic clade deriving from each founding offspring infected (with probability $\pi$) or following host coalescence with vertical transmission in both host infected offspring. In the later case the probability is $1/N$, such that
 
@@ -163,6 +172,7 @@ $$E[T_{n}]\approx 2N.$$
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
 import pandas as pd
 import itertools
 #+end_src
@@ -201,6 +211,73 @@ plt.savefig("SI_model_solutions.pdf", bbox_inches='tight', dpi=300)
 #+RESULTS:
 
 ** Equilibrium $^*$
+*** Dynamic plots
+#+begin_src python :session :results output :exports none :eval no-export
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
+
+# x*(beta, G, c_v) = (c_v - e^(-beta G)) / (c_v (1 - e^(-beta G)))
+def x_star(beta, G, c_v):
+    return (c_v - np.exp(-beta * G)) / (c_v * (1 - np.exp(-beta * G)))
+
+G_values = [1, 5, 10, 20, 50]
+n = len(G_values)
+reds = plt.cm.Reds(np.linspace(0.3, 0.95, n))     # left panel
+greens = plt.cm.Greens(np.linspace(0.3, 0.95, n))  # right panel
+
+beta = np.linspace(0.001, 2, 1000)       # left x-axis (avoid 0)
+c_v = np.linspace(0.001, 1, 1000)     # right x-axis (avoid 0 and 1)
+c_v0, beta0 = 0.5, 0.5
+
+fig, (axL, axR) = plt.subplots(1, 2, figsize=(12, 4))
+plt.subplots_adjust(left=0.07, right=0.97, bottom=0.2, wspace=0.22)
+
+# left: x* vs beta, slider on c_v, red hues of G
+linesL = [axL.plot(beta, x_star(beta, G, c_v0), color=c, lw=2, label=f"G = {G}")[0]
+          for G, c in zip(G_values, reds)]
+axL.set_xlim(0, 2)
+axL.set_xlabel(r"$\beta$")
+axL.set_title(r"A)", loc='left')
+
+# right: x* vs c_v, slider on beta, green hues of G
+linesR = [axR.plot(c_v, x_star(beta0, G, c_v), color=c, lw=2, label=f"G = {G}")[0]
+          for G, c in zip(G_values, greens)]
+axR.set_xlim(0, 1)
+axR.set_xlabel(r"$c_v$")
+axR.set_title(r"B)", loc='left')
+
+for ax in (axL, axR):
+    ax.axhline(1, color="gray", ls="--", lw=1)
+    ax.axhline(0, color="black", ls=":", lw=1.2)
+    ax.set_ylim(-0.1, 1.1)
+    ax.set_ylabel(r"$x^*$")
+    ax.grid(alpha=0.3)
+    ax.legend(loc="lower right")
+
+# one slider under each panel
+posL, posR = axL.get_position(), axR.get_position()
+ax_s_cv = fig.add_axes([posL.x0 + 0.05, 0.07, posL.width - 0.1, 0.03])
+ax_s_beta = fig.add_axes([posR.x0 + 0.05, 0.07, posR.width - 0.1, 0.03])
+s_cv = Slider(ax_s_cv, r"$c_v$", 0.01, 1, valinit=c_v0, valstep=0.01)
+s_beta = Slider(ax_s_beta, r"$\beta$", 0.01, 2, valinit=beta0, valstep=0.05)
+
+def update_left(val):
+    for ln, G in zip(linesL, G_values):
+        ln.set_ydata(x_star(beta, G, val))
+    fig.canvas.draw_idle()
+
+def update_right(val):
+    for ln, G in zip(linesR, G_values):
+        ln.set_ydata(x_star(val, G, c_v))
+    fig.canvas.draw_idle()
+
+s_cv.on_changed(update_left)
+s_beta.on_changed(update_right)
+plt.show()
+#+end_src
+*** Static plots
+
 #+begin_src python :session :results output :exports none :eval no-export
 cVs = [1, 0.75, 0.5, 0.25, 0.1] # probability of vertical transmission
 betas = [0.05, 0.1, 0.3, 0.5, 1] # contact rate
@@ -211,16 +288,19 @@ beta_cont = np.linspace(min(betas), max(betas), 100)
 G_cont = np.linspace(min(Gs), max(Gs), 100)
 
 # Deterministic approximation
-def x_equilibrium(cV,beta, G):
-    x = (cV-(1-cV)*np.exp(-beta*G))/(cV**2+(1-cV)*cV*(1-np.exp(-beta*G)))
-    return(np.maximum(x,0))
+# def x_equilibrium(cV,beta, G):
+#     x = (cV-(1-cV)*np.exp(-beta*G))/(cV**2+(1-cV)*cV*(1-np.exp(-beta*G)))
+#     return(np.maximum(x,0))
+def x_equilibrium(cV, beta, G):
+    x = (cV - np.exp(-beta*G)) / (cV*(1-np.exp(-beta*G)))
+    return(x)
 #+end_src
 
 #+RESULTS:
 
 #+begin_src python :session :results output :exports none :eval no-export
 cVs = [1, 0.75, 0.5, 0.25, 0.1, 0.0001] # probability of vertical transmission
-betas = [0, 0.1, 0.3, 0.5, 1] # contact rate
+betas = [0.01, 0.1, 0.3, 0.5, 1] # contact rate
 Gs = [1, 5, 10, 20, 50] # epidemic time
 
 palette = 'dark:blue'
@@ -249,13 +329,14 @@ for i, Gval in enumerate(Gs): # by panels for G
 fig.legend(loc='right', bbox_to_anchor=(0.96, 0.5), title=r'$\beta$')
 axes[0].get_legend().remove()
 
-plt.savefig(f"figures/x_equilibrium_vs_cv_perBeta_G.pdf", bbox_inches='tight', dpi=300)
+#plt.savefig(f"figures/x_equilibrium_vs_cv_perBeta_G.pdf", bbox_inches='tight', dpi=300)
 #+end_src
+
+#+RESULTS:
 
 #+attr_latex: :with \textwidth
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
-
 
 * Bibliography
 [[printbibliography:]]
