@@ -77,7 +77,9 @@ species pathogen reproduction() {
 		//cat("Un-infected Hosts: "); catn(uninfectedHosts); 
 		
 		C = rpois(1, beta * J * S / N_Host);
-		catn("Effective contact between J <-> S: " + C);  
+		catn("Effective contact between J <-> S: " + C); 
+		// Simulate all contacts per tick at once and randomly sample infected and susceptible pairs to transmit individual pathogens.
+		// OR alternatively change call back to per individual call back, so we can unfreeze the number of J and S within the tick . Nicer but probably slower? 
 	}
 	
 	self.active = 0;
