@@ -6,7 +6,7 @@ species all initialize() {
 	defineConstant("N_Host", 10); //constant host population size
 	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
 	defineConstant("c_v", 1); //probability of vertical transmission
-	defineConstant("G", 0); //relative epidemic time
+	defineConstant("G", 10); //relative epidemic time
 }
 
 species host initialize() {
@@ -59,13 +59,25 @@ species pathogen reproduction() {
 					verticalPathogen = subpop.addCloned(pathInd);
 					verticalPathogen.tag = offspring;
 					verticalPathogen.color = pathInd.color;
-				}}
+				}
+			}
 		}
 	}
 	
 	else {
 		// Horizontal transmission
 		catn("- Horizontal transmission - ");
+		pathogens = p2.individuals;
+		J = size(pathogens); 
+		catn("J = " + J);
+		//cat("pathogen.tag: "); catn(pathogens.tag);
+		uninfectedHosts = setDifference(p1.individuals.pedigreeID, pathogens.tag); // recalulate uninfected each time or use infection tagL0? Use tag to mark hosts as infected later...
+		S = size(uninfectedHosts); 
+		catn("S = " + S); 
+		//cat("Un-infected Hosts: "); catn(uninfectedHosts); 
+		
+		C = rpois(1, beta * J * S / N_Host);
+		catn("Effective contact between J <-> S: " + C);  
 	}
 	
 	self.active = 0;

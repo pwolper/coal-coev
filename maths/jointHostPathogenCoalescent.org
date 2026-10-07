@@ -228,9 +228,9 @@ greens = plt.cm.Greens(np.linspace(0.3, 0.95, n))  # right panel
 
 beta = np.linspace(0.001, 2, 1000)       # left x-axis (avoid 0)
 c_v = np.linspace(0.001, 1, 1000)     # right x-axis (avoid 0 and 1)
-c_v0, beta0 = 0.5, 0.5
+c_v0, beta0 = 0.5, 0.1
 
-fig, (axL, axR) = plt.subplots(1, 2, figsize=(12, 4))
+fig, (axL, axR) = plt.subplots(1, 2, figsize=(12, 5))
 plt.subplots_adjust(left=0.07, right=0.97, bottom=0.2, wspace=0.22)
 
 # left: x* vs beta, slider on c_v, red hues of G
@@ -260,7 +260,7 @@ posL, posR = axL.get_position(), axR.get_position()
 ax_s_cv = fig.add_axes([posL.x0 + 0.05, 0.07, posL.width - 0.1, 0.03])
 ax_s_beta = fig.add_axes([posR.x0 + 0.05, 0.07, posR.width - 0.1, 0.03])
 s_cv = Slider(ax_s_cv, r"$c_v$", 0.01, 1, valinit=c_v0, valstep=0.01)
-s_beta = Slider(ax_s_beta, r"$\beta$", 0.01, 2, valinit=beta0, valstep=0.05)
+s_beta = Slider(ax_s_beta, r"$\beta$", 0.01, 1.2, valinit=beta0, valstep=0.01)
 
 def update_left(val):
     for ln, G in zip(linesL, G_values):
@@ -276,6 +276,9 @@ s_cv.on_changed(update_left)
 s_beta.on_changed(update_right)
 plt.show()
 #+end_src
+
+#+RESULTS:
+
 *** Static plots
 
 #+begin_src python :session :results output :exports none :eval no-export
