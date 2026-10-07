@@ -6,7 +6,7 @@ species all initialize() {
 	defineConstant("N_Host", 10); //constant host population size
 	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
 	defineConstant("c_v", 1); //probability of vertical transmission
-	defineConstant("G", 5); //relative epidemic time
+	defineConstant("G", 0); //relative epidemic time
 }
 
 species host initialize() {
@@ -42,7 +42,6 @@ species host reproduction() {
 
 species pathogen reproduction() {
 	catn("-- Pathogen reproduction callback --");
-	
 	//vertical transmission after host reproduction
 	if (g == 0) {
 		catn("- Vertical transmission (g = 0)");
@@ -50,14 +49,17 @@ species pathogen reproduction() {
 		pathogens = p2.individuals;
 		
 		for (pathInd in p2.individuals) {
-			HostOffspringID = hostLineageDict.getValue(asString(pathInd.tag));   // offspring pedigreeIDs of this host
-			catn("\t" + pathInd.tag + " --> "  +  HostOffspringID + "\n");
+			HostOffspring = hostLineageDict.getValue(asString(pathInd.tag));   // offspring pedigreeIDs of this host
+			cat("\t Host: " + pathInd.tag + " -->"); catn(" " + HostOffspring);
 			
-			for (offspring in HostOffspringID) {
-				verticalPathogen = subpop.addCloned(pathInd);
-				verticalPathogen.tag = offspring;
-				verticalPathogen.color = pathInd.color;
-			}
+			if (size(HostOffspring) > 0) {
+				//catn(rbinom(size(HostOffspring), 1, asFloat(c_v)));
+				transmitted = HostOffspring[rbinom(size(HostOffspring), 1, asFloat(c_v)) == 1];
+				for (offspring in transmitted) {
+					verticalPathogen = subpop.addCloned(pathInd);
+					verticalPathogen.tag = offspring;
+					verticalPathogen.color = pathInd.color;
+				}}
 		}
 	}
 	
@@ -68,7 +70,6 @@ species pathogen reproduction() {
 	
 	self.active = 0;
 }
-
 
 
 ticks all 1 early() {
@@ -91,7 +92,7 @@ ticks all 1 early() {
 
 ticks all 1: first() {
 	defineGlobal("g", (community.tick - 1) % (G+1));
-	catn("\n\n\n--- " + host.cycle + "." + asInteger(g) + " first() ---");
+	catn("\n\n--- " + host.cycle + "." + asInteger(g) + " first() ---");
 	// catn("Hosts: "); catn(p1.individuals.tag);
 	//catn("Infections: "); catn(p1.individuals.tagL0);
 	//cat("HostIDs:"); catn(p1.individuals.pedigreeID);
@@ -100,31 +101,11 @@ ticks all 1: first() {
 
 ticks all 1: early() {
 	catn("-- early() --");
-	catn("Hosts: "); catn(p1.individuals.pedigreeID);
-	cat("Host Age: "); catn(p1.individuals.age);
-	// // 	catn("	fitnessScaling of Healthy");
-	// catn("Host.pedigreeIDs: "); catn(p1.individuals.pedigreeID);
-	pathogenHosts = p2.individuals.tag;
-	cat("pathogenHosts (pathogen.tag): "); catn(pathogenHosts);
-	// pathogens = p2.individuals;
-	// // 	healthy = p1.individuals[p1.individuals.tag == 0];
-	// // 	healthy.fitnessScaling = 1 + s_I;
-	// // 	catn(healthy.fitnessScaling);
-	// 
-	// hosts_parents_offspring_tags = p1.individuals.pedigreeID;
-	// 
-	// PathogensToKill  = pathogens[match(pathogens.tag, p1.individuals.pedigreeID) < 0];
-	// cat("PathogensToKill: "); catn(PathogensToKill.tag);
-	// 
-	// pathogen.killIndividuals(PathogensToKill);
-
+	//catn("Hosts: "); catn(p1.individuals.pedigreeID);
+	//cat("Host Age: "); catn(p1.individuals.age);
+	//pathogenHosts = p2.individuals.tag;
+	//cat("pathogenHosts (pathogen.tag): "); catn(pathogenHosts);
 }
-
-
-//species pathogen survival() {
-//	catn("Pathogen " + individual.tag + ", age: " + individual.age);
-//	return(individual.age < 2);
-//}
 
 
 species host survival() {
@@ -134,7 +115,6 @@ species host survival() {
 
 species pathogen survival() {
 	return (g != 0) | (individual.age == 0); // pathogens die only at tick g=0 or if their age is older than 1. 
-	// return (g != 0);    // T = survives; all old pathogens die at the vertical tick
 }
 
 ticks all 1: late() {
@@ -165,4 +145,4 @@ ticks all 1: late() {
 //species host survival() {}
 //species parasitoid survival() {}
 
-ticks all 5*N_Host late() {}
+ticks all (5*(G+1))*N_Host late() {}
