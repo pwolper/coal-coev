@@ -51,6 +51,7 @@ i(t) = \frac{i_0}{e^{-\beta t}(1-i_0) + i_0}.
 
 For one intial infection this system looks like the following: with the number of infected growing faster in time depending on the transmission rate $\beta$.
 
+
 ** Deterministic equilibrium of the number of infected hosts
 Assuming the number of infected at the end of the generation $n+1$ to be
 
@@ -62,6 +63,7 @@ where $I_{n+1}$ is the number of infected host offspring and $K_{n+1}$ individua
 
 If we take $N$ to infinity, we get the deterministic limit of the model, and with $x_n = X_n/N$ we have $I_{n+1}/N \approx c_v x_n$. See notes for further details. For the stationary solution $x_n = x_{n+1} = x$ we get
 
+# old equation
 # \begin{align}
 # x = x^* &= \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})} \\
 # &= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v - c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
@@ -166,8 +168,10 @@ $$E[T_n] = 2N\left(1-\frac1n\right).$$
 And for large sample size $n$, this is the familiar Kingman coalescent result.
 $$E[T_{n}]\approx 2N.$$
 #+end_tcolorbox
+** TODO Joint coalescent trees
+Add host-pathogen coalescence from simulations of joint tree-Sequences in SLiM.
 
-* Python code and plots :noexport:
+* Models :noexport:
 #+begin_src python :session :results value :exports none
 import numpy as np
 import seaborn as sns
@@ -210,7 +214,7 @@ plt.savefig("SI_model_solutions.pdf", bbox_inches='tight', dpi=300)
 
 #+RESULTS:
 
-** Equilibrium $^*$
+** Equilibrium $x^*$
 *** Dynamic plots
 #+begin_src python :session :results output :exports none :eval no-export
 import numpy as np
@@ -222,57 +226,74 @@ def x_star(beta, G, c_v):
     return (c_v - np.exp(-beta * G)) / (c_v * (1 - np.exp(-beta * G)))
 
 G_values = [1, 5, 10, 20, 50]
-n = len(G_values)
-reds = plt.cm.Reds(np.linspace(0.3, 0.95, n))     # left panel
-greens = plt.cm.Greens(np.linspace(0.3, 0.95, n))  # right panel
+beta_values = [0.01, 0.05, 0.1, 0.5, 1.0]
+reds = plt.cm.Reds(np.linspace(0.3, 0.95, len(G_values)))     # left panel
+blues = plt.cm.Blues(np.linspace(0.3, 0.95, len(beta_values)))     # middle
+greens = plt.cm.Greens(np.linspace(0.3, 0.95, len(G_values)))  # right panel
 
 beta = np.linspace(0.001, 2, 1000)       # left x-axis (avoid 0)
 c_v = np.linspace(0.001, 1, 1000)     # right x-axis (avoid 0 and 1)
 c_v0, beta0 = 0.5, 0.1
 
-fig, (axL, axR) = plt.subplots(1, 2, figsize=(12, 5))
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 plt.subplots_adjust(left=0.07, right=0.97, bottom=0.2, wspace=0.22)
 
 # left: x* vs beta, slider on c_v, red hues of G
+axL = axes[0]
 linesL = [axL.plot(beta, x_star(beta, G, c_v0), color=c, lw=2, label=f"G = {G}")[0]
           for G, c in zip(G_values, reds)]
 axL.set_xlim(0, 2)
 axL.set_xlabel(r"$\beta$")
 axL.set_title(r"A)", loc='left')
 
+# middle: x^* vs. c_v, slider on G, blue hues of beta
+axM = axes[1]
+linesM = [axM.plot(c_v, x_star(b, G0, c_v), color=c, lw=2, label=fr"$\beta$ = {b}")[0]
+          for b, c in zip(beta_values, blues)]
+axM.set_xlim(0, 1)
+axM.set_xlabel(r"$c_v$")
+axM.set_title("B)", loc="left")
+
 # right: x* vs c_v, slider on beta, green hues of G
+axR = axes[2]
 linesR = [axR.plot(c_v, x_star(beta0, G, c_v), color=c, lw=2, label=f"G = {G}")[0]
           for G, c in zip(G_values, greens)]
 axR.set_xlim(0, 1)
 axR.set_xlabel(r"$c_v$")
 axR.set_title(r"B)", loc='left')
 
-for ax in (axL, axR):
+for ax in axes:
     ax.axhline(1, color="gray", ls="--", lw=1)
     ax.axhline(0, color="black", ls=":", lw=1.2)
     ax.set_ylim(-0.1, 1.1)
     ax.set_ylabel(r"$x^*$")
     ax.grid(alpha=0.3)
     ax.legend(loc="lower right")
-
-# one slider under each panel
-posL, posR = axL.get_position(), axR.get_position()
-ax_s_cv = fig.add_axes([posL.x0 + 0.05, 0.07, posL.width - 0.1, 0.03])
-ax_s_beta = fig.add_axes([posR.x0 + 0.05, 0.07, posR.width - 0.1, 0.03])
-s_cv = Slider(ax_s_cv, r"$c_v$", 0.01, 1, valinit=c_v0, valstep=0.01)
-s_beta = Slider(ax_s_beta, r"$\beta$", 0.01, 1.2, valinit=beta0, valstep=0.01)
-
+def slider_axes(ax):
+    pos = ax.get_position()
+    return fig.add_axes([pos.x0 + 0.05, 0.07, pos.width - 0.1, 0.03])
+ 
+s_cv = Slider(slider_axes(axL), r"$c_v$", 0.01, 1, valinit=c_v0, valstep=0.01)
+s_G = Slider(slider_axes(axM), r"$G$", 1, 50, valinit=G0, valstep=1)
+s_beta = Slider(slider_axes(axR), r"$\beta$", 0.01, 1.2, valinit=beta0, valstep=0.01)
+ 
 def update_left(val):
     for ln, G in zip(linesL, G_values):
         ln.set_ydata(x_star(beta, G, val))
     fig.canvas.draw_idle()
-
+ 
+def update_middle(val):
+    for ln, b in zip(linesM, beta_values):
+        ln.set_ydata(x_star(b, val, c_v))
+    fig.canvas.draw_idle()
+ 
 def update_right(val):
     for ln, G in zip(linesR, G_values):
         ln.set_ydata(x_star(val, G, c_v))
     fig.canvas.draw_idle()
-
+ 
 s_cv.on_changed(update_left)
+s_G.on_changed(update_middle)
 s_beta.on_changed(update_right)
 plt.show()
 #+end_src
@@ -340,6 +361,21 @@ axes[0].get_legend().remove()
 #+attr_latex: :with \textwidth
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
+** SLiM Two-Species semi-discrete WF-SI 
+The above model is implemented as a individual-based, stochastic model with hosts and parasite species in SLiM (using two species in a non-WF framework). The host species reproduces in discrete, non-overlapping WF generations every $G$ tick, while in between host reproduction events, the stochastic infection model runs, following an SI process. Thus $G$ represents the timescale of the host to pathogen reproductive processes.
+Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below:
+
+Each host individual makes contact with another host individual at rate $\beta$, thus the waiting time between an individuals contacts is $\tau \sim \text{Exp}(\beta)$ and the number of contacts a host makes in a time interval of $t$ is distributed $C \sim \text{Poisson}(\beta \Delta t)$. For $J_t$ independent infected hosts, the number of contacts made by the infected individuals within one tick of interval ($\Delta t = 1$), follows:
+
+$$C_t = \sum_{j=1}^{J_t} C_j \sim \text{Poisson}(\beta J_t)$$
+
+and the effective contacts where infection can happen (as only the contacts with a susecptible host) can be written as
+
+$$C_{\text{eff}} \sim \text{Poisson}\left(\frac{\beta J_t (N-J_t)}{N}\right)$$
+
+In our simulation for each tick we draw the number of effective contacts, sample $c_eff$ the infecting individuals and target hosts with replacement. To not allow susceptibles to be contacted twice in one tick (they can only be infected once), we keep only the first contact, removing duplicates. We then add a horizontally transmitted pathogen as a clone of the infecting indvidual.
+
+*Comparison of stochastic SI model to deterministic version.* 
 
 * Bibliography
 [[printbibliography:]]
