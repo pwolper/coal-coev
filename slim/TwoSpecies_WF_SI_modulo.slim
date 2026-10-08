@@ -3,10 +3,10 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	defineConstant("N_Host", 10); //constant host population size
+	defineConstant("N_Host", 100); //constant host population size
 	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
-	defineConstant("c_v", 1); //probability of vertical transmission
-	defineConstant("G", 10); //relative epidemic time
+	defineConstant("c_v", 0.5); //probability of vertical transmission
+	defineConstant("G", 15); //relative epidemic time
 }
 
 species host initialize() {
@@ -21,7 +21,6 @@ species pathogen initialize() {
 
 
 
-
 species host reproduction() {
 	catn("-- Host reproduction callback -- ");
 	hostLineageDict = Dictionary();
@@ -33,24 +32,25 @@ species host reproduction() {
 		offspring.tagL0 = parent.tagL0;
 		
 		parentID = asString(parent.pedigreeID);
-		hostLineageDict.setValue(parentID, c(hostLineageDict.getValue(parentID), offspring.pedigreeID)); // Host Parent Offspring Dict
+		hostLineageDict.setValue(parentID, c(hostLineageDict.getValue(parentID), offspring.pedigreeID)); // host.pedigreeIDs; {parent: offspring}
 	}
 	defineGlobal("hostLineageDict", hostLineageDict);
-	catn(hostLineageDict);
+	//catn(hostLineageDict);
 	self.active = 0;
 }
 
 species pathogen reproduction() {
 	catn("-- Pathogen reproduction callback --");
+	
 	//vertical transmission after host reproduction
 	if (g == 0) {
-		catn("- Vertical transmission (g = 0)");
+		catn("\t\t - Vertical transmission (g = 0)");
 		//catn(hostLineageDict);
 		pathogens = p2.individuals;
 		
 		for (pathInd in p2.individuals) {
-			HostOffspring = hostLineageDict.getValue(asString(pathInd.tag));   // offspring pedigreeIDs of this host
-			cat("\t Host: " + pathInd.tag + " -->"); catn(" " + HostOffspring);
+			HostOffspring = hostLineageDict.getValue(asString(pathInd.tag));   // get vector of host offspring.pedigreeIDs from hostLineageDict {parent: offspring} from pathInd.tag, matching the host.parent.pedID.  
+			//cat("\t\t\tHost: " + pathInd.tag + " -->"); catn(" " + HostOffspring);
 			
 			if (size(HostOffspring) > 0) {
 				//catn(rbinom(size(HostOffspring), 1, asFloat(c_v)));
@@ -66,20 +66,42 @@ species pathogen reproduction() {
 	
 	else {
 		// Horizontal transmission
-		catn("- Horizontal transmission - ");
-		pathogens = p2.individuals;
-		J = size(pathogens); 
-		catn("J = " + J);
-		//cat("pathogen.tag: "); catn(pathogens.tag);
-		uninfectedHosts = setDifference(p1.individuals.pedigreeID, pathogens.tag); // recalulate uninfected each time or use infection tagL0? Use tag to mark hosts as infected later...
-		S = size(uninfectedHosts); 
-		catn("S = " + S); 
-		//cat("Un-infected Hosts: "); catn(uninfectedHosts); 
+		catn("\t\t - Horizontal transmission - ");
 		
-		C = rpois(1, beta * J * S / N_Host);
-		catn("Effective contact between J <-> S: " + C); 
+		pathogens = p2.individuals;
+		J = size(pathogens);
+		cat("\t\t\tJ = " + J); //cat("pathogen.tag: "); catn(pathogens.tag);
+		uninfectedHosts = p1.individuals[match(p1.individuals.pedigreeID, pathogens.tag) < 0]; //hosts whose pedigreeID is not in any pathogen tag. Use tag to mark hosts as infected later
+		S = size(uninfectedHosts);
+		cat(";\t S = " + S); //cat("Un-infected Hosts: "); catn(uninfectedHosts); 
+		
+		// Frozen j, big-bang Contacts
+		Ce = rpois(1, (beta * J * S) / N_Host);
+		catn(";\t Ce = Poisson((beta*J*S)/N) = " + Ce);
+		if (Ce > 0) {
+			infectors = sample(pathogens, Ce, replace=T); 	// pathogen from infecting host
+			//cat("\t\t\tInfecting Pathogen from Host: "); catn(infectors.tag);
+			targets = sample(uninfectedHosts, Ce, replace=T); // tag of the receiving host. list of inds instead
+			//cat("\t\t\tTarget Host: "); catn(targets.pedigreeID);
+			
+			// A S host hit twice in one tick. Should only get infected once by the first infection (or overwritten?)
+			keep      = (match(targets, targets) == seqAlong(targets));
+			infectors = infectors[keep];
+			cat("\t\t\t infectors[keep] = "); catn(size(infectors.tag));
+			targets   = targets[keep];
+			cat("\t\t\ttargets[keep] = "); catn(size(targets.pedigreeID));
+			
+			for (i in seqAlong(infectors)) {
+				newPath = p2.addCloned(infectors[i]);
+				newPath.tag = targets[i].pedigreeID;
+				newPath.color = targets[i].color;// add more coloring matching clades
+			}
+		}
+		// Alternatively non-big-bang callback and non-frozen within tick 
 		// Simulate all contacts per tick at once and randomly sample infected and susceptible pairs to transmit individual pathogens.
-		// OR alternatively change call back to per individual call back, so we can unfreeze the number of J and S within the tick . Nicer but probably slower? 
+		// OR alternatively change call back to per individual call back, so we can unfreeze the number of J and S within the tick .
+		// Nicer but probably slower? 
+	
 	}
 	
 	self.active = 0;
@@ -87,12 +109,13 @@ species pathogen reproduction() {
 
 
 ticks all 1 early() {
-	
+	catn(" -- early() --");
+	// Host creation
 	host.addSubpop("p1", N_Host, haploid=T);
 	p1.individuals.tagL0 = F; //Infection status. F for healthy, T for infected
 	p1.individuals.color = colors(p1.individualCount, "turbo");
 	p1.individuals.tag = seqLen(p1.individualCount);
-	catn("Hosts: "); catn(p1.individuals.tag);
+	//catn("Hosts: "); catn(p1.individuals.tag);
 	
 	//initial infection
 	pathogen.addSubpop("p2", 1);
@@ -106,14 +129,16 @@ ticks all 1 early() {
 
 ticks all 1: first() {
 	defineGlobal("g", (community.tick - 1) % (G+1));
-	catn("\n\n--- " + host.cycle + "." + asInteger(g) + " first() ---");
+	catn("\n\n--- " + host.cycle + "." + asInteger(g) + " first() ---");	
+	if (g == 0) {catn("+++ Non-overlapping host generation +++");}
+	
 	// catn("Hosts: "); catn(p1.individuals.tag);
 	//catn("Infections: "); catn(p1.individuals.tagL0);
 	//cat("HostIDs:"); catn(p1.individuals.pedigreeID);
 	//catn("PathogenIDs:"); catn(p2.individuals.pedigreeID);
 }
 
-ticks all 1: early() {
+ticks all 2: early() {
 	catn("-- early() --");
 	//catn("Hosts: "); catn(p1.individuals.pedigreeID);
 	//cat("Host Age: "); catn(p1.individuals.age);
@@ -133,27 +158,27 @@ species pathogen survival() {
 
 ticks all 1: late() {
 	catn("-- late() --");
-	catn("HostPedigreeIDs:"); catn(p1.individuals.pedigreeID);
+	// catn("HostPedigreeIDs:");
+	// catn(p1.individuals.pedigreeID);
 	// catn("Hosts.tag: "); catn(p1.individuals.tag);
 	// catn("Host.pedigreeIDs: "); catn(p1.individuals.pedigreeID);
-	// 
-	// pathogenHosts = p2.individuals.tag;
-	cat("pathogenHosts (pathogen.tag): "); catn(p2.individuals.tag);
-	// //cat("Host Age: "); catn(p1.individuals.age);
-	// //infected = p1.individuals[p1.individuals.tag == 1];
-	// 
-	// 
-	// 
-	// catn("Infections: "); catn(p1.individuals.tagL0);
-	// //susceptibles = p1.individuals[p1.individuals.tag == 0];
-	// //catn("\nN. susceptibles: " + length(susceptibles));
-	// //infected = p1.individuals[p1.individuals.tag == 1];
-	// //catn("N. infected: " + length(infected));
-	// 
-	// //if (length(infected) == 0) {
-	// //	catn("Pathogen extinct!");
-	// //	community.simulationFinished();}
-
+	
+	pathogens = p2.individuals;
+	J = size(pathogens);
+	
+	
+	
+	if (J < 10)  {cat("pathogens.tag: "); catn(pathogens.tag);} // conditional printing
+	else {catn("Infected J = " + size(pathogens));}
+	
+	if (J == 0) {
+		catn("Pathogen extinct at tick " + community.tick + "!!");
+		community.simulationFinished();
+	}
+	else if (J >= N_Host) {
+		catn("Pathogen fixed (all hosts infected) at tick " + community.tick + "!!");
+		community.simulationFinished();
+	}
 }
 
 //species host survival() {}
