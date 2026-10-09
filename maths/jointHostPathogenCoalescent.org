@@ -51,7 +51,6 @@ i(t) = \frac{i_0}{e^{-\beta t}(1-i_0) + i_0}.
 
 For one intial infection this system looks like the following: with the number of infected growing faster in time depending on the transmission rate $\beta$.
 
-
 ** Deterministic equilibrium of the number of infected hosts
 Assuming the number of infected at the end of the generation $n+1$ to be
 
@@ -171,7 +170,45 @@ $$E[T_{n}]\approx 2N.$$
 ** TODO Joint coalescent trees
 Add host-pathogen coalescence from simulations of joint tree-Sequences in SLiM.
 
-* Models :noexport:
+* Stochastic simulations
+** SLiM Two-Species semi-discrete WF-SI 
+The above model is implemented as a individual-based, stochastic model with hosts and parasite species in SLiM (using two species in a non-WF framework). The host species reproduces in discrete, non-overlapping WF generations every $G$ tick, while in between host reproduction events, the stochastic infection model runs, following an SI process. Thus $G$ represents the timescale of the host to pathogen reproductive processes.
+Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below:
+
+Each host individual makes contact with another host individual at rate $\beta$, thus the waiting time between an individuals contacts is $\tau \sim \text{Exp}(\beta)$ and the number of contacts a host makes in a time interval of $t$ is distributed $C \sim \text{Poisson}(\beta \Delta t)$. For $J_t$ independent infected hosts, the number of contacts made by the infected individuals within one tick of interval ($\Delta t = 1$), follows:
+
+$$C_t = \sum_{j=1}^{J_t} C_j \sim \text{Poisson}(\beta J_t)$$
+
+and the effective contacts where infection can happen (as only the contacts with a susecptible host) can be written as
+
+$$C_{\text{eff}} \sim \text{Poisson}\left(\frac{\beta J_t (N-J_t)}{N}\right)$$
+
+In our simulation for each tick we draw the number of effective contacts, sample $C_\text{eff}$ the infecting individuals and target hosts with replacement. To not allow susceptibles to be contacted twice in one tick (they can only be infected once), we keep only the first contact, removing duplicates. We then add a horizontally transmitted pathogen as a clone of the infecting indvidual.
+
+*Comparison of stochastic SI model to deterministic version.* 
+We derive the stochastic infectious process, and show it behaves similar to the deterministic version above under small $\beta$.
+Following the total effective number of contacts $C_\text{eff}$, distributing the number of contacts uniformly over $S = N - J_t$ susceptible host results in the per susceptible contacts $C_k \sim \text{Poisson}((\beta * J_t)/N)$, for each susceptible host $k$. From this distribution, the probability to become infected is defined as
+
+$$p = P(C_k > 0) = 1 - e^{\beta J_t/N}$$
+
+Thus for each step time, there are $\Delta J$ infected hosts with.
+
+$$\Delta J \sim \text{Binomial}\!\left(N-J,\; 1-e^{-\beta J/N}\right), \qquad E[\Delta J]=(N-J)\left(1-e^{-\beta J/N}\right).$$
+
+The number of infected after each time step is $J_{t+1} = J_t + \Delta J$, 
+
+$$J_{t+1} = J_t + (N - J_t)(1-e^{-\beta J_t /N})$$
+
+which for $i = J/N$ becomes
+
+$$ i_{t+1} = i_t + (1 - i_t)(1-e^{-\beta i_t})$$
+
+Comparing this to the deterministic ODE $i' = \beta i(1-i)$, which for $\Delta t << 1$ we can rewrite in discrete form as
+
+$$i_{t+1} = i_t + (1-i_t) \beta i_t $$
+
+We see, that the deterministic and stochastic models differ by $\beta i_t \ge 1- e^{-\beta i_t}, and that the stochastic version grows slower than the deterministic one, due to the possibility of a susceptible individual being hit by multiple infections, but we only count the first one. For $\beta i << 1$, this has little effect.
+* Deterministic behaviour and calculations :noexport:
 #+begin_src python :session :results value :exports none
 import numpy as np
 import seaborn as sns
@@ -361,21 +398,5 @@ axes[0].get_legend().remove()
 #+attr_latex: :with \textwidth
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
-** SLiM Two-Species semi-discrete WF-SI 
-The above model is implemented as a individual-based, stochastic model with hosts and parasite species in SLiM (using two species in a non-WF framework). The host species reproduces in discrete, non-overlapping WF generations every $G$ tick, while in between host reproduction events, the stochastic infection model runs, following an SI process. Thus $G$ represents the timescale of the host to pathogen reproductive processes.
-Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below:
-
-Each host individual makes contact with another host individual at rate $\beta$, thus the waiting time between an individuals contacts is $\tau \sim \text{Exp}(\beta)$ and the number of contacts a host makes in a time interval of $t$ is distributed $C \sim \text{Poisson}(\beta \Delta t)$. For $J_t$ independent infected hosts, the number of contacts made by the infected individuals within one tick of interval ($\Delta t = 1$), follows:
-
-$$C_t = \sum_{j=1}^{J_t} C_j \sim \text{Poisson}(\beta J_t)$$
-
-and the effective contacts where infection can happen (as only the contacts with a susecptible host) can be written as
-
-$$C_{\text{eff}} \sim \text{Poisson}\left(\frac{\beta J_t (N-J_t)}{N}\right)$$
-
-In our simulation for each tick we draw the number of effective contacts, sample $c_eff$ the infecting individuals and target hosts with replacement. To not allow susceptibles to be contacted twice in one tick (they can only be infected once), we keep only the first contact, removing duplicates. We then add a horizontally transmitted pathogen as a clone of the infecting indvidual.
-
-*Comparison of stochastic SI model to deterministic version.* 
-
 * Bibliography
 [[printbibliography:]]
