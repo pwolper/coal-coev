@@ -10,14 +10,13 @@
 
 #+LATEX_HEADER_EXTRA: \addbibresource{~/biblio/pop-gen.bib}
 
-
-
 * Introduction
 Phylodynamic inference of disease dyamics relies on connecting epidemiological dynamical models to a coalescent model of a sample of genetic sequences, often done heuristically. In order for the pathogen tree to relate to the host-measured SI process this typically employes several assumptions: (i) host evolution occurs on a much slower time scale (i.e. is neglegible) than the epidemic and (ii) each host is only infected with one pathogen individual. If these are given then we can construct the pathogen coalescent from $N_{\text{pathogen}} \sim I$.
  
 In real world host-pathogen systems though these assumptions can often be violated due to reciprocal host-pathogen interactions, complex disease-life cycles, including varying transmission modes, vectors and environmental factors. Importantly, evolutionary time scales of host and pathogens likely play a role in all but the most explosive epidemics.
 Many diseases have the ability to pass from infected to offspring through vertical transmission, in addition to horizontal epidemic infection dynamics. As infected hosts act as vessels for pathogens, it follows that the pathogen coalescent trees are embedded into a host genealogy, determined through vertical and horizontal transmission dynamics. The behaviour of joint host-pathogen genealogical processes is not well understood, limited to approaches by [[cite:&welch-2005-integ-geneal-epidem]], as to our knowledge there is no generalized coalescent model based on the reproductive processes of hosts and pathogens, and the infection process that connects them ([[cite:&ebert-2020-host]]).
 
+*add Roscoff abstract as intoduction as well?*
 * Semi-discrete model with vertical and horizontal transmission 
 Pathogen epidemic model embedded within Host reproduction -- a model of coevolution through horizontal and vertical transmission. 
 
@@ -62,12 +61,6 @@ where $I_{n+1}$ is the number of infected host offspring and $K_{n+1}$ individua
 
 If we take $N$ to infinity, we get the deterministic limit of the model, and with $x_n = X_n/N$ we have $I_{n+1}/N \approx c_v x_n$. See notes for further details. For the stationary solution $x_n = x_{n+1} = x$ we get
 
-# old equation
-# \begin{align}
-# x = x^* &= \frac{c_v - (1 -c_v)e^{-\beta G}}{c^2_v+(1-c_v)c_v(1-e^{-\beta G})} \\
-# &= \frac{c_v -e^{-\beta G} + c_v e^{-\beta G}}{c_v - c_v e^{-\beta G} + c_v^2 e^{-\beta G}} 
-# \end{align}
-
 \begin{equation}
 x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
 \end{equation}
@@ -78,12 +71,14 @@ The value of $x^*$ for values of $c_v$, $\beta$ and $G$ are shown below. Values 
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
-*** TODO Boundary conditions and limiting behaviour
+*** TODO Boundary conditions and limiting models
 We are only interested in the cases $x^*>0$ (and smaller 1), as other solutions are not biological. Hereby, $x^* = 0$ represents the boundary disease-free equilibrium, while $x^* = 1$ is the absorbing state of total infection. The cases inbetween represent the endemic disease equilibrium $0 < x^* < 1$. 
 
-The denominator in $x^*$ is positive for $c_v \ge e^{-\beta G}$. 
+The denominator in $x^*$ is positive for $c_v \ge e^{-\beta G}$. *put the limit functions.* 
 
-*** TODO Boundary conditions :noexport:
+*discuss* scaling between pure vertical transmission (no horizontal transmission, $G = 0$ [fn:: Deterministic model collapses at $G=0$, anyhow we can use a simpler vertical transmission model.]), where the pathogen tracks the host lineages, and a epidemic infection process independent of host evolution (when $G >> 1$) (i.e. the approach taken by phylodynamics). This is important when considering many different host-pathogen systems, where the infection-reproduction processes vary (see list later).
+
+*** TODO Boundary conditions old :noexport:
 {{{color(red, Check my work on boundary condition? Is $x^*$ derived under assumptions $\beta G > 0$?)}}}
 
 We wish to understand the boundary conditions for pathogen extinction, as the non-trivial equilibrium above can yield $x^* < 0$, which is un-meanigful, as $x = X / N \in [0,1]$. The value of $x^*$ is positive for all positive values of the numerator, as the denominator is positive for all $c_v$, $\beta$ and $G$ greater than 0. As the numerator is positive under $c_v > (1-c_v)e^{-\beta G}$, we get the boundary condition for persistence of the pathogen as
@@ -124,7 +119,7 @@ which become finally after substituting eqn for $x^*$:
 
 $$p_c\approx \frac{1}{N}\left[1+\frac{2(1-c_v)\left[1-(1-c_v)e^{-\beta G}\right]}{c_v-(1-c_v)e^{-\beta G}}\right]$$
 
-** Ancestral process $A_n$
+*** Ancestral process $A_n$
 Ancestral process $A_n$ denotes the number of pathogen lineages $n$ generations backwards in time, decreating whenever two lineages coalesce. Suppose you start with $k$ pathogen samples at the present generation, the number of lineages starts  $A_0=k$, and goes through the process $k \rightarrow k-1 \rightarrow k-2 \rightarrow \cdots \rightarrow2 \rightarrow1$. If $N$ is large that higher order terms disappear $p_c = \mathcal{O}(N^{-1}) << 1$, the ancestral process can be defined as 
 
 $$P(A_{n+1}=A_n-1\mid A_n) = p_c {A_n\choose2}$$
@@ -172,7 +167,7 @@ Add host-pathogen coalescence from simulations of joint tree-Sequences in SLiM.
 
 * Stochastic simulations
 ** SLiM Two-Species semi-discrete WF-SI 
-The above model is implemented as a individual-based, stochastic model with hosts and parasite species in SLiM (using two species in a non-WF framework). The host species reproduces in discrete, non-overlapping WF generations every $G$ tick, while in between host reproduction events, the stochastic infection model runs, following an SI process. Thus $G$ represents the timescale of the host to pathogen reproductive processes.
+The above model is implemented as a individual-based, stochastic model with hosts and parasite species in SLiM (using two species in a non-WF framework). The host species reproduces in discrete, non-overlapping WF generations every $G+1$ ticks, while in between host reproduction events, the stochastic infection model runs, following an SI process. Thus $G$ represents the timescale of the host to pathogen reproductive processes, and determines the relative length of the epidemic relative to the host reproduction.
 Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below:
 
 Each host individual makes contact with another host individual at rate $\beta$, thus the waiting time between an individuals contacts is $\tau \sim \text{Exp}(\beta)$ and the number of contacts a host makes in a time interval of $t$ is distributed $C \sim \text{Poisson}(\beta \Delta t)$. For $J_t$ independent infected hosts, the number of contacts made by the infected individuals within one tick of interval ($\Delta t = 1$), follows:
@@ -187,7 +182,7 @@ In our simulation for each tick we draw the number of effective contacts, sample
 
 *Comparison of stochastic SI model to deterministic version.* 
 We derive the stochastic infectious process, and show it behaves similar to the deterministic version above under small $\beta$.
-Following the total effective number of contacts $C_\text{eff}$, distributing the number of contacts uniformly over $S = N - J_t$ susceptible host results in the per susceptible contacts $C_k \sim \text{Poisson}((\beta * J_t)/N)$, for each susceptible host $k$. From this distribution, the probability to become infected is defined as
+Following the total effective number of contacts $C_\text{eff}$, distributing the number of contacts uniformly over $S = N - J_t$ susceptible host results in the per susceptible contacts $C_k \sim \text{Poisson}((\beta J_t)/N)$, for each susceptible host $k$. From this distribution, the probability to become infected is defined as
 
 $$p = P(C_k > 0) = 1 - e^{\beta J_t/N}$$
 
@@ -207,8 +202,9 @@ Comparing this to the deterministic ODE $i' = \beta i(1-i)$, which for $\Delta t
 
 $$i_{t+1} = i_t + (1-i_t) \beta i_t $$
 
-We see, that the deterministic and stochastic models differ by $\beta i_t \ge 1- e^{-\beta i_t}, and that the stochastic version grows slower than the deterministic one, due to the possibility of a susceptible individual being hit by multiple infections, but we only count the first one. For $\beta i << 1$, this has little effect.
-* Deterministic behaviour and calculations :noexport:
+We see, that the deterministic and stochastic models differ by $\beta i_t \ge 1- e^{-\beta i_t}$, and that the stochastic version grows slower than the deterministic one, due to the possibility of a susceptible individual being hit by multiple infections, but we only count the first one. For $\beta i << 1$, this has little effect.
+
+* HOLD Coding: Deterministic behaviour and calculations :noexport:
 #+begin_src python :session :results value :exports none
 import numpy as np
 import seaborn as sns
@@ -393,10 +389,27 @@ axes[0].get_legend().remove()
 #plt.savefig(f"figures/x_equilibrium_vs_cv_perBeta_G.pdf", bbox_inches='tight', dpi=300)
 #+end_src
 
-#+RESULTS:
-
 #+attr_latex: :with \textwidth
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
+* Discussion
+** Which host-pathogen systems can we apply our model to?
+*Annual crops with seed-borne pathogens*
+- Barley -- /Ramularia collo-cygni/:. Vertical transmission from infected seed to the developed plant and epidemic transmission within growing season. 
+- Barley -- /Fusarium/ spp. (?)
+- Barley/wheat smut (/Ustilago/ spp): Disease transmission though the embryo and pollen. 
+- Seed-borne plant viruses such as Mosaic viruses, (eg. Barley stripe mosaic virus, Pea seed-borne mosaic virus, Bean common mosaic virus); but horizontal transmission might be via vectors or leaf contact.
+  
+*Invertebrate host-pathogen systems:*
+- /Daphnia/ sp. and /Hamiltosporidium spp./ or /Pasteuria/ (?)
+- /Dropsophila/ sigma virus with high maternal transmission (controlled by host genes ([[https://doi.org/10.1534/genetics.107.085449]])),
+- /C. elegans/ -- microsporidia (/Nematocida/?)
+- Univoltine insects with transovarial pathogens, such as /Wolbachia/: Vertical phase with neglegible horizontal transmission?
+- Nuclear polyhedrosis virus in forest Lepidoptera (e.g. gypsy moth), where epidemics occur within a season and generations do not overlap. (check)
+
+*Other discrete-generation hosts:*
+- Annual fish and semelparous Pacific salmon with vertically transmitted viruses or bacteris (eg. IHNV, /Renibacterium salmoninarum/) (check)
+- Human infectious diseases with vertical transmission, such as HIV or /Helicobacter pylori/. Host generation overlapping and age-structured.
+
 * Bibliography
 [[printbibliography:]]
