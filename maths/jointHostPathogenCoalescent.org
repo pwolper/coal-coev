@@ -22,7 +22,7 @@ Pathogen epidemic model embedded within Host reproduction -- a model of coevolut
 
 #+attr_latex: :width \textwidth 
 #+caption: Semi-discrete host-pathogen model with $N^{\text{H}}$ hosts and $N^{\text{P}} = X_n$ pathogens corresponding to the number of infected individuals at the end of generation $n$. Pathogen have a probability $c_v$ to transmit vertically, following the host lineages. Within each host generation there is a continuous epidemiological process, modelling horizontal transmission through an SI infection model, determined by the contact rate $\beta$ and the duration of the epidemic $G$. 
-[[./nestedHostPathogen_WF_SI.png]]
+[[../figures/nestedHostPathogen_WF_SI.png]]
 
 ** Vertical pathogen transmission through host generations
 The host population reproduces in discrete generations and non-overlapping generation, following a Wright-Fisher process of size $N$. At the end of each generation $n$, there are $X_n$ hosts infected. We transition to the next generation by host reproduction, during which infected host have the probability $c_v$ to pass the pathogen on to their offspring, infecting vertically.  At the beginning of each generation $n+1$ there are $I_{n+1}$ infected host offspring, that are the founding individuals for the epidemiological process. 
@@ -205,7 +205,7 @@ $$i_{t+1} = i_t + (1-i_t) \beta i_t $$
 We see, that the deterministic and stochastic models differ by $\beta i_t \ge 1- e^{-\beta i_t}$, and that the stochastic version grows slower than the deterministic one, due to the possibility of a susceptible individual being hit by multiple infections, but we only count the first one. For $\beta i << 1$, this has little effect.
 
 * HOLD Coding: Deterministic behaviour and calculations :noexport:
-#+begin_src python :session :results value :exports none
+#+begin_src python :session :results value :exports none :eval no-export
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -215,7 +215,7 @@ import itertools
 #+end_src
 
 ** SI process
-#+begin_src python :session :results output :exports none 
+#+begin_src python :session :results output :exports none :eval no-export
 N = 1000 # Host population size
 betas = [0.1, 0.3, 0.5, 1] # contact rate
 G = 50

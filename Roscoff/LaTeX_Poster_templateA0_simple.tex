@@ -29,8 +29,8 @@
 \definecolor{posterbg}{HTML}{EAF1F8}
  
 %Header titlebox
-\tcbset{titlebox/.style={enhanced, colframe=posterbg,
-    colback=posterbg,
+\tcbset{titlebox/.style={enhanced, colframe=posterblue,
+    colback=posterblue,
     boxrule=3pt,
     %arc=4pt,
     left=2cm, right=2cm, top=1.5cm, bottom=1.5cm,
@@ -54,7 +54,7 @@
   colback=white,            % Makes the background completely transparent
   colframe=posterblue,     % Border color
   % coltitle=,     % Title text color
-  %fonttitle=\bfseries,     % Bold title
+  fonttitle=\bfseries,     % Bold title
   left=20pt, right=20pt, top=12pt, bottom=12pt,
   boxrule=3pt,             % Slim border outline
   title={#1},               % Accepts a dynamic title argument
@@ -67,19 +67,21 @@
 % Title, authors, and affiliations
 % ------------------------------------------------------------
 
+\hrule
+
 \begin{tcolorbox}[titlebox]
 \begin{center}
-  {\fontsize{60}{90}\selectfont\bfseries\color{posterblue}%
+  {\fontsize{65}{90}\selectfont\bfseries\color{white}%\
     Understanding Host--Pathogen Interactions, Epidemiology and Coevolution through a joint Coalescent approach\par}
   \vspace{1cm}
 
-  {\fontsize{42}{55}\selectfont
+  {\fontsize{42}{55}\selectfont\color{white}%
    Philip L. Wolper\textsuperscript{1}\qquad
    Johannes Müller\textsuperscript{2}\qquad
    Aurélien Tellier\textsuperscript{1}\par}
-  \vspace{0.8cm}
+  \vspace{1cm}
  
-  {\fontsize{28}{34}\selectfont
+  {\fontsize{28}{34}\selectfont\color{white}%
    \textsuperscript{1}Group of Population Genetics, Technical University of Munich, Freising, Germany
    \qquad
    \textsuperscript{2}Department of Mathematics, Technical University of Munich, Munich, Germany
@@ -87,35 +89,61 @@
 \end{center}
 \end{tcolorbox}
 
+\vspace{0.4cm}
+\hrule
 \vspace{1cm}
 
 \fontsize{30}{40}\selectfont
 
-\hrule
-\vspace{1cm}
-
-\textbf{Introduction}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.
-Nulla quis sem at nibh elementum imperdiet.
-
+% \begin{nofillbox}{Introduction}
+\begin{minipage}{0.8\textwidth}
 Add columns for introduction to nested host-pathogen genealogies. Research gap and existing work. 
+\end{minipage}
+ \begin{minipage}{0.19\textwidth}
+%     \begin{figure}[H]
+     \centering
+%     \includegraphics[width=1\linewidth]{../figures/nestedHostPathogenGenealogies.png}
+%     \end{figure}
+\end{minipage}
+% \end{nofillbox}
 
-\vspace{1cm}
-\hrule
-\vspace{1cm}
+\vspace{25pt}
 
-\begin{tcbraster}[raster columns=2,raster equal height,nobeforeafter,raster column skip=50pt]
-    \begin{nofillbox}{A nested semi-discrete Host-Pathogen model}
-    \vspace{10pt}
-    We present a semi-discrete host-pathogen model of vertical and horizontal transmission combining a Wright--Fisher host population infected by a pathogen horizontally transmitted by an SI infection process within each host generation. 
-
+\begin{nofillbox}{A nested semi-discrete Host-Pathogen model}
+  \begin{minipage}{0.49\textwidth}
     \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{../figures/nestedHostPathogen_WF_SI.png}
     \caption{Semi-discrete host-pathogen model with horizontal and vertical transmission. Pathogen can transmit vertically with probability $c_v$, following the host genealogy. Within each host generation there is a continuous epidemiological process $J_t$, modelling horizontal transmission through an SI infection model, determined by the contact rate $\beta$ and the duration of the epidemic $G$.}
     \end{figure}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.49\textwidth}
+    We present a semi-discrete host-pathogen model of vertical and horizontal transmission combining a Wright--Fisher host population infected by a pathogen horizontally transmitted by an SI infection process within each host generation. \\
+
+    \textbf{Horizontal infection}
+    \begin{equation}
+    \mathcal{J}_t: \quad J_0  \rightarrow J_G \quad \text{at rate } \beta(N-J_t)J_t/N.
+    \end{equation}
+    with intital conditions \(\mathcal{J}_0 = I_n+1\) as the number of infected host offspring.
+    From the fraction of infected hosts \(i(t) = J_t/N\) follows the the ODE
+    \begin{equation}
+    \frac{di}{dt} = \beta i(1-i), \quad \text{with } i(0) = J_0/N
+    \end{equation}
+    that has the solution
+    \begin{equation}
+    i(t) = \frac{i_0}{e^{-\beta t}(1-i_0) + i_0}.
+    \end{equation}
+
+    add details about the combined process. Or generally some more details.
+  \end{minipage}
+\end{nofillbox}
+
+\vspace{25pt}
+
+\begin{tcbraster}[raster columns=2,raster equal height,nobeforeafter,raster column skip=25pt]
+    \begin{nofillbox}{Deterministic limit and equilibrium}
+    \vspace{10pt}
 
     \textbf{Deterministic limit}\\
     Assuming the number of infected at the end of the generation \(n+1\) to be
@@ -135,7 +163,13 @@ Add columns for introduction to nested host-pathogen genealogies. Research gap a
     \end{figure}
     \end{nofillbox}
     \begin{nofillbox}{Stochastic, individual-based simulations with \textit{SLiM 5}}
-      This is the second column box. It sits perfectly parallel to the left one
+      add some simple equations of the stochatic infection process and screen shot of SLiM cycling behaviour. Present joint genealogies.
+      \begin{minipage}{0.5\linewidth}
+        \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{../figures/nestedHostPathogenGenealogies.png}
+        \end{figure}
+      \end{minipage} 
     \end{nofillbox}
 \end{tcbraster}
 
