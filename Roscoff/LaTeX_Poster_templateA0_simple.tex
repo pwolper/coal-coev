@@ -95,17 +95,19 @@
 
 \fontsize{30}{40}\selectfont
 
-% \begin{nofillbox}{Introduction}
- \begin{minipage}{0.8\textwidth}
+\begin{nofillbox}{Introduction}
+ \begin{minipage}{0.59\textwidth}
     Add columns for introduction to nested host-pathogen genealogies. Research gap and existing work. 
  \end{minipage}
- \begin{minipage}{0.19\textwidth}
+ \hfill
+ \begin{minipage}{0.39\textwidth}
     \begin{figure}[H]
      \centering
-    \includegraphics[width=1\linewidth]{../figures/coupled_genealogies.png}
+    \includegraphics[width=1\linewidth]{../figures/coupled_genealogiesAB.png}
+    \caption{A) Infectious branching process resulting from epidemic transmission within a population of hosts (adapted from Kühnert et al. 2011). B) Pathogen genealogy embedded within host genealogy through horizontal and vertical transmission (Figure adapted from Vienne et al. 2013).}
     \end{figure}
 \end{minipage}
-% \end{nofillbox}
+\end{nofillbox}
 
 \vspace{25pt}
 
@@ -134,7 +136,6 @@
     \begin{equation}
     i(t) = \frac{i_0}{e^{-\beta t}(1-i_0) + i_0}.
     \end{equation}
-
     add details about the combined process. Or generally some more details.
   \end{minipage}
 \end{nofillbox}
@@ -151,7 +152,7 @@
     X_{n+1} = I_{n+1} + K_{n+1}
     \end{equation}
     where \(I_{n+1}\) is the number of infected host offspring and \(K_{n+1}\) individuals are newly infected due to the epidemiological process \(\mathcal{J}_G\) in generation \(n+1\).
-    If we take \(N\) to infinity, we get the deterministic limit of the model, and with \(x_n = X_n/N\) we have \(I_{n+1}/N \approx c_v x_n\). See notes for further details. For the stationary solution \(x_n = x_{n+1} = x\) we get
+    If we take \(N\) to infinity, we get the deterministic limit of the model, and with \(x_n = X_n/N\) we have \(I_{n+1}/N \approx c_v x_n\). We get the stationary solution, 
     \begin{equation}
     x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
     \end{equation}
