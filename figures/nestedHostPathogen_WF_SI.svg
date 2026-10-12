@@ -4,15 +4,15 @@
 <svg
    inkscape:export-ydpi="300"
    inkscape:export-xdpi="300"
-   inkscape:export-filename="nestedHostPathogen_WF_SI"
+   inkscape:export-filename="nestedHostPathogen_WF_SI.png"
    sodipodi:docname="nestedHostPathogen_WF_SI.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xml:space="preserve"
    id="svg5"
    version="1.1"
-   viewBox="0 0 128.37449 67.68188"
-   height="67.681885mm"
-   width="128.37448mm"
+   viewBox="0 0 128.47679 68.681994"
+   height="68.681999mm"
+   width="128.47679mm"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -27,15 +27,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2"
-     inkscape:cx="340.5"
-     inkscape:cy="172.75"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:zoom="2.4723206"
+     inkscape:cx="257.24819"
+     inkscape:cy="131.25321"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g47704" /><defs
+     inkscape:current-layer="layer1" /><defs
      id="defs2"><marker
    style="overflow:visible"
    id="Stop"
@@ -70,7 +70,7 @@
    orient="235.19000244"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29" /></marker><marker
    id="arrowhead-7-4"
@@ -81,7 +81,7 @@
    orient="-156.53497314"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-6-7" /></marker><marker
    id="arrowhead-2-7-1-7"
@@ -92,7 +92,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-5-9-4-5" /></marker><marker
    id="arrowhead-2-7-1-7-2"
@@ -103,7 +103,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-5-9-4-5-2" /></marker><marker
    id="arrowhead-2-7-1-7-2-9"
@@ -114,7 +114,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7" /></marker><marker
    id="arrowhead-2-7-1-7-2-5"
@@ -125,7 +125,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-6" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9"
@@ -136,7 +136,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3" /></marker><marker
    id="arrowhead-2-7-1-7-5"
@@ -147,7 +147,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-25" /></marker><marker
    id="arrowhead-2-7-1-7-2-5-7"
@@ -156,7 +156,7 @@
    refX="9"
    refY="3.5"
    orient="auto"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-6-8" /></marker><marker
    id="arrowhead-2-7-1-7-5-3"
@@ -167,7 +167,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-25-1" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9-2"
@@ -178,7 +178,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3-0" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9-8"
@@ -189,7 +189,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3-9" /></marker><marker
    id="arrowhead-2-68-7-1"
@@ -201,7 +201,7 @@
    markerUnits="userSpaceOnUse"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-1-6-5" /></marker><marker
    id="arrowhead-3"
@@ -212,7 +212,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-9" /></marker><marker
    id="arrowhead-3-1"
@@ -223,7 +223,7 @@
    orient="-12.43166256"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-9-2" /></marker><clipPath
    id="clipPath7778">
@@ -385,7 +385,7 @@
    orient="-156.53497314"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-6-7-5" /></marker><clipPath
    id="clipPath8518">
@@ -655,7 +655,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-9-3" /></marker><clipPath
    id="clipPath3251-3">
@@ -672,7 +672,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-25-9" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9-2-3"
@@ -683,7 +683,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3-0-7" /></marker><clipPath
    id="clipPath3289">
@@ -863,7 +863,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0.324244, -26.9868)"><g
+     transform="translate(-1.4442606,-26.986787)"><g
        inkscape:label=""
        transform="translate(26.81788,31.031364)"
        id="g34972"
@@ -988,7 +988,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-9-3-0"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="88.043373"
        cy="31.510357"
        r="1.9315984"
@@ -996,7 +996,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><path
+       style="fill:#ffd5d5;stroke:#de8787;stroke-width:0.25;stroke-dasharray:none" /><path
        style="fill:#999999;stroke:#000000;stroke-width:0.264999;stroke-dasharray:none"
        d="m 88.043377,34.831044 v 5.715227"
        id="path35572"
@@ -1025,7 +1025,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="60.040813"
        cy="90.41404"
        r="1.9315984"
@@ -1033,7 +1033,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-8"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="69.20723"
        cy="90.41404"
        r="1.9315984"
@@ -1041,7 +1041,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-9"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><rect
+       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-dasharray:none"
        id="rect13904-5-6"
        width="5.7114706"
@@ -1063,7 +1063,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="50.750984"
        cy="90.41404"
        r="1.9315984"
@@ -1071,7 +1071,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-2"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="106.48985"
        cy="90.41404"
        r="1.9315984"
@@ -1079,7 +1079,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-8-6"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="115.77967"
        cy="90.41404"
        r="1.9315984"
@@ -1087,7 +1087,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-9-6"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="97.200058"
        cy="90.41404"
        r="1.9315984"
@@ -1095,7 +1095,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-2-4"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><rect
+       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-dasharray:none"
        id="rect13904-5-5-61"
        width="5.7114706"
@@ -1119,7 +1119,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-9"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="115.9128"
        cy="31.510361"
        r="1.9315984"
@@ -1127,7 +1127,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-9-4"
-       style="fill:#4d4d4d;stroke-width:0.25;stroke-dasharray:none" /><rect
+       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-dasharray:none"
        id="rect13904-5-5-6-8"
        width="5.7114706"
@@ -1416,25 +1416,25 @@
        style="opacity:0.292755;fill:#000000;stroke:#b3b3b3;stroke-width:0.3;stroke-dasharray:none"
        d="M 41.461166,62.493558 V 87.273003"
        id="path4425" /><path
-       style="opacity:1;fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.3;stroke-dasharray:none"
+       style="opacity:1;fill:none;stroke:#4d4d4d;stroke-width:0.3;stroke-dasharray:none"
        d="M 50.766965,62.493558 V 87.273003"
        id="path4425-7" /><path
-       style="fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.299506;stroke-dasharray:0.299506, 0.299506;stroke-dashoffset:0;marker-end:"
+       style="fill:none;stroke:#4d4d4d;stroke-width:0.299506;stroke-dasharray:0.299506, 0.299506;stroke-dashoffset:0"
        d="M 69.527844,71.044661 H 59.976579"
        id="path4425-7-8" /><path
-       style="fill:#333333;stroke:#333333;stroke-width:0.298415;stroke-dasharray:0.298415, 0.298415;stroke-dashoffset:0"
+       style="fill:none;stroke:#333333;stroke-width:0.298415;stroke-dasharray:0.298415, 0.298415;stroke-dashoffset:0"
        d="M 106.29828,78.876721 H 96.816444"
        id="path4425-7-8-4" /><path
-       style="fill:#333333;stroke:#333333;stroke-width:0.3;stroke-dasharray:0.3, 0.3;stroke-dashoffset:0"
+       style="fill:none;stroke:#333333;stroke-width:0.3;stroke-dasharray:0.3, 0.3;stroke-dashoffset:0"
        d="m 116.06012,66.143023 h -9.64498"
        id="path4425-7-8-4-9" /><path
-       style="opacity:1;fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.3;stroke-dasharray:none"
+       style="opacity:1;fill:none;stroke:#4d4d4d;stroke-width:0.3;stroke-dasharray:none"
        d="M 60.072765,62.493558 V 87.273004"
        id="path4425-4" /><path
        style="opacity:0.292755;fill:#000000;stroke:#b3b3b3;stroke-width:0.3;stroke-dasharray:none"
        d="M 69.378564,62.493558 V 87.273004"
        id="path4425-4-4" /><path
-       style="fill:#4d4d4d;stroke:#4d4d4d;stroke-width:0.3;stroke-dasharray:none"
+       style="fill:none;stroke:#4d4d4d;stroke-width:0.3;stroke-dasharray:none"
        d="M 69.377064,70.89653 V 87.271736"
        id="path4425-4-3" /><path
        style="opacity:0.292755;fill:#000000;stroke:#b3b3b3;stroke-width:0.3;stroke-dasharray:none"
@@ -1677,15 +1677,15 @@
          transform="translate(-127.0883,5.6030559)"><tspan
            x="153.38686"
            y="64.255829"
-           id="tspan56491"><tspan
+           id="tspan6669"><tspan
              style="font-style:italic;font-size:2.11667px;-inkscape-font-specification:'CMU Serif Upright Italic, Italic'"
-             id="tspan56487">2. Pathogen reproduction</tspan><tspan
+             id="tspan6665">2. Pathogen reproduction</tspan><tspan
              style="font-size:2.11667px"
-             id="tspan56489">
+             id="tspan6667">
 </tspan></tspan><tspan
            x="153.38686"
            y="66.677696"
-           id="tspan56493">→ horizontal transmission</tspan></text><g
+           id="tspan6671">→ horizontal transmission</tspan></text><g
          id="g47556"
          transform="translate(0.14850645)"><g
            id="g54464"><g
@@ -1815,10 +1815,10 @@
              transform="translate(-3.0650494,-1.5923755)"><tspan
                x="16.676184"
                y="49.726292"
-               id="tspan56497"><tspan
+               id="tspan6675"><tspan
    style="font-style:italic"
-   id="tspan56495">Discrete </tspan>
+   id="tspan6673">Discrete </tspan>
 </tspan><tspan
                x="16.676184"
                y="51.931153"
-               id="tspan56499">Host Wright-Fisher model</tspan></text></g></g></g></g></svg>
+               id="tspan6677">Host Wright-Fisher model</tspan></text></g></g></g></g></svg>
