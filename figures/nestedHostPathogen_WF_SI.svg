@@ -10,9 +10,9 @@
    xml:space="preserve"
    id="svg5"
    version="1.1"
-   viewBox="0 0 128.47679 68.681994"
+   viewBox="0 0 130.96278 68.681994"
    height="68.681999mm"
-   width="128.47679mm"
+   width="130.96278mm"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -28,12 +28,12 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="2.4723206"
-     inkscape:cx="257.24819"
-     inkscape:cy="131.25321"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:cx="287.98854"
+     inkscape:cy="69.772504"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" /><defs
      id="defs2"><marker
@@ -70,7 +70,7 @@
    orient="235.19000244"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29" /></marker><marker
    id="arrowhead-7-4"
@@ -81,7 +81,7 @@
    orient="-156.53497314"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-6-7" /></marker><marker
    id="arrowhead-2-7-1-7"
@@ -92,7 +92,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5" /></marker><marker
    id="arrowhead-2-7-1-7-2"
@@ -103,7 +103,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-5-9-4-5-2" /></marker><marker
    id="arrowhead-2-7-1-7-2-9"
@@ -114,7 +114,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7" /></marker><marker
    id="arrowhead-2-7-1-7-2-5"
@@ -125,7 +125,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-6" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9"
@@ -136,7 +136,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3" /></marker><marker
    id="arrowhead-2-7-1-7-5"
@@ -156,7 +156,7 @@
    refX="9"
    refY="3.5"
    orient="auto"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-6-8" /></marker><marker
    id="arrowhead-2-7-1-7-5-3"
@@ -167,7 +167,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-5-9-4-5-25-1" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9-2"
@@ -178,7 +178,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3-0" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9-8"
@@ -189,7 +189,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3-9" /></marker><marker
    id="arrowhead-2-68-7-1"
@@ -201,7 +201,7 @@
    markerUnits="userSpaceOnUse"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-5-1-6-5" /></marker><marker
    id="arrowhead-3"
@@ -212,7 +212,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,7 0,0 10,3.5 "
+     points="0,0 10,3.5 0,7 "
      fill="#000000"
      id="polygon29-9" /></marker><marker
    id="arrowhead-3-1"
@@ -223,7 +223,7 @@
    orient="-12.43166256"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="10,3.5 0,7 0,0 "
+     points="0,7 0,0 10,3.5 "
      fill="#000000"
      id="polygon29-9-2" /></marker><clipPath
    id="clipPath7778">
@@ -385,7 +385,7 @@
    orient="-156.53497314"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-6-7-5" /></marker><clipPath
    id="clipPath8518">
@@ -655,7 +655,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-9-3" /></marker><clipPath
    id="clipPath3251-3">
@@ -672,7 +672,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-5-9-4-5-25-9" /></marker><marker
    id="arrowhead-2-7-1-7-2-9-9-2-3"
@@ -683,7 +683,7 @@
    orient="auto"
    viewBox="0 0 10 7"
    preserveAspectRatio="xMidYMid"><polygon
-     points="0,0 10,3.5 0,7 "
+     points="10,3.5 0,7 0,0 "
      fill="#000000"
      id="polygon29-5-9-4-5-2-7-3-0-7" /></marker><clipPath
    id="clipPath3289">
@@ -863,7 +863,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-1.4442606,-26.986787)"><g
+     transform="translate(1.0055269,-26.986787)"><g
        inkscape:label=""
        transform="translate(26.81788,31.031364)"
        id="g34972"
@@ -988,7 +988,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-9-3-0"
-       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#aa0000;stroke:#550000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="88.043373"
        cy="31.510357"
        r="1.9315984"
@@ -1025,7 +1025,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7"
-       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#aa0000;stroke:#550000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="60.040813"
        cy="90.41404"
        r="1.9315984"
@@ -1033,7 +1033,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-8"
-       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#aa0000;stroke:#550000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="69.20723"
        cy="90.41404"
        r="1.9315984"
@@ -1041,7 +1041,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-9"
-       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><rect
+       style="fill:#aa0000;stroke:#550000;stroke-width:0.25;stroke-dasharray:none" /><rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-dasharray:none"
        id="rect13904-5-6"
        width="5.7114706"
@@ -1063,7 +1063,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4"
-       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#aa0000;stroke:#550000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="50.750984"
        cy="90.41404"
        r="1.9315984"
@@ -1071,7 +1071,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-2"
-       style="fill:#ff8080;stroke:#aa0000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#aa0000;stroke:#550000;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="106.48985"
        cy="90.41404"
        r="1.9315984"
@@ -1079,7 +1079,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-8-6"
-       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#de8787;stroke:#782121;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="115.77967"
        cy="90.41404"
        r="1.9315984"
@@ -1087,7 +1087,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-9-6"
-       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#de8787;stroke:#782121;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="97.200058"
        cy="90.41404"
        r="1.9315984"
@@ -1095,7 +1095,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-2-4"
-       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><rect
+       style="fill:#de8787;stroke:#782121;stroke-width:0.25;stroke-dasharray:none" /><rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-dasharray:none"
        id="rect13904-5-5-61"
        width="5.7114706"
@@ -1119,7 +1119,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-9"
-       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><circle
+       style="fill:#de8787;stroke:#782121;stroke-width:0.25;stroke-dasharray:none" /><circle
        cx="115.9128"
        cy="31.510361"
        r="1.9315984"
@@ -1127,7 +1127,7 @@
        stroke="#000000"
        stroke-width="0.19316"
        id="circle1-8-6-7-6-7-4-9-4"
-       style="fill:#d40000;stroke:#800000;stroke-width:0.25;stroke-dasharray:none" /><rect
+       style="fill:#de8787;stroke:#782121;stroke-width:0.25;stroke-dasharray:none" /><rect
        style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.25;stroke-dasharray:none"
        id="rect13904-5-5-6-8"
        width="5.7114706"
@@ -1668,7 +1668,7 @@
   </g>
 </g></g><g
        id="g47704"
-       transform="translate(-0.4391804)"><text
+       transform="translate(-0.4391804,-0.516209)"><text
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;line-height:1.3;font-family:'CMU Serif Upright Italic';-inkscape-font-specification:'CMU Serif Upright Italic, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;white-space:pre;inline-size:27.0593;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
          x="153.38686"
@@ -1677,15 +1677,15 @@
          transform="translate(-127.0883,5.6030559)"><tspan
            x="153.38686"
            y="64.255829"
-           id="tspan6669"><tspan
-             style="font-style:italic;font-size:2.11667px;-inkscape-font-specification:'CMU Serif Upright Italic, Italic'"
-             id="tspan6665">2. Pathogen reproduction</tspan><tspan
+           id="tspan12632"><tspan
+             style="font-weight:bold;font-size:2.11667px;-inkscape-font-specification:'CMU Serif Upright Italic, Bold'"
+             id="tspan12628">2. Pathogen reproduction</tspan><tspan
              style="font-size:2.11667px"
-             id="tspan6667">
+             id="tspan12630">
 </tspan></tspan><tspan
            x="153.38686"
            y="66.677696"
-           id="tspan6671">→ horizontal transmission</tspan></text><g
+           id="tspan12634">→ horizontal transmission</tspan></text><g
          id="g47556"
          transform="translate(0.14850645)"><g
            id="g54464"><g
@@ -1780,25 +1780,25 @@
     </g>
   </g>
 </g></g></g></g></g></g><g
-       id="g47833"
-       transform="translate(-0.52916667)"><text
+       id="g11001"
+       transform="translate(0,-0.65782439)"><text
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.11667px;line-height:1.3;font-family:'CMU Serif Upright Italic';-inkscape-font-specification:'CMU Serif Upright Italic, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-         x="26.388405"
+         x="25.859238"
          y="41.754955"
          id="text24966-7-3"><tspan
            sodipodi:role="line"
            id="tspan74732"
-           x="26.388405"
+           x="25.85924"
            y="41.754955"
-           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.11667px;font-family:'CMU Serif Upright Italic';-inkscape-font-specification:'CMU Serif Upright Italic, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end">1. Host reproduction</tspan><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.11667px;font-family:'CMU Serif Upright Italic';-inkscape-font-specification:'CMU Serif Upright Italic, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end">1. Host reproduction</tspan><tspan
            sodipodi:role="line"
            id="tspan74734"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.76389px;font-family:'CMU Serif Upright Italic';-inkscape-font-specification:'CMU Serif Upright Italic, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end"
-           x="26.388405"
+           x="25.859238"
            y="44.506626">→ vertical transmission</tspan></text><g
          id="g47534"
-         transform="translate(-0.17584721)"><g
+         transform="translate(-0.70501388)"><g
            id="g54441"
            transform="translate(1.1402553)"><rect
              style="fill:#e6e6e6;stroke:#000000;stroke-width:0.141875;stroke-dasharray:none;stroke-dashoffset:0"
@@ -1815,10 +1815,10 @@
              transform="translate(-3.0650494,-1.5923755)"><tspan
                x="16.676184"
                y="49.726292"
-               id="tspan6675"><tspan
+               id="tspan12638"><tspan
    style="font-style:italic"
-   id="tspan6673">Discrete </tspan>
+   id="tspan12636">Discrete </tspan>
 </tspan><tspan
                x="16.676184"
                y="51.931153"
-               id="tspan6677">Host Wright-Fisher model</tspan></text></g></g></g></g></svg>
+               id="tspan12640">Host Wright-Fisher model</tspan></text></g></g></g></g></svg>

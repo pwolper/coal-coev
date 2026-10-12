@@ -25,7 +25,9 @@ Pathogen epidemic model embedded within Host reproduction -- a model of coevolut
 [[../figures/nestedHostPathogen_WF_SI.png]]
 
 ** Vertical pathogen transmission through host generations
-The host population reproduces in discrete generations and non-overlapping generation, following a Wright-Fisher process of size $N$. At the end of each generation $n$, there are $X_n$ hosts infected. We transition to the next generation by host reproduction, during which infected host have the probability $c_v$ to pass the pathogen on to their offspring, infecting vertically.  At the beginning of each generation $n+1$ there are $I_{n+1}$ infected host offspring, that are the founding individuals for the epidemiological process. 
+The host population reproduces in discrete and non-overlapping generations, following a Wright-Fisher process of size $N$. At the end of each generation $n$, there are $X_n$ infected hosts. During host reproduction, an infected host can pass it's infection to it's offspring, the probability of vertical infection being $c_v$. Thus, at the start of the next generation are $I_{n+1}$ initally infected offspring:
+
+$$I_{n+1} \sim \text{Binom}\left(N, \frac{c_v X_n}{N}\right)$$
 
 ** Epidemic pathogen dynamics within host generations
 Alternating host reproduction, we have a continuous epidemiological process within each generation, representing horizontal transmission of infectious disease. This process runs for time $G$, which describes the length of the epidemic phase between host reproduction, and is well suited to describe seasonal epidemics for example in plants. Depending on the length of $G$, we can also adjust the relative speed of evolution of hosts to pathogens (for later?).
