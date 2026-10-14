@@ -74,11 +74,30 @@ The value of $x^*$ for values of $c_v$, $\beta$ and $G$ are shown below. Values 
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
 *** TODO Boundary conditions and limiting models
-We are only interested in the cases $x^*>0$ (and smaller 1), as other solutions are not biological. Hereby, $x^* = 0$ represents the boundary disease-free equilibrium, while $x^* = 1$ is the absorbing state of total infection. The cases inbetween represent the endemic disease equilibrium $0 < x^* < 1$. 
+We are only interested in the cases $x^*>0$ (and smaller 1), as other solutions are not biological. Hereby, $x^* = 0$ represents the boundary disease-free equilibrium, while $x^* = 1$ is the absorbing state of total infection.
 
-The denominator in $x^*$ is positive for $c_v \ge e^{-\beta G}$. *put the limit functions.* 
+We get the following limiting cases for $\beta G$ for $c_v \in [0, 1]$ as the epidemic transmission grows very large,
 
-*discuss* scaling between pure vertical transmission (no horizontal transmission, $G = 0$ [fn:: Deterministic model collapses at $G=0$, anyhow we can use a simpler vertical transmission model.]), where the pathogen tracks the host lineages, and a epidemic infection process independent of host evolution (when $G >> 1$) (i.e. the approach taken by phylodynamics). This is important when considering many different host-pathogen systems, where the infection-reproduction processes vary (see list later).
+$$\lim_{\beta G\to\infty} x^* = \frac{c_v-0}{c_v(1-0)} = 1$$
+
+which logically results in pathogen fixation for any $c_v > 0$. 
+
+$$\lim_{\beta G \to 0^+} x^* = \begin{cases} 1, & c_v=1 \\-\infty, & 0 > c_v > 1 \end{cases}$$
+
+and the limits in $c_V$ for $\beta G > 0$ as:
+
+$$\lim_{c_v \to 1} x^* = \frac{1-e^{-\beta G}}{1-e^{-\beta G}} = 1$$
+
+
+Scaling between pure vertical transmission (no horizontal transmission, $\beta G = 0$ [fn:: Deterministic model collapses at $\beta G=0$, anyhow we can use a simpler vertical transmission model.]), where the pathogen tracks the host lineages, and a epidemic infection process independent of host evolution (when $G >> 1$) (i.e. the approach taken by phylodynamics). This is important when considering many different host-pathogen systems, where the infection-reproduction processes vary (see list later).
+*** TODO Equilibrium conditions and persistence
+The cases inbetween represent the endemic disease equilibrium, where the disease is present at an equilibrium $0 < x^* < 1$, and can be reached only if the basic reproductive number $R_0 > 1$. Following $R_0 = c_v e^{\beta G}$, we see, this is the case for.
+
+$$R_0 = c_v e^{\beta G} > 1$$, for $$c_v > e^{-\beta G}$$
+
+*add R0 number*
+
+
 
 *** TODO Boundary conditions old :noexport:
 {{{color(red, Check my work on boundary condition? Is $x^*$ derived under assumptions $\beta G > 0$?)}}}
@@ -167,11 +186,7 @@ $$E[T_{n}]\approx 2N.$$
 ** TODO Joint coalescent trees
 Add host-pathogen coalescence from simulations of joint tree-Sequences in SLiM.
 
-* Stochastic simulations
-** SLiM Two-Species semi-discrete WF-SI 
-The above model is implemented as a individual-based, stochastic model with hosts and parasite species in SLiM (using two species in a non-WF framework). The host species reproduces in discrete, non-overlapping WF generations every $G+1$ ticks, while in between host reproduction events, the stochastic infection model runs, following an SI process. Thus $G$ represents the timescale of the host to pathogen reproductive processes, and determines the relative length of the epidemic relative to the host reproduction.
-Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below:
-
+* Stochastic process
 Each host individual makes contact with another host individual at rate $\beta$, thus the waiting time between an individuals contacts is $\tau \sim \text{Exp}(\beta)$ and the number of contacts a host makes in a time interval of $t$ is distributed $C \sim \text{Poisson}(\beta \Delta t)$. For $J_t$ independent infected hosts, the number of contacts made by the infected individuals within one tick of interval ($\Delta t = 1$), follows:
 
 $$C_t = \sum_{j=1}^{J_t} C_j \sim \text{Poisson}(\beta J_t)$$
@@ -180,13 +195,12 @@ and the effective contacts where infection can happen (as only the contacts with
 
 $$C_{\text{eff}} \sim \text{Poisson}\left(\frac{\beta J_t (N-J_t)}{N}\right)$$
 
-In our simulation for each tick we draw the number of effective contacts, sample $C_\text{eff}$ the infecting individuals and target hosts with replacement. To not allow susceptibles to be contacted twice in one tick (they can only be infected once), we keep only the first contact, removing duplicates. We then add a horizontally transmitted pathogen as a clone of the infecting indvidual.
 
-*Comparison of stochastic SI model to deterministic version.* 
+*Comparison of stochastic SI model to deterministic version. add $\Delta t$ to discretization.*
 We derive the stochastic infectious process, and show it behaves similar to the deterministic version above under small $\beta$.
 Following the total effective number of contacts $C_\text{eff}$, distributing the number of contacts uniformly over $S = N - J_t$ susceptible host results in the per susceptible contacts $C_k \sim \text{Poisson}((\beta J_t)/N)$, for each susceptible host $k$. From this distribution, the probability to become infected is defined as
 
-$$p = P(C_k > 0) = 1 - e^{\beta J_t/N}$$
+$$p = P(C_k > 0 | J_t) = 1 - e^{-\beta J_t/N}$$
 
 Thus for each step time, there are $\Delta J$ infected hosts with.
 
@@ -206,7 +220,12 @@ $$i_{t+1} = i_t + (1-i_t) \beta i_t $$
 
 We see, that the deterministic and stochastic models differ by $\beta i_t \ge 1- e^{-\beta i_t}$, and that the stochastic version grows slower than the deterministic one, due to the possibility of a susceptible individual being hit by multiple infections, but we only count the first one. For $\beta i << 1$, this has little effect.
 
-* HOLD Coding: Deterministic behaviour and calculations :noexport:
+** SLiM Two-Species semi-discrete WF-SI 
+The above model is implemented as a individual-based, stochastic model with hosts and parasite species in SLiM (using two species in a non-WF framework). The host species reproduces in discrete, non-overlapping WF generations every $G+1$ ticks, while in between host reproduction events, the stochastic infection model runs, following an SI process. Thus $G$ represents the timescale of the host to pathogen reproductive processes, and determines the relative length of the epidemic relative to the host reproduction.
+Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below.
+
+In our simulation for each tick we draw the number of effective contacts, sample $C_\text{eff}$ the infecting individuals and target hosts with replacement. To not allow susceptibles to be contacted twice in one tick (they can only be infected once), we keep only the first contact, removing duplicates. We then add a horizontally transmitted pathogen as a clone of the infecting indvidual.
+* Coding: Deterministic behaviour and calculations :noexport:
 #+begin_src python :session :results value :exports none :eval no-export
 import numpy as np
 import seaborn as sns
@@ -268,7 +287,7 @@ greens = plt.cm.Greens(np.linspace(0.3, 0.95, len(G_values)))  # right panel
 
 beta = np.linspace(0.001, 2, 1000)       # left x-axis (avoid 0)
 c_v = np.linspace(0.001, 1, 1000)     # right x-axis (avoid 0 and 1)
-c_v0, beta0 = 0.5, 0.1
+c_v0, beta0, G0 = 0.5, 0.1, 1
 
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 plt.subplots_adjust(left=0.07, right=0.97, bottom=0.2, wspace=0.22)

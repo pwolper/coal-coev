@@ -32,7 +32,7 @@
 \tcbset{titlebox/.style={enhanced, colframe=posterblue,
     colback=posterblue,
     boxrule=3pt,
-    arc=4pt,
+    arc=1pt,
     left=2cm, right=2cm, top=1.5cm, bottom=1.5cm,
     width=\textwidth,
     %halign=center
@@ -147,18 +147,18 @@
 
     \vspace{20pt}
 
-    \textbf{Horizontal infection.} Continuous-time epidemic process within a host generation with horizontal transmission between hosts running for time $G$ and the number of infected hosts following SI dynamics, with intital conditions \(\mathcal{J}_0 = I_{n+1}\) and the host contact rate $\beta$.
+    \textbf{Horizontal infection.} Continuous-time epidemiological infection process within a host generation running for time $G$ and dynamics following an SI model, with intital conditions \(\mathcal{J}_0 = I_{n+1}\) and the host contact rate $\beta$.
     \begin{equation}
     \mathcal{J}_t: \quad J_0  \rightarrow J_G \quad \text{at rate } \beta J_t(N-J_t)/N.
     \end{equation}
     
     \vspace{20pt}
 
-    \textbf{Combined process.} The number of infected at the end of the generation \(n+1\) is
+    \textbf{Combined process.} The number of infected at the end of each generation \(n+1\) is the combination of vertical and horizontal infections. The basic reproduction number of the model is $R_0 = c_v e^{\beta G}$, and taking $N \to \infty$ and $x = X/N$, we get the following deterministic solution:
     \begin{equation}
-    X_{n+1} = I_{n+1} + K_{n+1}
+      x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})}
     \end{equation}
-    where \(I_{n+1}\) is the number of infected host offspring and \(K_{n+1}\) individuals are newly infected due to the epidemiological process \(\mathcal{J}_G\) in generation \(n+1\).
+    %where \(I_{n+1}\) is the number of infected host offspring and \(K_{n+1}\) individuals are newly infected due to the epidemiological process \(\mathcal{J}_G\) in generation \(n+1\).
   \end{minipage}
 \end{nofillbox}
 
