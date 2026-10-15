@@ -95,6 +95,7 @@ The cases inbetween represent the endemic disease equilibrium, where the disease
 
 $$R_0 = c_v e^{\beta G} > 1$$, for $$c_v > e^{-\beta G}$$
 
+$$x^* = \frac{c_V - e^{-\beta G}}{c_v(1-e^{- \beta G})} = \frac{c_v - R_o0}{c_V ()}$$
 *add R0 number*
 
 
@@ -225,6 +226,7 @@ The above model is implemented as a individual-based, stochastic model with host
 Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below.
 
 In our simulation for each tick we draw the number of effective contacts, sample $C_\text{eff}$ the infecting individuals and target hosts with replacement. To not allow susceptibles to be contacted twice in one tick (they can only be infected once), we keep only the first contact, removing duplicates. We then add a horizontally transmitted pathogen as a clone of the infecting indvidual.
+
 * Coding: Deterministic behaviour and calculations :noexport:
 #+begin_src python :session :results value :exports none :eval no-export
 import numpy as np
@@ -413,6 +415,95 @@ axes[0].get_legend().remove()
 #+attr_latex: :with \textwidth
 #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
+
+*** Phase plot 
+
+#+begin_src python :session :results output :exports none :eval no-export
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+from matplotlib.colors import FuncNorm
+from matplotlib.cm import ScalarMappable
+import seaborn as sns
+
+# Grid: beta*G > 0 (x-axis), c_v in (0, 1] (y-axis)
+bG_max = 6.5
+bG = np.linspace(1e-3, bG_max, 800)
+cv = np.linspace(1e-3, 1, 800)
+BG, CV = np.meshgrid(bG, cv)
+
+E = np.exp(-BG)
+x_star = (CV - E) / (CV * (1 - E))
+x_biol = np.where(CV > E, x_star, np.nan)  # NaN = extinction (x* = 0)
+
+## Plot
+sns.set_theme(style="ticks", context="paper", font_scale=1.2)
+#sns.set_theme(style="white", context="paper", font_scale=1.2)
+
+fig, ax = plt.subplots(figsize=(8, 4.5))
+#ax.set_facecolor("white")
+
+#palette = "YlOrRd"
+palette = "Reds"
+cmap = sns.color_palette(palette, as_cmap=True)
+
+# fwd = lambda v: -np.log10(1 - np.clip(v, 0, 0.9999))
+# inv = lambda y: 1 - 10.0 ** (-y)
+# norm = FuncNorm((fwd, inv), vmin=0, vmax=0.99)
+ # continuous colour scale, linear in -log10(1 - x*) to resolve the high end
+eps = 0.01   # <- smaller = more stretch near x* = 1; larger = closer to linear
+fwd = lambda v: -np.log10(1 + eps - np.clip(v, 0, 1))
+inv = lambda y: 1 + eps - 10.0 ** (-y)
+norm = FuncNorm((fwd, inv), vmin=0, vmax=1)
+
+# band edges and iso-lines of x*
+levels = [0.5, 0.8, 0.9, 0.95, 0.99]
+bands = [0] + levels + [1]
+ 
+fig, ax = plt.subplots(figsize=(7, 5))
+# cf = ax.contourf(BG, CV, x_biol, levels=bands, cmap=cmap, norm=norm)
+cf = ax.pcolormesh(BG, CV, x_biol, cmap=cmap, norm=norm, shading="auto", rasterized=True)
+cl = ax.contour(BG, CV, x_biol, levels=levels, colors="k", linewidths=0.6)
+ 
+# label positions: pick a c_v per level (staggered), solve x*(beta G, c_v) = level for beta G
+cv_lab = np.linspace(0.55, 0.55, len(levels))        # <- adjust to move labels
+lv = np.array(levels)
+bG_lab = -np.log(cv_lab * (1 - lv) / (1 - lv * cv_lab))
+ax.clabel(cl, fmt="%g", fontsize=10, manual=list(zip(bG_lab, cv_lab)))
+
+# Threshold c_v = exp(-beta G)  <=>  R0 = c_v * exp(beta G) = 1
+ax.plot(bG, np.exp(-bG), "k--", lw=1.5, alpha=0.4, label=r"$R_0 = 1$")
+
+ax.text(4, 0.93, r"Persistence: $R_0 > 1$", fontsize=11, color="white")
+ax.text(0.15, 0.03, r"Extinction: $R_0 < 1$", fontsize=11)
+ax.text(0.16, 0.32, r"$R_0 = 1$", fontsize=11, color='grey')
+
+ax.set_xlim(0, bG_max)
+ax.set_ylim(0, 1)
+ax.set_xlabel(r"$\beta G$")
+ax.set_ylabel(r"$c_v$")
+#ax.legend(loc="upper right", fontsize=11)
+
+# cb = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), ax=ax)  # colorbar only, nothing plotted
+cb = fig.colorbar(cf, ax=ax, pad=0.06)
+cb.set_ticks([0, 0.5, 0.8, 0.9, 0.95, 0.99, 1])
+cb.set_ticklabels(["0", "0.5", "0.8", "0.9", "0.95", "0.99", "1"])
+#cb.set_label(r"$x^*$", labelpad=12, va="center", rotation=0)
+cb.set_label(r"Equilibrium infected $x^*$")
+cb.ax.yaxis.set_label_position("left")
+
+ax.grid(True, color="k", alpha=0.1, lw=0.5)
+ax.set_axisbelow(True)
+#sns.despine()
+
+# fig.tight_layout()
+fig.savefig("figures/Xdeterministic_contour_R0.pdf", bbox_inches='tight', dpi=300)
+#plt.show()
+
+#+end_src
+
+#+RESULTS:
+
 * Discussion
 ** Which host-pathogen systems can we apply our model to?
 *Annual crops with seed-borne pathogens*

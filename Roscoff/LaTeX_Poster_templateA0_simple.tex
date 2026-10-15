@@ -166,18 +166,20 @@
 
 \begin{tcbraster}[raster columns=2,raster equal height,nobeforeafter,raster column skip=25pt]
     \begin{nofillbox}{Deterministic limit and equilibrium}
-    \vspace{10pt}
-
-    \textbf{Deterministic limit}\\
-    If we take $N \to \infty$, we get the deterministic limit of the model, and with \(x_n = X_n/N\) we have \(I_{n+1}/N \approx c_v x_n\). We get the stationary solution, 
-    \begin{equation}
-    x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
-    \end{equation}
-    \begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{../maths/figures/x_equilibrium_vs_cv_perBeta_G.pdf}
-    \caption{Behaviour of the equilibrium \(x^*\) for rates of vertical transmission \(c_v\) and horizontal contact rate \(\beta\) and epidemic time \(G\) (A-E).}
-    \end{figure}
+    \begin{minipage}{0.49\textwidth}
+        \begin{figure}[H]
+        \centering
+        \includegraphics[width=\linewidth]{../maths/figures/Xdeterministic_contour_R0.pdf}
+        \caption{Equilibrium fraction of infected $x^*$ and the reproductive number $R_0 = c_v e^{\beta G}$ for rates of vertical transmission \(c_v\) and epidemic transmission $\beta$ and epidemic time $G$.}
+        \end{figure}
+    \end{minipage}
+    \begin{minipage}{0.49\textwidth}
+        \textbf{Deterministic limit}\\
+        If we take $N \to \infty$, we get the deterministic limit of the model, and with \(x_n = X_n/N\) we have \(I_{n+1}/N \approx c_v x_n\). We get the stationary solution, 
+        \begin{equation}
+        x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
+        \end{equation}
+    \end{minipage}
     \end{nofillbox}
     \begin{nofillbox}{Stochastic, individual-based simulations with \textit{SLiM 5}}
       add some simple equations of the stochatic infection process and screen shot of SLiM cycling behaviour. Present joint genealogies.
