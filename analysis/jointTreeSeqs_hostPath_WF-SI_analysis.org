@@ -63,7 +63,7 @@ N_host = 1000
 cV = 0.6
 beta=0.1
 
-dir = str(here()) + "/slim/trees/jointTreeSeqs" + f"/HostPathogen_WF_SI_Nhost{N_host}_cV{cV}_beta{beta}"
+dir = str(here()) + "/slim/trees/jointTreeSeqs" + f"/HostPathogen_WF_SI_Nhost{N_host}_cV{cV}_beta{beta}_G{G}"
 hostFilePath = str(dir + "/2621198558689426311_HostTreeSeq.trees")
 pathogenFilePath = str(dir + "/2621198558689426311_PathogenTreeSeq.trees")
 #+end_src
@@ -81,21 +81,24 @@ from dataclasses import dataclass, field
 class jointTreeSeq:
     hts: tskit.TreeSequence
     pts: tskit.TreeSequence
-    # params: dict    # model parameters
     infPairs: dict   # infected pairs
+    params: dict    # model parameters
 
     @classmethod
     def load(cls, host_file, patho_file):
         hts, pts = tskit.load(host_file), tskit.load(patho_file)
 
-        infDict = pts.metadata['SLiM']['user_metadata']
+        infDict = pts.metadata['SLiM']['user_metadata']['InfDict']
         infPairs = {int(k): int(v[0]) for k, v in infDict.items()}    # add list of integers later on
 
         # parse parameters from metadata as well later
+        params = pts.metadata['SLiM']['user_metadata']['params']
         
         # return cls(hts, pts, params, pairs)
-        return cls(hts, pts, infPairs)
+        return cls(hts, pts, infPairs, params)
 #+end_src
+
+add more class methods to simplify and maybe calculate the coalescent times.
 
 #+begin_src python :session :results output
 j = jointTreeSeq.load(hostFilePath, pathogenFilePath)
@@ -137,5 +140,54 @@ print(j.pts)
 ╚═══════════╧═════╧════════╧════════════╝
 #+end_example
 
+#+begin_src python :session :results output
+import glob, os
+
+# Helper function to finds the simulation directory for the params combination.  
+def get_directory(N_host, cV, beta, G):
+    baseDir = str(here() + "/slim/trees/jointTreeSeqs")
+    dirString = f"/HostPathogen_WF_SI_Nhost{N_host}_cV{cV}_beta{beta}_G{G}"
+    d = str(baseDir + dirString)
+     if not os.path.isdir(d):
+         raise FileNotFoundError(d)
+     return d
+    
+# Function to get the list of unique list of host-pathogen tree Seq files
+def get_hostPathFilePairs(N_host, cV, beta, G):
+    """ Returns dictionary of host and Pathogen filenames from param dir"""
+    params = {"N_host": N_host, "cV": cV, "beta": beta, "G": G}
+    d = get_directory(N_host, cV, beta, G)
+    print(d)
+    
+    pairs = []
+    for hFile in sorted(glob.glob(f"{d}/*_HostTreeSeq.trees")):
+        seed = os.path.basename(hFile).split("_")[0]
+        pFile = f"{d}/{seed}_PathogenTreeSeq.trees"
+        if not os.path.exists(pFile):
+            print(f"PathogenFile not present for seed {seed}.")
+            continue
+        pairs.append((hFile, pFile))
+        
+    return {"params": params, "FilePairs": pairs}
+#+end_src
+
+#+begin_src python :session :results output
+N_host = 1000
+cV = 0.6
+beta=0.1
+
+HostPathFiles = get_hostPathFilePairs(N_host, cV, beta, G)
+
+jts_list = []
+
+params = HostPathFiles['params']
+
+jts = 
+for h, p in HostPathFiles['FilePairs']:
+    j = jointTreeSeq.load(h, p)
+    jts_list.append(j)
+
+print(jts_list)
+#+end_src
 ** TODO Simplify joint treeSeqs based on infPairs
 ** TODO Calculate pairwise coalescent times T? or sample n

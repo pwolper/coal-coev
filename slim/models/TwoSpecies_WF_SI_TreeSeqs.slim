@@ -183,13 +183,18 @@ if (g == G) {
     if (host.treeSeqCoalesced()) {
         catn("Host coalesced at host cycle " + host.cycle);
 
-        pairs = Dictionary();
+        InfDict = Dictionary();
         for (path in p2.individuals)
-            pairs.setValue(asString(path.pedigreeID), path.tag);   // {pathogen pedID: host pedID}
+            InfDict.setValue(asString(path.pedigreeID), path.tag);   // {pathogen pedID: host pedID}
+
+        params = Dictionary("N_host", N_host, "cV", c_v, "beta", beta, "G", G);
+        catn(params);
+        md = Dictionary("InfDict", InfDict, "params", params);
+        
 
 		if (!exists("slimgui")) {
             catn("pwd: " + getwd());
-            dir = paste0("./trees/jointTreeSeqs/HostPathogen_WF_SI" + "_Nhost" + N_host + "_cV" + c_v + "_beta" + beta);
+            dir = paste0("./trees/jointTreeSeqs/HostPathogen_WF_SI" + "_Nhost" + N_host + "_cV" + c_v + "_beta" + beta + "_G" + G);
 			catn("Dir: " + dir);
             if (!fileExists(dir)) {createDirectory(dir);}
 			
@@ -198,7 +203,7 @@ if (g == G) {
 			catn("Host File written: " + hostFile);
 			
 			pathogenFile = paste0(dir + "/" +  getSeed() +"_PathogenTreeSeq" + ".trees");
-			pathogen.treeSeqOutput(pathogenFile, metadata=pairs);
+			pathogen.treeSeqOutput(pathogenFile, metadata=md);
 			catn("Pathogen File written: "  + pathogenFile);
 		}
         community.simulationFinished();
