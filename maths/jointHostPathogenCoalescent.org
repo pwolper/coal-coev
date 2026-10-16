@@ -96,6 +96,7 @@ The cases inbetween represent the endemic disease equilibrium, where the disease
 $$R_0 = c_v e^{\beta G} > 1$$, for $$c_v > e^{-\beta G}$$
 
 *add R0 number*
+#+attr_latex:
 
 
 
@@ -120,72 +121,6 @@ $$x^{*0}:=  \left. x^* \right|_{\beta G=0}=\frac{2c_v-1}{c_v^2}$$.
 
 As the probability of vertical transmission $c_v \in [0,1]$, this results in $x^{*0} > 0$ only if $c_v > 0.5$, and $x^{*0} = 1$ for $c_v = 1$. In strict absence of vertical transmission the pathogen tracks the $N$ hosts coalescent tree with a number of infected $X = x^{*0}/N = \left(\frac{2c_v -1}{c^2_v}\right)N$, as a function of the probability of vertical transmission. 
 #+end_tcolorbox
-** Pairwise coalescent probability
-The probability that two randomly sampled pathogen lineages coalesce depends on both hoizontal and vertical transmission. Coalescence can happen either within an epidemic clade deriving from each founding offspring infected (with probability $\pi$) or following host coalescence with vertical transmission in both host infected offspring. In the later case the probability is $1/N$, such that
-
-$$p_c = P(\text{coalescence of two pathogen lineages with one host generation}) = \pi + (1-\pi)\frac{1}{N}.$$
-
-Following the derivation of $\pi$ from a Pólya urn model (see appendix), we obtain
-$$\pi = \frac{j}{j+I-1}\frac{2}{I+1}$$.
-
-Expecting $I = Nc_v x^*$ founding infected and $j = Nx^* - I = N(1-c_v)x^*$ newly infecteds, such that in leading order (?)
-
-$$\pi = \frac{N(1-c_v)x^*}{N x^* - 1} \frac{2}{c_v x^* N + 1} \approx \frac{2(1-c_v)}{c_v x^*}\frac{1}{N}$$
-
-the coalescence probability becomes
- 
-$$p_c\approx \frac{1}{N}\left(1+\frac{2(1-c_v)}{c_vx^*}\right), $$
-
-which become finally after substituting eqn for $x^*$:
-
-$$p_c\approx \frac{1}{N}\left[1+\frac{2(1-c_v)\left[1-(1-c_v)e^{-\beta G}\right]}{c_v-(1-c_v)e^{-\beta G}}\right]$$
-
-*** Ancestral process $A_n$
-Ancestral process $A_n$ denotes the number of pathogen lineages $n$ generations backwards in time, decreating whenever two lineages coalesce. Suppose you start with $k$ pathogen samples at the present generation, the number of lineages starts  $A_0=k$, and goes through the process $k \rightarrow k-1 \rightarrow k-2 \rightarrow \cdots \rightarrow2 \rightarrow1$. If $N$ is large that higher order terms disappear $p_c = \mathcal{O}(N^{-1}) << 1$, the ancestral process can be defined as 
-
-$$P(A_{n+1}=A_n-1\mid A_n) = p_c {A_n\choose2}$$
-
-gives you the transition probability of the lineage-counting process, from that, you can construct the entire ancestral process:
-
-$$ n \xrightarrow{\lambda_n} n-1 \xrightarrow{\lambda_{n-1}} n-2 \rightarrow \cdots \xrightarrow{\lambda_2} 1.$$
-
-where $\lambda_k$ is the coalescence rate when there are $k$ ancestral lineages.
-Suppose there are currently $k$ ancestral lineages. There are ${k\choose2}$ possible pairs, and each pair coalesces with probability $p_c$. Probability of a coalescent event when there are $k$ lineages
-
-$$\lambda_k = p_c {k\choose 2} = p_c\frac{k(k-1)}{2}$$
-
-with waiting times $T_k$ until the next coalescence approximately geometric (?) distributed in continuous time ($A_n = A_t$) following $P(T_k=t\mid A=k) = (1-\lambda_k)^{t-1}\lambda_k$ with $t=1,2, \ldots$, and an expected value of
-
-$$E[T_k] = \frac{1}{\lambda_k} = \frac{2}{p_c k(k-1)}.$$
-
-Define $T_{n}$ as the time backwards to the most recent common ancestor of $n$ samples, where $T_k$ is the waiting time distribution for the process to go from $k$ lineages to $k-1$. The expectation $E[T_n]$ derives from summing over all $T_k$ down to $k=1$ lineage. For a large sample size $n$, we get the following [fn:: where the final equality follows from $\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}$]:
-
-\begin{align}
-E[T_{n}] &= \sum_{k=2}^n E[T_k] = \frac{2}{p_c}\sum_{k=2}^n\frac{1}{k(k-1)} = \frac{2}{p_c} \left(1-\frac1n\right).
-\end{align}
-
-For large $n$, this approaches $E[T_{n}]\approx 2/p_c$.
-
-#+ATTR_LATEX: :options [title=The Wright-Fisher model and Kingman's coalescent]
-#+begin_tcolorbox
-Below is the derivation of the coalescence times for a haploid Wright-Fisher model if $p_c=1/N$
-then
-$$
-P(A_{n+1}=k-1\mid A_n=k)
-\simeq \frac{k(k-1)}{2N}.
-$$
-and
-$$
-E[T_k]=\frac{2N}{k(k-1)}.
-$$
-The time to the most recent common ancestor becomes:
-$$E[T_n] = 2N\left(1-\frac1n\right).$$
-And for large sample size $n$, this is the familiar Kingman coalescent result.
-$$E[T_{n}]\approx 2N.$$
-#+end_tcolorbox
-** TODO Joint coalescent trees
-Add host-pathogen coalescence from simulations of joint tree-Sequences in SLiM.
-
 * Stochastic process
 Each host individual makes contact with another host individual at rate $\beta$, thus the waiting time between an individuals contacts is $\tau \sim \text{Exp}(\beta)$ and the number of contacts a host makes in a time interval of $t$ is distributed $C \sim \text{Poisson}(\beta \Delta t)$. For $J_t$ independent infected hosts, the number of contacts made by the infected individuals within one tick of interval ($\Delta t = 1$), follows:
 
@@ -225,6 +160,73 @@ The above model is implemented as a individual-based, stochastic model with host
 Host reproducing following WF dynamics can pass pathogens on to their offspring if infected as vertical transmission with probability $c_v$. We implement the epidemiological model as a stochastic, individual-based model as follows below.
 
 In our simulation for each tick we draw the number of effective contacts, sample $C_\text{eff}$ the infecting individuals and target hosts with replacement. To not allow susceptibles to be contacted twice in one tick (they can only be infected once), we keep only the first contact, removing duplicates. We then add a horizontally transmitted pathogen as a clone of the infecting indvidual.
+* Pairwise coalescent probability
+The probability that two randomly sampled pathogen lineages coalesce depends on both hoizontal and vertical transmission. Coalescence can happen either within an epidemic clade deriving from each founding offspring infected (with probability $\pi$) or following host coalescence with vertical transmission in both host infected offspring. In the later case the probability is $1/N$, such that
+
+$$p_c = P(\text{coalescence of two pathogen lineages with one host generation}) = \pi + (1-\pi)\frac{1}{N}.$$
+
+Following the derivation of $\pi$ from a Pólya urn model (see appendix), we obtain
+$$\pi = \frac{j}{j+I-1}\frac{2}{I+1}$$.
+
+Expecting $I = Nc_v x^*$ founding infected and $j = Nx^* - I = N(1-c_v)x^*$ newly infecteds, such that in leading order (?)
+
+$$\pi = \frac{N(1-c_v)x^*}{N x^* - 1} \frac{2}{c_v x^* N + 1} \approx \frac{2(1-c_v)}{c_v x^*}\frac{1}{N}$$
+
+the coalescence probability becomes
+ 
+$$p_c\approx \frac{1}{N}\left(1+\frac{2(1-c_v)}{c_vx^*}\right), $$
+
+which become finally after substituting eqn for $x^*$:
+
+$$p_c\approx \frac{1}{N}\left[1+\frac{2(1-c_v)\left[1-(1-c_v)e^{-\beta G}\right]}{c_v-(1-c_v)e^{-\beta G}}\right]$$
+
+** Ancestral process $A_n$
+Ancestral process $A_n$ denotes the number of pathogen lineages $n$ generations backwards in time, decreating whenever two lineages coalesce. Suppose you start with $k$ pathogen samples at the present generation, the number of lineages starts  $A_0=k$, and goes through the process $k \rightarrow k-1 \rightarrow k-2 \rightarrow \cdots \rightarrow2 \rightarrow1$. If $N$ is large that higher order terms disappear $p_c = \mathcal{O}(N^{-1}) << 1$, the ancestral process can be defined as 
+
+$$P(A_{n+1}=A_n-1\mid A_n) = p_c {A_n\choose2}$$
+
+gives you the transition probability of the lineage-counting process, from that, you can construct the entire ancestral process:
+
+$$ n \xrightarrow{\lambda_n} n-1 \xrightarrow{\lambda_{n-1}} n-2 \rightarrow \cdots \xrightarrow{\lambda_2} 1.$$
+
+where $\lambda_k$ is the coalescence rate when there are $k$ ancestral lineages.
+Suppose there are currently $k$ ancestral lineages. There are ${k\choose2}$ possible pairs, and each pair coalesces with probability $p_c$. Probability of a coalescent event when there are $k$ lineages
+
+$$\lambda_k = p_c {k\choose 2} = p_c\frac{k(k-1)}{2}$$
+
+with waiting times $T_k$ until the next coalescence approximately geometric (?) distributed in continuous time ($A_n = A_t$) following $P(T_k=t\mid A=k) = (1-\lambda_k)^{t-1}\lambda_k$ with $t=1,2, \ldots$, and an expected value of
+
+$$E[T_k] = \frac{1}{\lambda_k} = \frac{2}{p_c k(k-1)}.$$
+
+Define $T_{n}$ as the time backwards to the most recent common ancestor of $n$ samples, where $T_k$ is the waiting time distribution for the process to go from $k$ lineages to $k-1$. The expectation $E[T_n]$ derives from summing over all $T_k$ down to $k=1$ lineage. For a large sample size $n$, we get the following [fn:: where the final equality follows from $\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}$]:
+
+\begin{align}
+E[T_{n}] &= \sum_{k=2}^n E[T_k] = \frac{2}{p_c}\sum_{k=2}^n\frac{1}{k(k-1)} = \frac{2}{p_c} \left(1-\frac1n\right).
+\end{align}
+
+For large $n$, this approaches $E[T_{n}]\approx 2/p_c$.
+
+*** Exkurs: Kingman's Coalescent
+#+ATTR_LATEX: :options [title=The Wright-Fisher model and Kingman's coalescent]
+#+begin_tcolorbox
+Below is the derivation of the coalescence times for a haploid Wright-Fisher model if $p_c=1/N$
+then
+$$
+P(A_{n+1}=k-1\mid A_n=k)
+\simeq \frac{k(k-1)}{2N}.
+$$
+and
+$$
+E[T_k]=\frac{2N}{k(k-1)}.
+$$
+The time to the most recent common ancestor becomes:
+$$E[T_n] = 2N\left(1-\frac1n\right).$$
+And for large sample size $n$, this is the familiar Kingman coalescent result.
+$$E[T_{n}]\approx 2N.$$
+#+end_tcolorbox
+** TODO Joint coalescent trees
+Add host-pathogen coalescence from simulations of joint tree-Sequences in SLiM.
+
 * Coding: Deterministic behaviour and calculations :noexport:
 #+begin_src python :session :results value :exports none :eval no-export
 import numpy as np

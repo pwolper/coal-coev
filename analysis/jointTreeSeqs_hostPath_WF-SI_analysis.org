@@ -1,0 +1,141 @@
+#+title: Joint host-pathogen coalescent genealogies
+#+setupfile: ~/.doom.d/setup-files/latex.setup
+
+This document contains the code to run the SLiM simulations and analyze the tree sequences.
+
+#+begin_src python :session :results output
+import tskit
+#+end_src
+
+* Running SLiM simulations 
+#+begin_src sh :results output  
+cd ../slim/
+
+slim -d N_host=1000 -d c_v=0.6 -d beta=0.1 -d G=15 ../slim/models/TwoSpecies_WF_SI_TreeSeqs.slim 
+
+#parallel --verbose -j 5 slim -d N={1} -d r={2} -d reps={3} models/WF_haploid_fullDFE.slim ::: 10000 ::: 1e-6 1e-7 1e-8 ::: $(seq 100)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+// Initial random seed:
+2621198558689426311
+
+// RunInitializeCallbacks():
+initializeSLiMModelType(modelType = 'nonWF');
+initializeSpecies(tickModulo = 16, avatar = "🌾", color = "green");
+initializeSLiMOptions(keepPedigrees = T);
+initializeTreeSeq(checkCoalescence = T);
+initializeMutationType(1, 0.5, "f", 0);
+initializeGenomicElementType(1, m1, 1);
+initializeChromosome(1, 1, 'H');
+initializeGenomicElement(g1);
+initializeMutationRate(0);
+initializeRecombinationRate(0);
+initializeSpecies(avatar = "🦠", color = "red");
+initializeSLiMOptions(keepPedigrees = T);
+initializeTreeSeq(checkCoalescence = T);
+initializeMutationType(2, 0.5, "f", 0);
+initializeGenomicElementType(2, m2, 1);
+initializeChromosome(1, 1, 'H');
+initializeGenomicElement(g2);
+initializeMutationRate(0);
+initializeRecombinationRate(0);
+
+// Starting run at tick <start>:
+1 
+
+Params:  host N=1000, c_v=0.6, beta=0.1, G=15
+ -- early() --
+Initial infection in host 725
+Host coalesced at host cycle 783
+pwd: /home/pwolper/popgen/coal-coev/slim
+Dir: ./trees/jointTreeSeqs/HostPathogen_WF_SI_Nhost1000_cV0.6_beta0.1
+Host File written: ./trees/jointTreeSeqs/HostPathogen_WF_SI_Nhost1000_cV0.6_beta0.1/2621198558689426311_HostTreeSeq.trees
+Pathogen File written: ./trees/jointTreeSeqs/HostPathogen_WF_SI_Nhost1000_cV0.6_beta0.1/2621198558689426311_PathogenTreeSeq.trees
+#+end_example
+
+* Reading and processing tree sequences
+#+begin_src python :session
+from pyprojroot import here
+
+N_host = 1000
+cV = 0.6
+beta=0.1
+
+dir = str(here()) + "/slim/trees/jointTreeSeqs" + f"/HostPathogen_WF_SI_Nhost{N_host}_cV{cV}_beta{beta}"
+hostFilePath = str(dir + "/2621198558689426311_HostTreeSeq.trees")
+pathogenFilePath = str(dir + "/2621198558689426311_PathogenTreeSeq.trees")
+#+end_src
+
+#+RESULTS:
+: None
+
+The \texttt{dataclass} /JointTreeSeq/ will hold the host and pathogen tree sequences.
+#+begin_src python :session :results output
+import tskit, pyslim
+from dataclasses import dataclass, field
+
+
+@dataclass
+class jointTreeSeq:
+    hts: tskit.TreeSequence
+    pts: tskit.TreeSequence
+    # params: dict    # model parameters
+    infPairs: dict   # infected pairs
+
+    @classmethod
+    def load(cls, host_file, patho_file):
+        hts, pts = tskit.load(host_file), tskit.load(patho_file)
+
+        infDict = pts.metadata['SLiM']['user_metadata']
+        infPairs = {int(k): int(v[0]) for k, v in infDict.items()}    # add list of integers later on
+
+        # parse parameters from metadata as well later
+        
+        # return cls(hts, pts, params, pairs)
+        return cls(hts, pts, infPairs)
+#+end_src
+
+#+begin_src python :session :results output
+j = jointTreeSeq.load(hostFilePath, pathogenFilePath)
+print(j.pts)
+#+end_src
+
+#+begin_example
+╔═════════════════════════╗
+║TreeSequence             ║
+╠═══════════════╤═════════╣
+║Trees          │        1║
+╟───────────────┼─────────╢
+║Sequence Length│        1║
+╟───────────────┼─────────╢
+║Time Units     │    ticks║
+╟───────────────┼─────────╢
+║Sample Nodes   │    1,600║
+╟───────────────┼─────────╢
+║Total Size     │235.3 KiB║
+╚═══════════════╧═════════╝
+╔═══════════╤═════╤════════╤════════════╗
+║Table      │Rows │Size    │Has Metadata║
+╠═══════════╪═════╪════════╪════════════╣
+║Edges      │1,201│37.5 KiB│          No║
+╟───────────┼─────┼────────┼────────────╢
+║Individuals│  800│79.9 KiB│         Yes║
+╟───────────┼─────┼────────┼────────────╢
+║Migrations │    0│ 8 Bytes│          No║
+╟───────────┼─────┼────────┼────────────╢
+║Mutations  │    0│ 1.2 KiB│          No║
+╟───────────┼─────┼────────┼────────────╢
+║Nodes      │2,002│73.9 KiB│         Yes║
+╟───────────┼─────┼────────┼────────────╢
+║Populations│    3│ 2.3 KiB│         Yes║
+╟───────────┼─────┼────────┼────────────╢
+║Provenances│    1│11.3 KiB│          No║
+╟───────────┼─────┼────────┼────────────╢
+║Sites      │    0│16 Bytes│          No║
+╚═══════════╧═════╧════════╧════════════╝
+#+end_example
+
+** TODO Simplify joint treeSeqs based on infPairs
+** TODO Calculate pairwise coalescent times T? or sample n
