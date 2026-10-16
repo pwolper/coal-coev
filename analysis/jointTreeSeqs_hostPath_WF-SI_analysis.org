@@ -178,16 +178,35 @@ beta=0.1
 
 HostPathFiles = get_hostPathFilePairs(N_host, cV, beta, G)
 
-jts_list = []
-
 params = HostPathFiles['params']
 
-jts = 
+jts = [] 
 for h, p in HostPathFiles['FilePairs']:
     j = jointTreeSeq.load(h, p)
-    jts_list.append(j)
+    jts.append(j)
 
-print(jts_list)
+## Lopp over several combinations
+# from itertools import product
+# 
+# N_hosts = [1000]
+# cVs     = [0.5, 0.6]
+# betas   = [0.1, 0.3]
+# G       = 20
+# 
+# jts = {}   # (N_host, cV, beta, G) -> list of jointTreeSeq
+# 
+# for N_host, cV, beta in product(N_hosts, cVs, betas):
+#     files = get_hostPathFilePairs(N_host, cV, beta, G)
+#     jts[(N_host, cV, beta, G)] = [jointTreeSeq.load(h, p)
+#                                   for h, p in files["FilePairs"]]
 #+end_src
+
+Implement multiple parameter combinations, eg. increasing c_v for the Roscoff conference Poster
 ** TODO Simplify joint treeSeqs based on infPairs
+#+begin_src python :session :results output
+j = jts[0]
+
+# add code to simplify to matching host and pathogen individuals
+
+#+end_src
 ** TODO Calculate pairwise coalescent times T? or sample n
