@@ -95,7 +95,7 @@ The cases inbetween represent the endemic disease equilibrium, where the disease
 
 $$R_0 = c_v e^{\beta G} > 1$$, for $$c_v > e^{-\beta G}$$
 
-$$x^* = \frac{c_V - e^{-\beta G}}{c_v(1-e^{- \beta G})} = \frac{c_v - R_o0}{c_V ()}$$
+$$x^* = \frac{c_V - e^{-\beta G}}{c_v(1-e^{- \beta G})} = \frac{R_0 - 1}{R_0 - c_v}$$
 *add R0 number*
 
 
