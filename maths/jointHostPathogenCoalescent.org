@@ -179,7 +179,7 @@ $$p_c\approx \frac{1}{N}\left(1+\frac{2(1-c_v)}{c_vx^*}\right), $$
 
 which become finally after substituting eqn for $x^*$:
 
-$$p_c\approx \frac{1}{N}\left[1+\frac{2(1-c_v)\left[1-(1-c_v)e^{-\beta G}\right]}{c_v-(1-c_v)e^{-\beta G}}\right]$$
+$$p_c\approx \frac{1}{N}\left(1+\frac{2(1-c_v)(1-e^{-\beta G})}{c_v-e^{-\beta G}}\right)$$
 
 ** Ancestral process $A_n$
 Ancestral process $A_n$ denotes the number of pathogen lineages $n$ generations backwards in time, decreating whenever two lineages coalesce. Suppose you start with $k$ pathogen samples at the present generation, the number of lineages starts  $A_0=k$, and goes through the process $k \rightarrow k-1 \rightarrow k-2 \rightarrow \cdots \rightarrow2 \rightarrow1$. If $N$ is large that higher order terms disappear $p_c = \mathcal{O}(N^{-1}) << 1$, the ancestral process can be defined as 
