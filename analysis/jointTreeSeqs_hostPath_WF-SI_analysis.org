@@ -9,7 +9,7 @@ cd ../slim/
 
 #slim -d N_host=1000 -d c_v=0.6 -d beta=0.1 -d G=15 ../slim/models/TwoSpecies_WF_SI_TreeSeqs.slim 
 
-parallel --verbose --dry-run -j 5 slim -d N_host=1000 -d c_v=0.6 -d beta=0.1 -d G=15 -d reps={1} ../slim/models/TwoSpecies_WF_SI_TreeSeqs.slim ::: $(seq 20)
+parallel --verbose -j 5 slim -d N_host=1000 -d c_v=0.6 -d beta=0.1 -d G=15 -d reps={1} ../slim/models/TwoSpecies_WF_SI_TreeSeqs.slim ::: $(seq 20)
 #+end_src
 
 #+RESULTS:
@@ -169,17 +169,37 @@ def tmrcas(j):
             "pathogen_mean_t2": pathogen_mean_t2}
 #+end_src
 
+#+begin_src python :session :results output 
+def x_star(c_v, beta, G):
+    """Stationary infected fraction; 0 if c_v <= E (pathogen goes extinct)."""
+    E = np.exp(-beta * G)
+    x = (c_v - E) / (c_v * (1 - E))
+    return np.where(x > 0, x, 0.0)
+
+def p_c(N, c_v, beta, G):
+    """Pairwise coalescence probability of infected samples
+    Returns inf at/below the extinction threshold (c_v <= exp(-beta*G))."""
+    E = np.exp(-beta * G)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        val = (1 + 2 * (1 - c_v) * (1 - E) / (c_v - E)) / N
+    return np.where(c_v > E, val, np.inf)
+
+def E_Tn(n, pc):
+    """Expected Tn of n sampled infecting pathogens in host generations
+    E[T_n] = (2/p_c) * (1 - 1/n).  Returns inf at/below the extinction threshold."""
+    return 2.0 * (1.0 - 1.0 / n) / pc
+#+end_src
+
 #+RESULTS:
 
-
+* Results
+*** One parameter combination
 #+begin_src python :session :results output
-
 N_host = 1000
-cV = 0.6
+cV = 0.3
 beta=0.1
 G = 15
 n = 100
-reps = 100
 
 HostPathFiles = get_hostPathFilePairs(N_host, cV, beta, G)
 params = HostPathFiles['params']
@@ -187,7 +207,7 @@ params = HostPathFiles['params']
 jts = [] 
 data = []
 
-for h, p in HostPathFiles['FilePairs'][:reps]:
+for h, p in HostPathFiles['FilePairs']:
     j = jointTreeSeq.load(h, p).remove_vacants().sampled_paired_infected(n=n)
     jts.append(j)
     row = {**j.params, **tmrcas(j)}
@@ -198,80 +218,251 @@ df = pd.DataFrame(data)
 print(df)
 #+end_src
 
+#+begin_src python :session :results output
+print(df.columns)
+df['host_tmrca_gen'] = df['host_tmrca'] / G
+df['pathogen_tmrca_gen'] = df['pathogen_tmrca'] / G
+
+df['x*'] = x_star(df['cV'], df['beta'], df['G'])
+df["p_c"] = p_c(df['N_host'], df["cV"], df["beta"], df["G"])
+df["ETn"] = E_Tn(n, df['p_c'])
+
+print(df)
+#+end_src
+
 #+RESULTS:
 #+begin_example
-'HostPathogen_WF_SI_Nhost1000_cV0.6_beta0.1_G15' contains 100 reps
-     G  N_host  beta   cV  host_tmrca  host_mean_t2  pathogen_tmrca  pathogen_mean_t2
-0   15    1000   0.1  0.6     10607.0   5866.673131         10629.0       6539.610909
-1   15    1000   0.1  0.6     17199.0  10731.820606         10751.0       5448.542323
-2   15    1000   0.1  0.6     14495.0   8598.965657          5983.0       3439.184343
-3   15    1000   0.1  0.6     18559.0  11426.000808         11631.0       4641.424545
-4   15    1000   0.1  0.6     16575.0   8381.381818          6399.0       3470.431414
-..  ..     ...   ...  ...         ...           ...             ...               ...
-95  15    1000   0.1  0.6     15359.0   8838.768485         19391.0       9404.280505
-96  15    1000   0.1  0.6     17855.0  10741.258990         21630.0      12767.861111
-97  15    1000   0.1  0.6     10975.0   7849.247677         14586.0       8288.240505
-98  15    1000   0.1  0.6     20223.0  13024.468687         17631.0       7454.630606
-99  15    1000   0.1  0.6     16255.0   6637.711515          5247.0       3059.473333
+Index(['G', 'N_host', 'beta', 'cV', 'host_tmrca', 'host_mean_t2',
+       'pathogen_tmrca', 'pathogen_mean_t2', 'host_tmrca_gen',
+       'pathogen_tmrca_gen'],
+      dtype='str')
+      G  N_host  beta   cV  ...  pathogen_tmrca_gen        x*       p_c         ETn
+0    15    1000   0.1  0.4  ...           71.400000  0.569175  0.006271  315.749683
+1    15    1000   0.1  0.4  ...          248.466667  0.569175  0.006271  315.749683
+2    15    1000   0.1  0.4  ...          262.333333  0.569175  0.006271  315.749683
+3    15    1000   0.1  0.4  ...          159.933333  0.569175  0.006271  315.749683
+4    15    1000   0.1  0.4  ...          161.000000  0.569175  0.006271  315.749683
+..   ..     ...   ...  ...  ...                 ...       ...       ...         ...
+595  15    1000   0.1  0.6  ...          274.066667  0.808522  0.002649  747.423789
+596  15    1000   0.1  0.6  ...          790.333333  0.808522  0.002649  747.423789
+597  15    1000   0.1  0.6  ...          664.466667  0.808522  0.002649  747.423789
+598  15    1000   0.1  0.6  ...          873.066667  0.808522  0.002649  747.423789
+599  15    1000   0.1  0.6  ...          658.066667  0.808522  0.002649  747.423789
 
-[100 rows x 8 columns]
+[600 rows x 13 columns]
 #+end_example
 
-
-Implement multiple parameter combinations, eg. increasing c_v for the Roscoff conference Poster
-** TODO Coalescence times
 #+begin_src python :session :results output
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-df['host_tmrca_gen'] = df['host_tmrca'] / G
-
-fig, ax = plt.subplots(figsize=(5,5))
-# sns.scatterplot(data=df, x="pathogen_tmrca", y="host_tmrca_gen", alpha=0.6, ax = ax)
-# ax.set(xscale='log', yscale='log')
-
-# sns.histplot(data=df, x="pathogen_tmrca", y="host_tmrca_gen", alpha=0.6, ax = ax)
-
-sns.despine()
-plt.show()
+x = x_star(0.8, beta, G)
+print(f"x* = {x}; e^{{-beta G}} = {np.exp(-1*beta*G)}")
 
 #+end_src
 
 #+RESULTS:
+: x* = 0.9281957708027829; e^{-beta G} = 0.22313016014842982
 
+Plotting the coalescence times of joint host-pathogen pairs.
 #+begin_src python :session :results output
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df['host_mean_t2_gen'] = df['host_mean_t2'] / G
+levels  = sorted(df["cV"].unique())
+colors  = dict(zip(levels, sns.color_palette("colorblind", len(levels))))
 
-fig, ax = plt.subplots(figsize=(5,5))
-sns.scatterplot(data=df, x="pathogen_mean_t2", y="host_mean_t2_gen", alpha=0.6, ax = ax)
+#sns.scatterplot(data=df, x="pathogen_tmrca", y="host_tmrca_gen", alpha=0.6, ax = ax)
 # ax.set(xscale='log', yscale='log')
+g = sns.JointGrid(data=df, x="host_tmrca_gen", y="pathogen_tmrca_gen",
+                  hue="cV", height=10, ratio=5, space=0.1)
+g.plot_joint(sns.scatterplot, s=28, alpha=0.65, palette=colors, edgecolor="white",
+             linewidth=0.3, rasterized=True, legend=True)
 
-# sns.histplot(data=df, x="pathogen_tmrca", y="host_tmrca_gen", alpha=0.6, ax = ax)
+g.plot_marginals(sns.kdeplot, palette=colors, fill=True, alpha=0.35, linewidth=1.2,
+                 common_norm=False, legend=False)
 
-sns.despine()
+levels  = sorted(df["cV"].unique())
+
+x_st = df.groupby("cV")["x*"].mean()
+ETn = df.groupby("cV")['ETn'].mean()
+
+for cv in levels:
+    g.ax_marg_y.axhline(E_Tn.loc[cv], color=colors[cv], lw=2, xmax=1.2, label=r'$E[T^i_n]')
+    g.ax_marg_x.axvline(N_host, color=colors[cv], lw=2, ymax=1.2)
+
+
+g.set_axis_labels(r"Host $T_n$", r"Pathogen $T_n$")
+
+
 plt.show()
-
 #+end_src
 
 #+RESULTS:
 
 *** Combinations of parameters
 #+begin_src python :session :results output
-## Loop over several combinations
-# from itertools import product
-# 
-# N_hosts = [1000]
-# cVs     = [0.5, 0.6]
-# betas   = [0.1, 0.3]
-# G       = 20
-# 
-# jts = {}   # (N_host, cV, beta, G) -> list of jointTreeSeq
-# 
-# for N_host, cV, beta in product(N_hosts, cVs, betas):
-#     files = get_hostPathFilePairs(N_host, cV, beta, G)
-#     jts[(N_host, cV, beta, G)] = [jointTreeSeq.load(h, p)
-#                                   for h, p in files["FilePairs"]]
+# Loop over several combinations
+N_hosts = [1000]
+cVs     = [0.3, 0.4, 0.6, 0.8]
+betas   = 0.1
+G       = 15
+
+reps = 100
+
+jointTreeSeqs = {}   # (N_host, cV, beta, G) -> list of jointTreeSeq
+data = []
+
+for cV in cVs:
+    print(N_host, cV, beta, G)
+    files = get_hostPathFilePairs(N_host, cV, beta, G)
+    jts = []
+    for h, p in files['FilePairs'][:reps]:
+        j = jointTreeSeq.load(h, p).remove_vacants().sampled_paired_infected(n=n)
+        jts.append(j)
+        row = {**j.params, **tmrcas(j)}
+        data.append(row)
+    jointTreeSeqs[(N_host, cV, beta, G)] = jts 
+
+
+df = pd.DataFrame(data)
+
+df['host_tmrca_gen'] = df['host_tmrca'] / G
+df['pathogen_tmrca_gen'] = df['pathogen_tmrca'] / G
+
+df['x*'] = x_star(df['cV'], df['beta'], df['G'])
+df["p_c"] = p_c(df['N_host'], df["cV"], df["beta"], df["G"])
+df["ETn"] = E_Tn(n, df['p_c'])
+
+print(df)
 #+end_src
+
+#+RESULTS:
+#+begin_example
+1000 0.3 0.1 15
+'HostPathogen_WF_SI_Nhost1000_cV0.3_beta0.1_G15' contains 326 reps
+1000 0.4 0.1 15
+'HostPathogen_WF_SI_Nhost1000_cV0.4_beta0.1_G15' contains 301 reps
+1000 0.6 0.1 15
+'HostPathogen_WF_SI_Nhost1000_cV0.6_beta0.1_G15' contains 302 reps
+1000 0.8 0.1 15
+'HostPathogen_WF_SI_Nhost1000_cV0.8_beta0.1_G15' contains 318 reps
+      G  N_host  beta   cV  ...  pathogen_tmrca_gen        x*       p_c          ETn
+0    15    1000   0.1  0.3  ...           33.133333  0.329827  0.015149   130.703222
+1    15    1000   0.1  0.3  ...           62.866667  0.329827  0.015149   130.703222
+2    15    1000   0.1  0.3  ...          134.333333  0.329827  0.015149   130.703222
+3    15    1000   0.1  0.3  ...          377.133333  0.329827  0.015149   130.703222
+4    15    1000   0.1  0.3  ...           27.133333  0.329827  0.015149   130.703222
+..   ..     ...   ...  ...  ...                 ...       ...       ...          ...
+395  15    1000   0.1  0.8  ...          638.866667  0.928196  0.001539  1286.817720
+396  15    1000   0.1  0.8  ...         2064.533333  0.928196  0.001539  1286.817720
+397  15    1000   0.1  0.8  ...          761.533333  0.928196  0.001539  1286.817720
+398  15    1000   0.1  0.8  ...          782.866667  0.928196  0.001539  1286.817720
+399  15    1000   0.1  0.8  ...         1172.200000  0.928196  0.001539  1286.817720
+
+[400 rows x 13 columns]
+#+end_example
+
+#+begin_src python :session :results output
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+levels  = sorted(df["cV"].unique())
+colors  = dict(zip(levels, sns.color_palette("colorblind", len(levels))))
+
+g = sns.JointGrid(data=df, y="host_tmrca_gen", x="pathogen_tmrca_gen",
+                  hue="cV", height=7, ratio=5, space=0.1,
+                  #marginal_ticks=True
+                  )
+g.plot_joint(sns.scatterplot, s=30, alpha=0.75, palette=colors, edgecolor="white",
+             linewidth=0.3, rasterized=True, legend=True)
+
+g.plot_marginals(sns.kdeplot, palette=colors, fill=True, alpha=0.35, linewidth=1.2,
+                 common_norm=False, legend=False)
+
+g.set_axis_labels(r"Pathogen $T_n$", r"Host $T_n$")
+
+levels  = sorted(df["cV"].unique())
+
+x_st = df.groupby("cV")["x*"].mean()
+ETn = df.groupby("cV")['ETn'].mean()
+
+for cv in levels:
+    g.ax_marg_x.axvline(ETn.loc[cv], color=colors[cv], lw=2, ymax=1.2, label=r'$E[T^i_n]')
+
+g.ax_marg_y.axhline(N_host, color='black', lw=2, xmax=1.2)
+
+
+for ax in (g.ax_joint, g.ax_marg_x, g.ax_marg_y):
+    for sp in ax.spines.values():
+        sp.set_visible(True)
+        
+leg = g.ax_joint.get_legend()
+leg.set_title(r"$c_v$  ($x^*$)")
+for txt, cv in zip(leg.texts, levels):          # legend entries follow sorted(cV)
+        txt.set_text(rf"$c_v$ = {cv:g},  $x^*$ = {x_st.loc[cv]:.2f}")
+plt.show()
+#+end_src
+
+#+RESULTS:
+#+begin_src python :session :results output
+sns.set_theme(style="ticks", context="paper", font_scale=1.3)
+plt.rcParams.update({"font.family": "sans-serif", "axes.linewidth": 0.8,
+                     "pdf.fonttype": 42, "svg.fonttype": "none"})
+ 
+LIM = (0, 4000)
+ 
+levels = sorted(df["cV"].unique())
+colors = dict(zip(levels, sns.color_palette("colorblind", len(levels))))
+x_st   = df.groupby("cV")["x*"].mean()
+ETn    = df.groupby("cV")["ETn"].mean()
+ 
+g = sns.JointGrid(data=df, y="host_tmrca_gen", x="pathogen_tmrca_gen",
+                  hue="cV", height=7, ratio=5, space=0.1)
+g.plot_joint(sns.scatterplot, s=30, alpha=0.75, palette=colors, edgecolor="white",
+             linewidth=0.3, rasterized=True, legend=True)
+g.plot_marginals(sns.kdeplot, palette=colors, fill=True, alpha=0.35, linewidth=1.2,
+                 common_norm=False, legend=False)
+ 
+g.set_axis_labels(r"Pathogen $T_n$", r"Host $T_n$")
+g.ax_joint.set(xlim=LIM, ylim=LIM)            # marginals share these axes
+ 
+# grid on the scatter
+g.ax_joint.grid(True, color="0.85", lw=0.6)
+g.ax_joint.set_axisbelow(True)
+ 
+# ---------------- reference lines: marginals + scatter ----------------
+for cv in levels:
+    g.ax_marg_x.axvline(ETn.loc[cv], color=colors[cv], lw=2)
+    g.ax_joint.axvline(ETn.loc[cv], color=colors[cv], lw=1.2, ls="--", zorder=1)
+ 
+# single label for the E[T_n] lines, placed at the first one
+x0 = ETn.loc[levels[-1]]
+g.ax_marg_x.annotate(r"$E[T_n]$", xy=(x0, 0.95),
+                     xycoords=g.ax_marg_x.get_xaxis_transform(),
+                     xytext=(-3, 0), textcoords="offset points",
+                     rotation=90, ha="right", va="top", color="0.2", fontsize=10)
+ 
+g.ax_marg_y.axhline(N_host, color="black", lw=2)
+g.ax_joint.axhline(N_host, color="black", lw=1.2, ls="--", zorder=1)
+g.ax_marg_y.annotate(r"$E[T_{Host}] \approx N_{host}$", xy=(-0.2, N_host),
+                     xycoords=g.ax_marg_y.get_yaxis_transform(),
+                     xytext=(0, 3), textcoords="offset points",
+                     ha="right", va="bottom", fontsize=10,
+                     #bbox=dict(fc="white", ec="none", alpha=0.7, pad=1)
+                     )
+ 
+# ---------------- full box on all panels ----------------
+for ax in (g.ax_joint, g.ax_marg_x, g.ax_marg_y):
+    for sp in ax.spines.values():
+        sp.set_visible(True)
+ 
+# ---------------- legend ----------------
+sns.move_legend(g.ax_joint, "upper right", title=r"$c_v$  ($x^*$)", frameon=False)
+for txt, cv in zip(g.ax_joint.get_legend().texts, levels):
+    txt.set_text(rf"$c_v$ = {cv:g},  $x^*$ = {x_st.loc[cv]:.2f}")
+ 
+plt.show()
+
+
+#+end_src
+
+#+RESULTS:
