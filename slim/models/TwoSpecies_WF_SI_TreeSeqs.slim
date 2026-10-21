@@ -94,6 +94,7 @@ species pathogen reproduction() {
 		// Frozen j, big-bang Contacts
 		Ce = rpois(1, (beta * J * S) / N_host); // what about using the total contact rate inspead of split onto susceptibles .
 															 // Universal contact, so infection process keeps running even when S = 0.
+															 
 		//catn(";\t Ce = Poisson((beta*J*S)/N) = " + Ce);
 		if (Ce > 0) {
 			infectors = sample(pathogens, Ce, replace=T); 	// pathogen from infecting host
