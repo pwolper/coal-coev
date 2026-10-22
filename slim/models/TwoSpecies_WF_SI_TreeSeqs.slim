@@ -3,9 +3,9 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-    if (!exists("N_host"))	defineConstant("N_host", 1000); //constant host population size
+    if (!exists("N_host"))	defineConstant("N_host", 100); //constant host population size
     if (!exists("beta"))	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
-    if (!exists("c_v"))	defineConstant("c_v", 1); //probability of vertical transmission
+    if (!exists("c_v"))	defineConstant("c_v", 0.8); //probability of vertical transmission
     if (!exists("G"))	defineConstant("G", 15); //relative epidemic time
 }
 
