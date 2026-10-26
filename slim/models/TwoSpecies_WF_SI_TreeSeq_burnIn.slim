@@ -1,0 +1,233 @@
+// Keywords: host-pathogen, Two-Species WF-SI model, joint coalescent trees
+
+species all initialize() {
+	initializeSLiMModelType("nonWF");
+	
+    if (!exists("N_host"))	defineConstant("N_host", 1000); //constant host population size
+    if (!exists("beta"))	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
+    if (!exists("c_v"))	defineConstant("c_v", 0.8); //probability of vertical transmission
+    if (!exists("G"))	defineConstant("G", 20); //relative epidemic time
+
+    if (!exists("runTime"))	defineConstant("runTime", 10); //runtime scaling of the simulation length (i.e. Burn-in) in ticks as factor of host N and pathogen generation cycles, 
+                                                           //eg. 10N(G+1) total ticks.
+}
+
+species host initialize() {
+	initializeSpecies(tickModulo=G+1, avatar="🌾", color='green');
+	initializeSLiMOptions(keepPedigrees=T);
+	initializeTreeSeq(checkCoalescence=T);
+
+	initializeMutationType("m1", 0.5, "f", 0.0); //neutral mutation type; not used...
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeChromosome(1, 1, type='H');
+	initializeGenomicElement(g1);
+	initializeMutationRate(0);
+	initializeRecombinationRate(0);
+}
+
+species pathogen initialize() {
+	initializeSpecies(tickModulo=1, avatar="🦠", color='red');
+	initializeSLiMOptions(keepPedigrees=T); //are pedigreeID of two species unique?
+	initializeTreeSeq(checkCoalescence=T);
+
+	initializeMutationType("m2", 0.5, "f", 0.0); //pathogen neutral mutation type
+	initializeGenomicElementType("g2", m2, 1.0);
+	initializeChromosome(1, 1, type='H');
+	initializeGenomicElement(g2);
+	initializeMutationRate(0);
+	initializeRecombinationRate(0);
+}
+
+
+
+species host reproduction() {
+	//catn("-- Host reproduction callback -- ");
+	hostLineageDict = Dictionary();
+	// Host WF reproduction step
+	parents = p1.sampleIndividuals(N_host, replace=T);
+	for (parent in parents) {
+		offspring = subpop.addCloned(parent);
+		offspring.color = parent.color;
+		offspring.tagL0 = parent.tagL0;
+		
+		parentID = asString(parent.pedigreeID);
+		hostLineageDict.setValue(parentID, c(hostLineageDict.getValue(parentID), offspring.pedigreeID)); // host.pedigreeIDs; {parent: offspring}
+	}
+	defineGlobal("hostLineageDict", hostLineageDict);
+	//catn(hostLineageDict);
+	self.active = 0;
+}
+
+species pathogen reproduction() {
+	//catn("-- Pathogen reproduction callback --");
+	
+	//vertical transmission after host reproduction
+	if (g == 0) {
+		//catn("\t\t - Vertical transmission (g = 0)");
+		//catn(hostLineageDict);
+		pathogens = p2.individuals;
+		
+		for (pathInd in p2.individuals) {
+			HostOffspring = hostLineageDict.getValue(asString(pathInd.tag));   // get vector of host offspring.pedigreeIDs from hostLineageDict {parent: offspring} from pathInd.tag, matching the host.parent.pedID.  
+			//cat("\t\t\tHost: " + pathInd.tag + " -->"); catn(" " + HostOffspring);
+			
+			if (size(HostOffspring) > 0) {
+				//catn(rbinom(size(HostOffspring), 1, asFloat(c_v)));
+				transmitted = HostOffspring[rbinom(size(HostOffspring), 1, asFloat(c_v)) == 1];
+				for (offspring in transmitted) {
+					verticalPathogen = subpop.addCloned(pathInd);
+					verticalPathogen.tag = offspring;
+					verticalPathogen.color = pathInd.color;
+				}
+			}
+		}
+	}
+	
+	else {
+		// Horizontal transmission
+		//catn("\t\t - Horizontal transmission - ");
+		
+		pathogens = p2.individuals;
+		J = size(pathogens);
+		//cat("\t\t\tJ = " + J); //cat("pathogen.tag: "); catn(pathogens.tag);
+		uninfectedHosts = p1.individuals[match(p1.individuals.pedigreeID, pathogens.tag) < 0]; //hosts whose pedigreeID is not in any pathogen tag. Use tag to mark hosts as infected later
+		S = size(uninfectedHosts);
+		//cat(";\t S = " + S); //cat("Un-infected Hosts: "); catn(uninfectedHosts); 
+		
+		// Frozen j, big-bang Contacts
+		Ce = rpois(1, (beta * J * S) / N_host); // what about using the total contact rate inspead of split onto susceptibles .
+															 // Universal contact, so infection process keeps running even when S = 0.
+															 
+		//catn(";\t Ce = Poisson((beta*J*S)/N) = " + Ce);
+		if (Ce > 0) {
+			infectors = sample(pathogens, Ce, replace=T); 	// pathogen from infecting host
+			//cat("\t\t\tInfecting Pathogen from Host: "); catn(infectors.tag);
+			targets = sample(uninfectedHosts, Ce, replace=T); // tag of the receiving host. list of inds instead
+			//cat("\t\t\tTarget Host: "); catn(targets.pedigreeID);
+			
+			// A S host hit twice in one tick. Should only get infected once by the first infection (or overwritten?)
+			keep      = (match(targets, targets) == seqAlong(targets));
+			infectors = infectors[keep];
+			//cat("\t\t\t infectors[keep] = "); catn(size(infectors.tag));
+			targets   = targets[keep];
+			//cat("\t\t\ttargets[keep] = "); catn(size(targets.pedigreeID));
+			
+			for (i in seqAlong(infectors)) {
+				newPath = p2.addCloned(infectors[i]);
+				newPath.tag = targets[i].pedigreeID;
+				newPath.color = targets[i].color;// add more coloring matching clades
+			}
+		}
+		// Alternatively non-big-bang callback and non-frozen within tick 
+		// Simulate all contacts per tick at once and randomly sample infected and susceptible pairs to transmit individual pathogens.
+		// OR alternatively change call back to per individual call back, so we can unfreeze the number of J and S within the tick .
+		// Nicer but probably slower? 
+	
+	}
+	
+	self.active = 0;
+}
+
+
+ticks all 1 early() {
+    catn("Params:  " + "host N=" + N_host + ", c_v=" + c_v + ", beta=" + beta + ", G=" + G);
+    
+	catn(" -- early() --");
+	// Host creation
+	host.addSubpop("p1", N_host, haploid=T);
+	p1.individuals.tagL0 = F; //Infection status. F for healthy, T for infected
+	p1.individuals.color = colors(p1.individualCount, "turbo");
+	p1.individuals.tag = seqLen(p1.individualCount);
+	//catn("Hosts: "); catn(p1.individuals.tag);
+	
+	//initial infection
+	pathogen.addSubpop("p2", 1);
+	newHost = p1.sampleIndividuals(1);
+	newHost.tagL0 = T; //newHost.color = "red";
+	catn("Initial infection in host " + newHost.pedigreeID);
+	p2.individuals.color = newHost.color;
+	p2.individuals.tag = newHost.pedigreeID; //tag pathogen with host.pedigreeID
+
+}
+
+ticks all 1: first() {
+	defineGlobal("g", (community.tick - 1) % (G+1));
+	//catn("\n\n--- " + host.cycle + "." + asInteger(g) + " first() ---");	
+	//if (g == 0) {catn("+++ Non-overlapping host generation +++");}
+}
+
+ticks all 2: early() {
+	//catn("-- early() --");
+	//catn("Hosts: "); catn(p1.individuals.pedigreeID);
+	//cat("Host Age: "); catn(p1.individuals.age);
+	//pathogenHosts = p2.individuals.tag;
+	//cat("pathogenHosts (pathogen.tag): "); catn(pathogenHosts);
+}
+
+
+species host survival() {
+	// non-overlapping host generations
+	return (individual.age == 0);
+}
+
+species pathogen survival() {
+	return (g != 0) | (individual.age == 0); // pathogens die only at tick g=0 or if their age is older than 1. 
+}
+
+ticks all 1: late() {
+	//catn("-- late() --");
+	// catn("HostPedigreeIDs:");
+	// catn(p1.individuals.pedigreeID);
+	// catn("Hosts.tag: "); catn(p1.individuals.tag);
+	// catn("Host.pedigreeIDs: "); catn(p1.individuals.pedigreeID);
+	
+if (g == G) {
+    host.treeSeqSimplify();   //simplify host tree sequence at the end of the host discrete generation        
+    if (!exists("hostCoalesced") & host.treeSeqCoalesced()) {
+        defineGlobal("hostCoalesced", T);
+        catn("Host coalesced at host cycle " + host.cycle);
+    }
+}
+
+	pathogens = p2.individuals;
+	J = size(pathogens);
+	
+	// if (J < 10)  {cat("pathogens.tag: "); catn(pathogens.tag);} // conditional printing
+	// else {catn("Infected J = " + size(pathogens));}
+	if (J == 0) {
+        catn("Pathogen extinct at tick " + community.tick + "!!");
+        community.simulationFinished();}
+	// else if (J >= N_host) {
+    //     catn("Pathogen fixed before host coalescence (all hosts infected) at tick " + community.tick + "!!");
+    //     community.simulationFinished();}
+
+}
+
+//species host survival() {}
+//species parasitoid survival() {}
+
+ticks all (runTime*(G+1))*N_host late() {
+    catn("SLiM simulation timeout in  hostGen.pathModulo" + host.cycle + "." + asInteger(g) + " and community.tick: " + community.tick);	
+    InfDict = Dictionary();
+    for (path in p2.individuals)
+        InfDict.setValue(asString(path.pedigreeID), path.tag);   // {pathogen pedID: host pedID}
+    params = Dictionary("N_host", N_host, "cV", c_v, "beta", beta, "G", G);
+    catn(params);
+    md = Dictionary("InfDict", InfDict, "params", params);
+
+    if (!exists("slimgui")) {
+        catn("pwd: " + getwd());
+        dir = paste0("./trees/jointTreeSeqs/HostPathogen_WF_SI_burnIn" + runTime + "_Nhost" + N_host + "_cV" + c_v + "_beta" + beta + "_G" + G);
+        catn("Dir: " + dir);
+        if (!fileExists(dir)) {createDirectory(dir);}
+
+        hostFile = paste0(dir + "/"+ getSeed() + "_HostTreeSeq" + ".trees");
+        host.treeSeqOutput(hostFile);
+        catn("Host File written: " + hostFile);
+
+        pathogenFile = paste0(dir + "/" +  getSeed() +"_PathogenTreeSeq" + ".trees");
+        pathogen.treeSeqOutput(pathogenFile, metadata=md);
+        catn("Pathogen File written: "  + pathogenFile);
+    }
+    community.simulationFinished();
+}
