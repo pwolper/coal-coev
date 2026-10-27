@@ -67,9 +67,9 @@ import numpy as np
 #+begin_src python :session :results output
 # Helper function to finds the simulation directory for the params combination.  
 def get_directory(N_host, cV, beta, G):
-    #baseDir = str(str(here()) + "/slim/trees/jointTreeSeqs")
-    baseDir = str(str(here()) + "/slim/trees/jointTreeSeqs/old")
-    dirString = f"/HostPathogen_WF_SI_Nhost{N_host}_cV{cV}_beta{beta}_G{G}"
+    baseDir = str(str(here()) + "/slim/trees/jointTreeSeqs")
+    #baseDir = str(str(here()) + "/slim/trees/jointTreeSeqs/old")
+    dirString = f"/HostPathogen_WF_SI_burnIn12_Nhost{N_host}_cV{cV}_beta{beta}_G{G}"
     d = str(baseDir + dirString)
     if not os.path.isdir(d):
         raise FileNotFoundError(d)
@@ -150,12 +150,6 @@ class jointTreeSeq:
                        infPairs=dict(sampled_pairs))
         
         
-#+end_src
-
-#+RESULTS:
-
-
-#+begin_src python :session :results output
 def tmrcas(j):
     """Dictionary with host and pathogen (pairwise) TMRCA"""
     ht, pt = j.hts.first(), j.pts.first()
@@ -202,11 +196,11 @@ def E_Tn(n, pc):
 * Results
 *** One parameter combination
 #+begin_src python :session :results output
-N_host = 100
-cV = 0.8
+N_host = 1000
+cV = 1
 beta=0.1
-G = 15
-n = 50
+G = 20
+n = 200
 
 HostPathFiles = get_hostPathFilePairs(N_host, cV, beta, G)
 params = HostPathFiles['params']
@@ -235,21 +229,21 @@ print(df)
 
 #+RESULTS:
 #+begin_example
-'HostPathogen_WF_SI_Nhost100_cV0.8_beta0.1_G15' contains 125 reps
-      G  N_host  beta   cV  host_tmrca  ...  host_tmrca_gen  pathogen_tmrca_gen        x*       p_c         ETn
-0    15     100   0.1  0.8      1023.0  ...         63.9375             87.9375  0.928196  0.015387  127.381956
-1    15     100   0.1  0.8      1247.0  ...         77.9375            120.9375  0.928196  0.015387  127.381956
-2    15     100   0.1  0.8      2639.0  ...        164.9375             86.9375  0.928196  0.015387  127.381956
-3    15     100   0.1  0.8      1343.0  ...         83.9375            134.6875  0.928196  0.015387  127.381956
-4    15     100   0.1  0.8       655.0  ...         40.9375             55.9375  0.928196  0.015387  127.381956
-..   ..     ...   ...  ...         ...  ...             ...                 ...       ...       ...         ...
-120  15     100   0.1  0.8      1039.0  ...         64.9375            109.9375  0.928196  0.015387  127.381956
-121  15     100   0.1  0.8       511.0  ...         31.9375             82.9375  0.928196  0.015387  127.381956
-122  15     100   0.1  0.8      1231.0  ...         76.9375             94.2500  0.928196  0.015387  127.381956
-123  15     100   0.1  0.8      2047.0  ...        127.9375             76.5000  0.928196  0.015387  127.381956
-124  15     100   0.1  0.8       703.0  ...         43.9375             65.9375  0.928196  0.015387  127.381956
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV1_beta0.1_G20' contains 363 reps
+      G  N_host  beta  cV  host_tmrca  host_mean_t2  ...  pathogen_mean_t2  host_tmrca_gen  pathogen_tmrca_gen   x*    p_c     ETn
+0    20    1000   0.1   1     49265.0  25324.928894  ...      25324.928894     2345.952381         2345.952381  1.0  0.001  1990.0
+1    20    1000   0.1   1     51806.0  23161.724171  ...      23161.724171     2466.952381         2466.952381  1.0  0.001  1990.0
+2    20    1000   0.1   1     38618.0  21218.469648  ...      21218.469648     1838.952381         1838.952381  1.0  0.001  1990.0
+3    20    1000   0.1   1     67850.0  24461.301256  ...      24461.301256     3230.952381         3230.952381  1.0  0.001  1990.0
+4    20    1000   0.1   1     31478.0  21218.974070  ...      21218.974070     1498.952381         1498.952381  1.0  0.001  1990.0
+..   ..     ...   ...  ..         ...           ...  ...               ...             ...                 ...  ...    ...     ...
+358  20    1000   0.1   1     77552.0  34403.949648  ...      34403.949648     3692.952381         3692.952381  1.0  0.001  1990.0
+359  20    1000   0.1   1     21881.0  11139.102814  ...      11139.102814     1041.952381         1041.952381  1.0  0.001  1990.0
+360  20    1000   0.1   1     77825.0  40286.687035  ...      40286.687035     3705.952381         3705.952381  1.0  0.001  1990.0
+361  20    1000   0.1   1     45947.0  24345.713668  ...      24345.713668     2187.952381         2187.952381  1.0  0.001  1990.0
+362  20    1000   0.1   1    117515.0  35370.039347  ...      35370.039347     5595.952381         5595.952381  1.0  0.001  1990.0
 
-[125 rows x 13 columns]
+[363 rows x 13 columns]
 #+end_example
 
 #+begin_src python :session :results output
@@ -259,7 +253,7 @@ print(f"x* = {x}; e^{{-beta G}} = {np.exp(-1*beta*G)}")
 #+end_src
 
 #+RESULTS:
-: x* = 0.9281957708027829; e^{-beta G} = 0.22313016014842982
+: x* = 0.9608705893125835; e^{-beta G} = 0.1353352832366127
 
 Plotting the coalescence times of joint host-pathogen pairs.
 #+begin_src python :session :results output
@@ -301,12 +295,12 @@ plt.show()
 #+begin_src python :session :results output
 # Loop over several combinations
 N_host = 1000
-cVs     = [0.3, 0.4, 0.6, 0.8]
+cVs     = [0.3, 0.6, 0.8, 0.99, 1]
 betas   = 0.1
-G       = 15
+G       = 20
 n = 50
 
-reps = 200
+reps = 100
 
 jointTreeSeqs = {}   # (N_host, cV, beta, G) -> list of jointTreeSeq
 data = []
@@ -337,67 +331,33 @@ print(df)
 
 #+RESULTS:
 #+begin_example
-       G  N_host  beta   cV  host_tmrca  ...  host_tmrca_gen  pathogen_tmrca_gen        x*       p_c          ETn
-0     15    1000   0.1  0.3     17663.0  ...     1178.533333           34.133333  0.409736  0.012389   158.199091
-1     15    1000   0.1  0.3     14095.0  ...      940.666667           63.866667  0.409736  0.012389   158.199091
-2     15    1000   0.1  0.3     18255.0  ...     1218.000000          135.333333  0.409736  0.012389   158.199091
-3     15    1000   0.1  0.3     24703.0  ...     1647.866667          378.133333  0.409736  0.012389   158.199091
-4     15    1000   0.1  0.3     14591.0  ...      973.733333           28.133333  0.409736  0.012389   158.199091
-...   ..     ...   ...  ...         ...  ...             ...                 ...       ...       ...          ...
-1195  15    1000   0.1  0.8     19695.0  ...     1314.000000          542.800000  0.936757  0.001534  1277.908513
-1196  15    1000   0.1  0.8     17727.0  ...     1182.800000          921.333333  0.936757  0.001534  1277.908513
-1197  15    1000   0.1  0.8     16095.0  ...     1074.000000         1802.533333  0.936757  0.001534  1277.908513
-1198  15    1000   0.1  0.8     16143.0  ...     1077.200000          741.200000  0.936757  0.001534  1277.908513
-1199  15    1000   0.1  0.8     15967.0  ...     1065.466667         1064.133333  0.936757  0.001534  1277.908513
+1000 0.3 0.1 20
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.3_beta0.1_G20' contains 111 reps
+1000 0.6 0.1 20
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.6_beta0.1_G20' contains 158 reps
+1000 0.8 0.1 20
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.8_beta0.1_G20' contains 172 reps
+1000 0.99 0.1 20
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.99_beta0.1_G20' contains 173 reps
+1000 1 0.1 20
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV1_beta0.1_G20' contains 363 reps
+      G  N_host  beta   cV  host_tmrca  ...  host_tmrca_gen  pathogen_tmrca_gen        x*      p_c          ETn
+0    20    1000   0.1  0.3     73100.0  ...         3656.00              288.65  0.674396  0.00792   247.481878
+1    20    1000   0.1  0.3     26081.0  ...         1305.05              324.95  0.674396  0.00792   247.481878
+2    20    1000   0.1  0.3     56867.0  ...         2844.35              294.95  0.674396  0.00792   247.481878
+3    20    1000   0.1  0.3     29525.0  ...         1477.25              134.30  0.674396  0.00792   247.481878
+4    20    1000   0.1  0.3     40361.0  ...         2019.05              244.55  0.674396  0.00792   247.481878
+..   ..     ...   ...  ...         ...  ...             ...                 ...       ...      ...          ...
+495  20    1000   0.1  1.0     18899.0  ...          945.95              945.95  1.000000  0.00100  1960.000000
+496  20    1000   0.1  1.0     25661.0  ...         1284.05             1284.05  1.000000  0.00100  1960.000000
+497  20    1000   0.1  1.0    102437.0  ...         5122.85             5122.85  1.000000  0.00100  1960.000000
+498  20    1000   0.1  1.0     44729.0  ...         2237.45             2237.45  1.000000  0.00100  1960.000000
+499  20    1000   0.1  1.0     21755.0  ...         1088.75             1088.75  1.000000  0.00100  1960.000000
 
-[1200 rows x 13 columns]
+[500 rows x 13 columns]
 #+end_example
 
-#+begin_src python :session :results output
-import seaborn as sns
-import matplotlib.pyplot as plt
 
-
-levels  = sorted(df["cV"].unique())
-colors  = dict(zip(levels, sns.color_palette("colorblind", len(levels))))
-
-g = sns.JointGrid(data=df, y="host_tmrca_gen", x="pathogen_tmrca_gen",
-                  hue="cV", height=7, ratio=5, space=0.1,
-                  #marginal_ticks=True
-                  )
-g.plot_joint(sns.scatterplot, s=30, alpha=0.75, palette=colors, edgecolor="white",
-             linewidth=0.3, rasterized=True, legend=True)
-
-g.plot_marginals(sns.kdeplot, palette=colors, fill=True, alpha=0.35, linewidth=1.2,
-                 common_norm=False, legend=False)
-
-g.set_axis_labels(r"Pathogen $T_n$", r"Host $T_n$")
-
-levels  = sorted(df["cV"].unique())
-
-x_st = df.groupby("cV")["x*"].mean()
-ETn = df.groupby("cV")['ETn'].mean()
-
-for cv in levels:
-    g.ax_marg_x.axvline(ETn.loc[cv], color=colors[cv], lw=2, ymax=1.2, label=r'$E[T^i_n]')
-
-g.ax_marg_y.axhline(N_host, color='black', lw=2, xmax=1.2)
-
-
-for ax in (g.ax_joint, g.ax_marg_x, g.ax_marg_y):
-    for sp in ax.spines.values():
-        sp.set_visible(True)
-        
-leg = g.ax_joint.get_legend()
-leg.set_title(r"$c_v$  ($x^*$)")
-for txt, cv in zip(leg.texts, levels):          # legend entries follow sorted(cV)
-        txt.set_text(rf"$c_v$ = {cv:g},  $x^*$ = {x_st.loc[cv]:.2f}")
-plt.show()
-#+end_src
-
-#+RESULTS:
-
-#+RESULTS:
 #+begin_src python :session :results output
 sns.set_theme(style="ticks", context="paper", font_scale=1.3)
 plt.rcParams.update({"font.family": "sans-serif", "axes.linewidth": 0.8,
@@ -410,14 +370,14 @@ colors = dict(zip(levels, sns.color_palette("colorblind", len(levels))))
 x_st   = df.groupby("cV")["x*"].mean()
 ETn    = df.groupby("cV")["ETn"].mean()
  
-g = sns.JointGrid(data=df, y="host_tmrca_gen", x="pathogen_tmrca_gen",
+g = sns.JointGrid(data=df, x="host_tmrca_gen", y="pathogen_tmrca_gen",
                   hue="cV", height=7, ratio=5, space=0.1)
-g.plot_joint(sns.scatterplot, s=30, alpha=0.75, palette=colors, edgecolor="white",
+g.plot_joint(sns.scatterplot, s=30, alpha=1, palette=colors, edgecolor="white",
              linewidth=0.3, rasterized=True, legend=True)
-g.plot_marginals(sns.kdeplot, palette=colors, fill=True, alpha=0.35, linewidth=1.2,
+g.plot_marginals(sns.kdeplot, palette=colors, fill=False, alpha=1, linewidth=1.5,
                  common_norm=False, legend=False)
  
-g.set_axis_labels(r"Pathogen $T^{\text{P}}_n$", r"Host $T^{\text{H}}_n$")
+g.set_axis_labels(r"Host $T^{\text{H}}_n$", r"Pathogen $T^{\text{P}}_n$")
 g.ax_joint.set(xlim=LIM, ylim=LIM)            # marginals share these axes
  
 # grid on the scatter
@@ -426,11 +386,11 @@ g.ax_joint.set_axisbelow(True)
  
 # ---------------- reference lines: marginals + scatter ----------------
 for cv in levels:
-    g.ax_marg_x.axvline(ETn.loc[cv], color=colors[cv], lw=1.2)
-    g.ax_joint.axvline(ETn.loc[cv], color=colors[cv], lw=1.2, ls="--", zorder=1)
+    g.ax_marg_y.axhline(ETn.loc[cv], color=colors[cv], lw=1.2)
+    g.ax_joint.axhline(ETn.loc[cv], color=colors[cv], lw=1.2, ls="--", zorder=1)
  
 # single label for the E[T_n] lines, placed at the first one
-g.ax_marg_x.text(0.55, 0.65, r"$E[T^\text{P}_n] = 2 / p_c$", transform=g.ax_marg_x.transAxes,
+g.ax_marg_y.text(1.05, 0.65, r"$E[T^\text{P}_n] = 2 / p_c$", transform=g.ax_marg_y.transAxes,
                  ha='right', va='top', fontsize=10)
 # x0 = ETn.loc[levels[-1]]
 # g.ax_marg_x.annotate(r"$E[T_n]$", xy=(x0, 0.95),
@@ -438,11 +398,11 @@ g.ax_marg_x.text(0.55, 0.65, r"$E[T^\text{P}_n] = 2 / p_c$", transform=g.ax_marg
 #                      xytext=(-3, 0), textcoords="offset points",
 #                      rotation=90, ha="right", va="top", color="0.2", fontsize=10)
  
-g.ax_marg_y.axhline(N_host, color="black", lw=1.2)
-g.ax_joint.axhline(N_host, color="black", lw=1.2, ls="--", zorder=1)
-g.ax_marg_y.axhline(2*N_host, color="black", ls='--', lw=1.2)
-g.ax_marg_y.annotate(r"$E[T^\text{H}_n] = 2N_{host}$", xy=(1.2, 2*N_host),
-                     xycoords=g.ax_marg_y.get_yaxis_transform(),
+#g.ax_marg_y.axhline(N_host, color="black", lw=1.2)
+#g.ax_joint.axhline(N_host, color="black", lw=1.2, ls="--", zorder=1)
+g.ax_marg_x.axvline(2*N_host, color="black", ls='--', lw=1.2)
+g.ax_marg_x.annotate(r"$E[T^\text{H}_n] = 2N_{host}$", xy=(1.2, 2*N_host),
+                     xycoords=g.ax_marg_x.get_xaxis_transform(),
                      xytext=(0, 3), textcoords="offset points",
                      ha="right", va="bottom", fontsize=10)
  
@@ -462,100 +422,122 @@ plt.show()
 
 #+end_src
 
+#+begin_src python :session :results output
+from matplotlib.lines import Line2D
+from matplotlib import colormaps
+
+sns.set_theme(style="ticks", context="paper", font_scale=1.3)
+plt.rcParams.update({"font.family": "sans-serif", "axes.linewidth": 0.8,
+                     "pdf.fonttype": 42, "svg.fonttype": "none"})
+
+LIM = (-100, 4000)
+X, Y = "host_tmrca_gen", "pathogen_tmrca_gen"
+
+levels = sorted(df["cV"].unique())
+colors = dict(zip(levels, sns.color_palette("Reds", len(levels))))
+#colors  = dict(zip(levels, colormaps["Reds"](np.linspace(0.45, 0.95, len(levels)))))
+markers = dict(zip(levels, ["o", "s", "^", "D"]))
+x_st   = df.groupby("cV")["x*"].mean()
+ETn    = df.groupby("cV")["ETn"].mean()
+
+# ---------------- geometry (inches) ----------------
+S, L = 6.0, 3.2                  # square plot area, legend strip
+ml, mb, mt = 0.9, 0.8, 0.2
+W, H = ml + S + L, mb + S + mt
+
+fig, axd = plt.subplot_mosaic(
+    [["mx", "."],
+     ["j",  "my"]],
+    figsize=(W, H),
+    gridspec_kw=dict(width_ratios=[5, 1], height_ratios=[1, 5],
+                     left=ml/W, right=(ml+S)/W, bottom=mb/H, top=(mb+S)/H,
+                     wspace=0.08, hspace=0.08))
+ax_j, ax_mx, ax_my = axd["j"], axd["mx"], axd["my"]
+ax_mx.sharex(ax_j)               # top marginal shares x with the scatter
+ax_my.sharey(ax_j)               # right marginal shares y with the scatter
+
+# ---------------- data ----------------
+kw = dict(data=df, hue="cV", palette=colors)
+sns.scatterplot(x=X, y=Y, ax=ax_j, s=50 , edgecolor="0.15", linewidth=0.4, style="cV",
+                #markers=markers,
+                alpha=0.85, rasterized=True, legend="full", **kw)
+sns.kdeplot(x=X, ax=ax_mx, fill=False, linewidth=1.5, common_norm=False, legend=False, **kw)
+sns.kdeplot(y=Y, ax=ax_my, fill=False, linewidth=1.5, common_norm=False, legend=False, **kw)
+
+handles, _ = ax_j.get_legend_handles_labels()   # seaborn's own colour + marker handles
+ax_j.get_legend().remove()
+
+ax_j.set(xlim=LIM, ylim=LIM,
+         xlabel=r"Host $T^{\text{H}}_n$", ylabel=r"Pathogen $T^{\text{P}}_n$")
+ax_j.grid(True, color="0.85", lw=0.6); ax_j.set_axisbelow(True)
+
+# tidy marginals (the box stays)
+ax_mx.set(xlabel="", ylabel="", yticks=[]);  ax_mx.tick_params(labelbottom=False)
+ax_my.set(xlabel="", ylabel="", xticks=[]);  ax_my.tick_params(labelleft=False)
+
+# ---------------- reference lines ----------------
+for cv in levels:
+    ax_my.axhline(ETn.loc[cv], color=colors[cv], lw=1.2, ls="--")
+    ax_j.axhline(ETn.loc[cv], color=colors[cv], lw=1.2, ls="--", zorder=1)
+ax_my.text(0.95, 0.65, r"$E[T^\text{P}_n] = 2 / p_c$", transform=ax_my.transAxes,
+           ha="right", va="top", fontsize=10)
+
+ax_mx.axvline(2*N_host, color="black", ls="--", lw=1.2)
+ax_j.axvline(2*N_host, color="black", ls="--", lw=1.2, zorder=1)
+ax_mx.annotate(r"$E[T^\text{H}_n] = 2N_{host}$", xy=(2*N_host, 0.95),
+               xycoords=ax_mx.get_xaxis_transform(), xytext=(4, 0),
+               textcoords="offset points", ha="left", va="top", fontsize=10)
+
+# ---------------- legend outside ----------------
+x0 = (ml + S + 0.3) / W
+#handles = [Line2D([], [], marker="o", ls="", color=colors[cv]) for cv in levels]
+labels  = [rf"$c_v$ = {cv:g},  $x^*$ = {x_st.loc[cv]:.2f}" for cv in levels]
+fig.legend(handles, labels, title=r"$c_v$  ($x^*$)", loc="upper left",
+           bbox_to_anchor=(x0, 0.95), frameon=True)
+
+# fig.savefig("tmrca_joint.pdf", bbox_inches="tight")
+plt.show()
+#+end_src
+
 #+RESULTS:
 
 *** Host only coalescence check
 #+begin_src python :session :results output
 import glob
 
-folder = str(str(here()) + "/slim/trees/hostTreeSeqs/HostPathogen_WF_SI_Nhost1000_G10")
-G, N = 10, 1000
+N = 1000
+cV = 0.99
+beta, G = 0.1, 20
+
+folder = str(str(here()) + f"/slim/trees/jointTreeSeqs/HostPathogen_WF_SI_burnIn12_Nhost{N}_cV{cV}_beta{beta}_G{G}")
+
+print(folder)
 
 files = sorted(glob.glob(f"{folder}/*_HostTreeSeq.trees"))
 
 treeSeqs = []
-tmrcas = []
 
 for f in files:
     ts = tskit.load(f)
     ts = pyslim.remove_vacant(ts)
-    #ts = ts.simplify()
+    ts = ts.simplify()
     
     treeSeqs.append(ts)
-    tr = ts.first()
-    tmrcas.append(tr.time(tr.root))
 
 print(len(treeSeqs))
-print(np.array(tmrcas).mean())
-
-print(ts)
 #+end_src
 
 #+RESULTS:
-#+begin_example
-201
-21903.666666666668
-╔═════════════════════════╗
-║TreeSequence             ║
-╠═══════════════╤═════════╣
-║Trees          │        1║
-╟───────────────┼─────────╢
-║Sequence Length│        1║
-╟───────────────┼─────────╢
-║Time Units     │    ticks║
-╟───────────────┼─────────╢
-║Sample Nodes   │    1,000║
-╟───────────────┼─────────╢
-║Total Size     │287.6 KiB║
-╚═══════════════╧═════════╝
-╔═══════════╤═════╤═════════╤════════════╗
-║Table      │Rows │Size     │Has Metadata║
-╠═══════════╪═════╪═════════╪════════════╣
-║Edges      │1,830│ 57.2 KiB│          No║
-╟───────────┼─────┼─────────┼────────────╢
-║Individuals│1,000│ 99.5 KiB│         Yes║
-╟───────────┼─────┼─────────┼────────────╢
-║Migrations │    0│  8 Bytes│          No║
-╟───────────┼─────┼─────────┼────────────╢
-║Mutations  │    0│  1.2 KiB│          No║
-╟───────────┼─────┼─────────┼────────────╢
-║Nodes      │2,831│103.9 KiB│         Yes║
-╟───────────┼─────┼─────────┼────────────╢
-║Populations│    2│  2.3 KiB│         Yes║
-╟───────────┼─────┼─────────┼────────────╢
-║Provenances│    1│  5.3 KiB│          No║
-╟───────────┼─────┼─────────┼────────────╢
-║Sites      │    0│ 16 Bytes│          No║
-╚═══════════╧═════╧═════════╧════════════╝
-#+end_example
-
-#+begin_src python :session :results output
-ts = treeSeqs[4]
-print("Un-simplified:" )
-print("TMRCA ts : "), print(ts.first().time(ts.first().root))
-#print(ts)
-
-print("ts.simplify()")
-ts_simplified = ts.simplify()
-print("TMRCA ts_simplified : "), print(ts_simplified.first().time(ts_simplified.first().root))
-#print(ts_simplified)
-
-#+end_src
-
-#+RESULTS:
-: Un-simplified:
-: TMRCA ts : 
-: 7204.0
-: ts.simplify()
-: TMRCA ts_simplified : 
-: 5983.0
+: /home/p-wolper/popgen/coal-coev/slim/trees/jointTreeSeqs/HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.99_beta0.1_G20
+: 96
 
 #+begin_src python :session :results output
 tmrcas = []
 
-for ts in treeSeqs:
+for i, ts in enumerate(treeSeqs):
     tr = ts.first()
     if tr.num_roots != 1:
+        print(f"Tree {i} has more than one root...")
         continue
     tmrcas.append(tr.time(tr.root))
 
@@ -566,7 +548,7 @@ print(f"Mean coalescence time: {tmrcasG.mean()}")
 #+end_src
 
 #+RESULTS:
-: Mean coalescence time: 1924.5625562556259
+: Mean coalescence time: 2061.119047619048
 
 *** Compare to Host-Pathogen sims
 #+begin_src python :session :results output

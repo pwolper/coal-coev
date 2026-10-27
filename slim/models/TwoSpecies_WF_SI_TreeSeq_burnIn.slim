@@ -5,10 +5,10 @@ species all initialize() {
 	
     if (!exists("N_host"))	defineConstant("N_host", 1000); //constant host population size
     if (!exists("beta"))	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
-    if (!exists("c_v"))	defineConstant("c_v", 0.8); //probability of vertical transmission
+    if (!exists("c_v"))	defineConstant("c_v", 1); //probability of vertical transmission
     if (!exists("G"))	defineConstant("G", 20); //relative epidemic time
 
-    if (!exists("runTime"))	defineConstant("runTime", 10); //runtime scaling of the simulation length (i.e. Burn-in) in ticks as factor of host N and pathogen generation cycles, 
+    if (!exists("runTime"))	defineConstant("runTime", 12); //runtime scaling of the simulation length (i.e. Burn-in) in ticks as factor of host N and pathogen generation cycles, 
                                                            //eg. 10N(G+1) total ticks.
 }
 
@@ -94,10 +94,13 @@ species pathogen reproduction() {
 		S = size(uninfectedHosts);
 		//cat(";\t S = " + S); //cat("Un-infected Hosts: "); catn(uninfectedHosts); 
 		
+		if (S > 0 & J > 0)
+			Ce = rpois(1, (beta * J * S) / N_host);
+		else
+			Ce = 0;
 		// Frozen j, big-bang Contacts
-		Ce = rpois(1, (beta * J * S) / N_host); // what about using the total contact rate inspead of split onto susceptibles .
+		//Ce = rpois(1, (beta * J * S) / N_host); // what about using the total contact rate inspead of split onto susceptibles .
 															 // Universal contact, so infection process keeps running even when S = 0.
-															 
 		//catn(";\t Ce = Poisson((beta*J*S)/N) = " + Ce);
 		if (Ce > 0) {
 			infectors = sample(pathogens, Ce, replace=T); 	// pathogen from infecting host
@@ -207,7 +210,7 @@ if (g == G) {
 //species parasitoid survival() {}
 
 ticks all (runTime*(G+1))*N_host late() {
-    catn("SLiM simulation timeout in  hostGen.pathModulo" + host.cycle + "." + asInteger(g) + " and community.tick: " + community.tick);	
+    catn("SLiM simulation timeout in  hostGen.pathModulo " + host.cycle + "." + asInteger(g) + " and community.tick: " + community.tick);	
     InfDict = Dictionary();
     for (path in p2.individuals)
         InfDict.setValue(asString(path.pedigreeID), path.tag);   // {pathogen pedID: host pedID}

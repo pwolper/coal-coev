@@ -3,7 +3,7 @@
 species all initialize() {
 	initializeSLiMModelType("nonWF");
 	
-	if (!exists("N_host"))	defineConstant("N_host", 100); //constant host population size
+	if (!exists("N_host"))	defineConstant("N_host", 1000); //constant host population size
 	if (!exists("beta"))	defineConstant("beta", 0.1); //contact rate, with which infected host will infect another host
 	if (!exists("c_v"))	defineConstant("c_v", 0.3); //probability of vertical transmission
 	if (!exists("G"))	defineConstant("G", 20); //relative epidemic time
@@ -233,4 +233,4 @@ ticks all 1: late() {
 //species host survival() {}
 //species parasitoid survival() {}
 
-ticks all (2*(G+1))*N_host late() {}
+ticks all (1*(G+1))*N_host late() {} //short only for the demography plots

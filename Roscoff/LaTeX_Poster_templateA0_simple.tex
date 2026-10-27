@@ -120,7 +120,7 @@
     \begin{figure}[H]
      \centering
     \includegraphics[width=1\linewidth]{../figures/coupled_genealogiesA.png}
-    \caption{Pathogen genealogy embedded within host genealogy through horizontal and vertical transmission (adapted from [2]).}
+    % \caption{Pathogen genealogy embedded within host genealogy through horizontal and vertical transmission (adapted from [2]).}
     \end{figure}
 \end{minipage}
 \end{nofillbox}
@@ -128,7 +128,7 @@
 \vspace{25pt}
 
 \begin{nofillbox}{A nested semi-discrete Host-Pathogen model with vertical and horizontal transmission}
-  \begin{minipage}{0.49\textwidth}
+  \begin{minipage}{0.42\textwidth}
     \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{../figures/nestedHostPathogen_WF_SI.png}
@@ -136,10 +136,10 @@
     \end{figure}
   \end{minipage}
   \hfill
-  \begin{minipage}{0.49\textwidth}
+  \begin{minipage}{0.56\textwidth}
 
     \textbf{Vertical infection.}
-    The host population reproduces in discrete and non-overlapping generations, following a Wright-Fisher process of size \(N\), with $X_{n}$ infected indivduals in generation \(n\). Infected host can produce infected offspring through vertical transmission (with probability \(c_v\)). At the start of the next generation are \(I_{n+1}\) initally host infected offspring:
+    The host population reproduces in discrete and non-overlapping generations, following a Wright-Fisher process of size \(N\), with $X_{n}$ infected indivduals in generation \(n\). Infected host can produce infected offspring through vertical transmission with probability \(c_v\). At the start of the next generation are \(I_{n+1}\) initally host infected offspring:
 
     \begin{equation}
     I_{n+1} \sim \text{Binom}(N, c_v X_n/N)
@@ -154,10 +154,11 @@
     
     \vspace{20pt}
 
-    \textbf{Combined process.} The number of infected at the end of each generation \(n+1\) is the combination of vertical and horizontal infections. The basic reproduction number of the model is $R_0 = c_v e^{\beta G}$, and taking $N \to \infty$ and $x = X/N$, we get the following deterministic solution:
-    \begin{equation}
-      x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})}
-    \end{equation}
+    \textbf{Combined process.} The number of infected $X_{n+1}$ at the end of each generation \(n+1\) is the combination of vertical and horizontal infections.
+    % The basic reproduction number of the model is $R_0 = c_v e^{\beta G}$, and taking $N \to \infty$ and $x = X/N$, we get the following deterministic solution:
+    % \begin{equation}
+    %   x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})}
+    % \end{equation}
     %where \(I_{n+1}\) is the number of infected host offspring and \(K_{n+1}\) individuals are newly infected due to the epidemiological process \(\mathcal{J}_G\) in generation \(n+1\).
   \end{minipage}
 \end{nofillbox}
@@ -165,7 +166,7 @@
 \vspace{25pt}
 
 \begin{tcbraster}[raster columns=2,raster equal height,nobeforeafter,raster column skip=25pt]
-    \begin{nofillbox}{Deterministic limit and equilibrium}
+    \begin{nofillbox}{Deterministic equilibrium and $R_0$}
     \begin{minipage}{0.49\textwidth}
         \begin{figure}[H]
         \centering
@@ -173,25 +174,41 @@
         \caption{Equilibrium fraction of infected $x^*$ and the reproductive number $R_0 = c_v e^{\beta G}$ for rates of vertical transmission \(c_v\) and epidemic transmission $\beta$ and epidemic time $G$.}
         \end{figure}
     \end{minipage}
+    \hfill
     \begin{minipage}{0.49\textwidth}
         \textbf{Deterministic limit}\\
-        If we take $N \to \infty$, we get the deterministic limit of the model, and with \(x_n = X_n/N\) we have \(I_{n+1}/N \approx c_v x_n\). We get the stationary solution, 
+        % If we take $N \to \infty$, we get the deterministic limit of the model, and with \(x_n = X_n/N\) we have \(I_{n+1}/N \approx c_v x_n\). We get the stationary solution, 
+        % \begin{equation}
+        % x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
+        % \end{equation}
+         Taking $N \to \infty$ and $x = X/N$ we get the following deterministic solution of the fraction of infected after each generation:
         \begin{equation}
-        x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
+        x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})}.
         \end{equation}
+        \vspace{20pt}
+
+        \textbf{Basic reproductive number $R_0$}\\
+        The basic reproduction number of the model is $R_0 = c_v e^{\beta G}$.
+        % \textbf{Basic reproductive number $R_0$}\\
+        % \begin{equation}
+        %  R_0 = c_v e^{-\beta G}
+        %  \end{equation}
     \end{minipage}
     \end{nofillbox}
     \begin{nofillbox}{Stochastic, individual-based simulations with \textit{SLiM 5}}
-      add some simple equations of the stochatic infection process and screen shot of SLiM cycling behaviour. Present joint genealogies.
-      \vspace{18cm}
-      \begin{minipage}{0.5\linewidth}
-        % \begin{figure}[H]
-        % \centering
-        % \includegraphics[width=1\linewidth]{../figures/nestedHostPathogenGenealogies.png}
-        % \end{figure}
+      % \vspace{18cm}
+      \begin{minipage}{0.29\linewidth}
+      \end{minipage} 
+     \hfill 
+      \begin{minipage}{0.7\linewidth}
+        \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{../figures/WF_SI_PopulationDynamics/Demographies_N1000_beta0.1_G20_cycles0.1.pdf}
+        \end{figure}
+        Two-Species model with tree-sequence recording of both host and pathogen
       \end{minipage} 
     \end{nofillbox}
-% \end{tcbraster}
+\end{tcbraster}
 
 \vspace{50pt}
 
