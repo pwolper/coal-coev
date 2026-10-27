@@ -572,11 +572,11 @@ print(f"Mean coalescence time: {tmrcasG.mean()}")
 #+begin_src python :session :results output
 import glob
 
-folder = str(str(here()) + f"/slim/trees/jointTreeSeqs/old/HostPathogen_WF_SI_Nhost{N}_cV{cV}_beta{beta}_G{G}")
 N = 1000
 cV = 0.8
 beta = 0.1
 G = 15
+folder = str(str(here()) + f"/slim/trees/jointTreeSeqs/old/HostPathogen_WF_SI_Nhost{N}_cV{cV}_beta{beta}_G{G}")
 
 #print(folder)
 
@@ -585,16 +585,15 @@ files = sorted(glob.glob(f"{folder}/*_HostTreeSeq.trees"))
 print(len(files))
 treeSeqs = []
 for f in files:
-    ts = pyslim.remove_vacant(tskit.load(f))
-    ts_sim = ts.simplify()
-    treeSeqs.append(ts_sim)
+    ts = pyslim.remove_vacant(tskit.load(f)).simplify(keep_input_roots=True)
+    treeSeqs.append(ts)
 
 print(treeSeqs[:10])
 #+end_src
 
 #+RESULTS:
-: 73
-: [<tskit.trees.TreeSequence object at 0x7ce09f9e3890>, <tskit.trees.TreeSequence object at 0x7ce09f9e3c50>, <tskit.trees.TreeSequence object at 0x7ce09f9e3ed0>, <tskit.trees.TreeSequence object at 0x7ce09f9e3610>, <tskit.trees.TreeSequence object at 0x7ce09f9e39d0>, <tskit.trees.TreeSequence object at 0x7ce09f9e34d0>, <tskit.trees.TreeSequence object at 0x7ce09f9e3d90>, <tskit.trees.TreeSequence object at 0x7ce09f96c410>, <tskit.trees.TreeSequence object at 0x7ce09f96c550>, <tskit.trees.TreeSequence object at 0x7ce09f96c690>]
+: 318
+: [<tskit.trees.TreeSequence object at 0x7ccd884796a0>, <tskit.trees.TreeSequence object at 0x7ccd88479a90>, <tskit.trees.TreeSequence object at 0x7ccd88479be0>, <tskit.trees.TreeSequence object at 0x7ccd88479d30>, <tskit.trees.TreeSequence object at 0x7ccd88479e80>, <tskit.trees.TreeSequence object at 0x7ccd88479fd0>, <tskit.trees.TreeSequence object at 0x7ccd8847a120>, <tskit.trees.TreeSequence object at 0x7ccd8847a270>, <tskit.trees.TreeSequence object at 0x7ccd8847a3c0>, <tskit.trees.TreeSequence object at 0x7ccd8847a510>]
 
 #+begin_src python :session :results output
 tmrcas = []
@@ -612,4 +611,4 @@ print(f"Mean coalescence time: {tmrcasG.mean()}")
 #+end_src
 
 #+RESULTS:
-: Mean coalescence time: 976.3051305130509
+: Mean coalescence time: 1819.7834119496856

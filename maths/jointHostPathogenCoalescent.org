@@ -418,7 +418,6 @@ axes[0].get_legend().remove()
 [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
 *** Phase plot 
-
 #+begin_src python :session :results output :exports none :eval no-export
 import numpy as np
 import matplotlib.pyplot as plt
