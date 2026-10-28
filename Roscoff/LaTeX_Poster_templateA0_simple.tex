@@ -7,6 +7,8 @@
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage{anyfontsize}
 \usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[outercaption]{sidecap} 
 \usepackage{amsmath,amssymb}
 \usepackage{xcolor}
 \usepackage{float}
@@ -92,7 +94,7 @@
 \hrule
 \vspace{1cm}
 
-\fontsize{28}{36}\selectfont
+\fontsize{24}{32}\selectfont
 
 \begin{nofillbox}{Introduction}
  \begin{minipage}{0.79\textwidth}
@@ -111,7 +113,9 @@
      \textbf{Why joint genealogies?}\\
      It is less understood how coevolution shapes the joint relationship of host and pathogen genealogical trees as determined by their repspective infection and reproduction processes.
 
-     More specifically, we aim to understand the how the pathogen ancestral genealogies are embedded within a host genealogy, mediated by horizontal and vertical transmission.
+     More specifically, we aim to understand the how the pathogen ancestral genealogies are embedded within a host genealogy, mediated by horizontal and vertical transmission.\\
+
+     add aim to have a neutral model of how host and pathogen genealogies behave under their joint reproductive processes. (cite Dieter)
      \vfill
    \end{minipage}
  \end{minipage}
@@ -137,9 +141,10 @@
   \end{minipage}
   \hfill
   \begin{minipage}{0.56\textwidth}
-
+    % We present a semi-discrete host-pathogen model\\
+    
     \textbf{Vertical infection.}
-    The host population reproduces in discrete and non-overlapping generations, following a Wright-Fisher process of size \(N\), with $X_{n}$ infected indivduals in generation \(n\). Infected host can produce infected offspring through vertical transmission with probability \(c_v\). At the start of the next generation are \(I_{n+1}\) initally host infected offspring:
+    The host population reproduces in discrete and non-overlapping generations, following a Wright-Fisher process of size \(N\), with $X_{n}$ infected indivduals at the end of generation \(n\). Infected host can produce infected offspring through vertical transmission with probability \(c_v\). At the start of the next generation are \(I_{n+1}\) initally host infected offspring:
 
     \begin{equation}
     I_{n+1} \sim \text{Binom}(N, c_v X_n/N)
@@ -166,8 +171,8 @@
 \vspace{25pt}
 
 \begin{tcbraster}[raster columns=2,raster equal height,nobeforeafter,raster column skip=25pt]
-    \begin{nofillbox}{Deterministic equilibrium and $R_0$}
-    \begin{minipage}{0.49\textwidth}
+    \begin{nofillbox}{Deterministic equilibrium and backwards process}
+    \begin{minipage}{0.48\textwidth}
         \begin{figure}[H]
         \centering
         \includegraphics[width=\linewidth]{../maths/figures/Xdeterministic_contour_R0.pdf}
@@ -177,52 +182,86 @@
         \end{figure}
     \end{minipage}
     \hfill
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{0.48\textwidth}
         \textbf{Deterministic limit}\\
-        % If we take $N \to \infty$, we get the deterministic limit of the model, and with \(x_n = X_n/N\) we have \(I_{n+1}/N \approx c_v x_n\). We get the stationary solution, 
-        % \begin{equation}
-        % x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
-        % \end{equation}
-         Taking $N \to \infty$ and $x = X/N$ we get the following deterministic solution of the fraction of infected after each generation:
+         Taking $N \to \infty$ and $x = X/N$ we get the following deterministic solution.
         \begin{equation}
         x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})}.
         \end{equation}
-        \vspace{20pt}
+        \vspace{0pt}
 
-        \textbf{Basic reproductive number $R_0$}\\
-        The basic reproduction number of the model is $R_0 = c_v e^{\beta G}$.
-        % \textbf{Basic reproductive number $R_0$}\\
-        % \begin{equation}
-        %  R_0 = c_v e^{-\beta G}
-        %  \end{equation}
+        \textbf{Basic reproductive number: $R_0= c_v e^{\beta G}$}\\
+        The persistence threshold for the pathogen ($R_0 >1$) follows for $c_v > e^{-\beta G}$.
+        \vspace{35pt}
+
+      \textbf{Ancestral process}\\
+      The probability for two randomly sampled pathogen lineages to coalesce within a host generation:
+      \begin{equation}
+        p_c = \frac{1}{N}+\frac{2(1-c_v)}{c_vx^*N}
+      \end{equation}
+      % from which we gain the expected coalescence time as $E[T_n] = 2/p_c$.\\
     \end{minipage}
     \end{nofillbox}
     \begin{nofillbox}{Stochastic, individual-based simulations with \textit{SLiM 5}}
-      % \vspace{18cm}
-      \begin{minipage}{0.29\linewidth}
-        Two-Species model with tree-sequence recording of both host and pathogen
+      \begin{minipage}{0.60\linewidth}
+        \begin{center}
+        % \begin{figure}[h]
+        \begin{minipage}{\linewidth}
+        \centering
+        \includegraphics[width=1\linewidth]{../figures/WF_SI_PopulationDynamics/Demographies_N100_beta0.1_G20_cycles60.pdf}
+        % \end{figure}
+        % \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\linewidth]{../figures/WF_SI_PopulationDynamics/Demographies_N1000_beta0.1_G20_cycles60.pdf}
+        % \end{figure}
+      \end{minipage} 
+      \end{center}
       \end{minipage} 
      \hfill 
-      \begin{minipage}{0.7\linewidth}
-        \begin{figure}[H]
-        \centering
-        \includegraphics[width=1\linewidth]{../figures/WF_SI_PopulationDynamics/Demographies_N1000_beta0.1_G20_cycles0.1.pdf}
-        \end{figure}
+      \begin{minipage}{0.38\linewidth}
+        \textbf{Simulations}\\
+        \emph{Host} and \emph{Pathogen} coalescent trees using \emph{tree-sequence recording} in a \emph{Two-Species} model!\\
+
+        \textbf{Stochastic dynamics}\\
+        The proportion of infected fluctuates around the deterministic solution $x^*$, with oscillations driven by within host generation epidemic growth and vertical transmission between generation.\\ 
+
+        % \textbf{Simulations:}\\
+        % \emph{Host} and \emph{Pathogen} \\
+        % coalescent trees using \\
+        % \emph{tree-sequence recording}\\
+        % in a \emph{Two-Species} model!!
+
       \end{minipage} 
     \end{nofillbox}
 \end{tcbraster}
 
-\vspace{50pt}
+\vspace{25pt}
 
 \begin{tcbraster}[raster columns=2,raster equal height,nobeforeafter,raster column skip=25pt]
-    \begin{nofillbox}{Future work}
+  \begin{nofillbox}{Joint Host-Pathogen Genealogies}
+    \begin{minipage}{0.51\linewidth}
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{../analysis/figures/HostPath_jointTn_paired_Nhost1000_cV[0.3, 0.6, 0.99, 1]_G20_beta0.1.pdf}
+    %\caption{Simulated Host and Pathogen coalescence times of $n=50$ infected pairs, for different vertical transmission probabilities $c_v$ and resulting $x^*$ values.}
+     \end{figure} 
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.47\linewidth}
+      \textbf{Key Results}\\
+      Under complete vertical transmission the genealogy of the pathogen matches that of the host.\\
+
+      Even low horizontal transmission has a strong decoupling effect on the joint coalescence times.
+      
+    \end{minipage}
+  \end{nofillbox}
+  \begin{nofillbox}{Future work}
     \textbf{Reciprocal selection and coevolution.} Frequency-dependent selection. Infection matrix. Fitness costs of infectivity and resistance.\\
 
     \textbf{Joint host-pathogen ARGs.} Recombining host and pathogen genotypes. Co-infection of several strains.\\
 
     \textbf{Population structure in space or time.} Host spatial structure, migration or overlapping generations. Pathogen migration or environmental source, or vectors.\\
-
-    \end{nofillbox}
+  \end{nofillbox}
 \end{tcbraster}
 
 % ------------------------------------------------------------

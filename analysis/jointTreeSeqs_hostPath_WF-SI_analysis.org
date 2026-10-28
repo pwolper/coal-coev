@@ -296,11 +296,11 @@ plt.show()
 # Loop over several combinations
 N_host = 1000
 cVs     = [0.3, 0.6, 0.8, 0.99, 1]
-betas   = 0.1
+beta   = 0.1
 G       = 20
 n = 50
 
-reps = 100
+reps = 200
 
 jointTreeSeqs = {}   # (N_host, cV, beta, G) -> list of jointTreeSeq
 data = []
@@ -332,13 +332,13 @@ print(df)
 #+RESULTS:
 #+begin_example
 1000 0.3 0.1 20
-'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.3_beta0.1_G20' contains 111 reps
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.3_beta0.1_G20' contains 221 reps
 1000 0.6 0.1 20
-'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.6_beta0.1_G20' contains 158 reps
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.6_beta0.1_G20' contains 320 reps
 1000 0.8 0.1 20
-'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.8_beta0.1_G20' contains 172 reps
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.8_beta0.1_G20' contains 349 reps
 1000 0.99 0.1 20
-'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.99_beta0.1_G20' contains 173 reps
+'HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.99_beta0.1_G20' contains 295 reps
 1000 1 0.1 20
 'HostPathogen_WF_SI_burnIn12_Nhost1000_cV1_beta0.1_G20' contains 363 reps
       G  N_host  beta   cV  host_tmrca  ...  host_tmrca_gen  pathogen_tmrca_gen        x*      p_c          ETn
@@ -346,18 +346,26 @@ print(df)
 1    20    1000   0.1  0.3     26081.0  ...         1305.05              324.95  0.674396  0.00792   247.481878
 2    20    1000   0.1  0.3     56867.0  ...         2844.35              294.95  0.674396  0.00792   247.481878
 3    20    1000   0.1  0.3     29525.0  ...         1477.25              134.30  0.674396  0.00792   247.481878
-4    20    1000   0.1  0.3     40361.0  ...         2019.05              244.55  0.674396  0.00792   247.481878
+4    20    1000   0.1  0.3    118607.0  ...         5931.35              339.05  0.674396  0.00792   247.481878
 ..   ..     ...   ...  ...         ...  ...             ...                 ...       ...      ...          ...
-495  20    1000   0.1  1.0     18899.0  ...          945.95              945.95  1.000000  0.00100  1960.000000
-496  20    1000   0.1  1.0     25661.0  ...         1284.05             1284.05  1.000000  0.00100  1960.000000
-497  20    1000   0.1  1.0    102437.0  ...         5122.85             5122.85  1.000000  0.00100  1960.000000
-498  20    1000   0.1  1.0     44729.0  ...         2237.45             2237.45  1.000000  0.00100  1960.000000
-499  20    1000   0.1  1.0     21755.0  ...         1088.75             1088.75  1.000000  0.00100  1960.000000
+995  20    1000   0.1  1.0     62222.0  ...         3112.10             3112.10  1.000000  0.00100  1960.000000
+996  20    1000   0.1  1.0     12830.0  ...          642.50              642.50  1.000000  0.00100  1960.000000
+997  20    1000   0.1  1.0     37484.0  ...         1875.20             1875.20  1.000000  0.00100  1960.000000
+998  20    1000   0.1  1.0     42986.0  ...         2150.30             2150.30  1.000000  0.00100  1960.000000
+999  20    1000   0.1  1.0     29525.0  ...         1477.25             1477.25  1.000000  0.00100  1960.000000
 
-[500 rows x 13 columns]
+[1000 rows x 13 columns]
 #+end_example
 
 
+#+begin_src python :session :results output
+cVs     = [0.3, 0.6, 0.99, 1]
+df = df[df['cV'].isin(cVs)]
+#+end_src
+
+#+RESULTS:
+
+*** Plotting
 #+begin_src python :session :results output
 sns.set_theme(style="ticks", context="paper", font_scale=1.3)
 plt.rcParams.update({"font.family": "sans-serif", "axes.linewidth": 0.8,
@@ -423,8 +431,10 @@ plt.show()
 #+end_src
 
 #+begin_src python :session :results output
+import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib import colormaps
+import seaborn as sns
 
 sns.set_theme(style="ticks", context="paper", font_scale=1.3)
 plt.rcParams.update({"font.family": "sans-serif", "axes.linewidth": 0.8,
@@ -434,72 +444,110 @@ LIM = (-100, 4000)
 X, Y = "host_tmrca_gen", "pathogen_tmrca_gen"
 
 levels = sorted(df["cV"].unique())
-colors = dict(zip(levels, sns.color_palette("Reds", len(levels))))
+colors = dict(zip(levels, sns.color_palette("gist_heat_r", len(levels))))
 #colors  = dict(zip(levels, colormaps["Reds"](np.linspace(0.45, 0.95, len(levels)))))
-markers = dict(zip(levels, ["o", "s", "^", "D"]))
+#palette = ["#fc9272", "#de2d26", "#8c8c8c","#a50f15"]   # light red, grey, red, dark red
+#colors  = dict(zip(levels, palette))
+print(colors)
+# markers = dict(zip(levels, ["o", "s", "^", "D"]))
 x_st   = df.groupby("cV")["x*"].mean()
 ETn    = df.groupby("cV")["ETn"].mean()
 
 # ---------------- geometry (inches) ----------------
-S, L = 6.0, 3.2                  # square plot area, legend strip
-ml, mb, mt = 0.9, 0.8, 0.2
-W, H = ml + S + L, mb + S + mt
+S   = 6.0                        # side of the square scatter panel
+M   = 1.3                       # size of the marginals (height of top, width of right)
+gap = 0.15                       # space between panels
+ml, mb, mt, mr = 0.9, 0.8, 0.2, 0.2
+W = ml + S + gap + M + mr
+H = mb + S + gap + M + mt
+avg = (S + M) / 2                # wspace/hspace are fractions of the mean panel size
 
 fig, axd = plt.subplot_mosaic(
-    [["mx", "."],
+    [["mx", "lg"],
      ["j",  "my"]],
     figsize=(W, H),
-    gridspec_kw=dict(width_ratios=[5, 1], height_ratios=[1, 5],
-                     left=ml/W, right=(ml+S)/W, bottom=mb/H, top=(mb+S)/H,
-                     wspace=0.08, hspace=0.08))
-ax_j, ax_mx, ax_my = axd["j"], axd["mx"], axd["my"]
-ax_mx.sharex(ax_j)               # top marginal shares x with the scatter
-ax_my.sharey(ax_j)               # right marginal shares y with the scatter
-
-# ---------------- data ----------------
-kw = dict(data=df, hue="cV", palette=colors)
-sns.scatterplot(x=X, y=Y, ax=ax_j, s=50 , edgecolor="0.15", linewidth=0.4, style="cV",
-                #markers=markers,
-                alpha=0.85, rasterized=True, legend="full", **kw)
-sns.kdeplot(x=X, ax=ax_mx, fill=False, linewidth=1.5, common_norm=False, legend=False, **kw)
-sns.kdeplot(y=Y, ax=ax_my, fill=False, linewidth=1.5, common_norm=False, legend=False, **kw)
-
-handles, _ = ax_j.get_legend_handles_labels()   # seaborn's own colour + marker handles
-ax_j.get_legend().remove()
-
-ax_j.set(xlim=LIM, ylim=LIM,
-         xlabel=r"Host $T^{\text{H}}_n$", ylabel=r"Pathogen $T^{\text{P}}_n$")
-ax_j.grid(True, color="0.85", lw=0.6); ax_j.set_axisbelow(True)
-
-# tidy marginals (the box stays)
-ax_mx.set(xlabel="", ylabel="", yticks=[]);  ax_mx.tick_params(labelbottom=False)
-ax_my.set(xlabel="", ylabel="", xticks=[]);  ax_my.tick_params(labelleft=False)
+    gridspec_kw=dict(width_ratios=[S, M], height_ratios=[M, S],
+                     left=ml/W, right=1 - mr/W, bottom=mb/H, top=1 - mt/H,
+                     wspace=gap/avg, hspace=gap/avg))
+ax_j, ax_mx, ax_my, ax_lg = axd["j"], axd["mx"], axd["my"], axd["lg"]
+ax_mx.sharex(ax_j)
+ax_my.sharey(ax_j)
+ax_lg.axis("off")              
 
 # ---------------- reference lines ----------------
 for cv in levels:
     ax_my.axhline(ETn.loc[cv], color=colors[cv], lw=1.2, ls="--")
     ax_j.axhline(ETn.loc[cv], color=colors[cv], lw=1.2, ls="--", zorder=1)
-ax_my.text(0.95, 0.65, r"$E[T^\text{P}_n] = 2 / p_c$", transform=ax_my.transAxes,
+ax_my.text(0.95, 0.98, r"$E[T^\text{P}_n] = 2 / p_c$", transform=ax_my.transAxes,
            ha="right", va="top", fontsize=10)
 
 ax_mx.axvline(2*N_host, color="black", ls="--", lw=1.2)
 ax_j.axvline(2*N_host, color="black", ls="--", lw=1.2, zorder=1)
-ax_mx.annotate(r"$E[T^\text{H}_n] = 2N_{host}$", xy=(2*N_host, 0.95),
-               xycoords=ax_mx.get_xaxis_transform(), xytext=(4, 0),
-               textcoords="offset points", ha="left", va="top", fontsize=10)
+ax_mx.text(0.53, 0.17, r"$E[T^\text{H}_n] = 2N_{host}$", transform=ax_mx.transAxes,
+           ha="left", va="top", fontsize=10)
+
+# ---------------- data ----------------
+kw = dict(data=df, hue="cV", palette=colors)
+sns.scatterplot(x=X, y=Y, ax=ax_j, s=60 , edgecolor="0.15", linewidth=0.4,
+                style="cV",
+                #markers=markers,
+                alpha=0.85, rasterized=True, legend="full", **kw)
+sns.kdeplot(x=X, ax=ax_mx, fill=False, linewidth=1.5, common_norm=False, legend=False, **kw)
+sns.kdeplot(y=Y, ax=ax_my, fill=False, linewidth=1.5, common_norm=False, legend=False, **kw)
+
+ax_j.set(xlim=LIM, ylim=LIM,
+         xlabel=r"Host $T^{\text{H}}_n$", ylabel=r"Pathogen $T^{\text{P}}_n$")
+ax_j.grid(True, color="0.85", lw=0.6); ax_j.set_axisbelow(True)
+handles, _ = ax_j.get_legend_handles_labels()   # seaborn's own colour + marker handles
+ax_j.get_legend().remove()
+
+# tidy marginals (the box stays)
+ax_mx.set(xlabel="", ylabel="", yticks=[]);  ax_mx.tick_params(labelbottom=False)
+ax_my.set(xlabel="", ylabel="", xticks=[]);  ax_my.tick_params(labelleft=False)
+# ax_mx.grid(True)
+# ax_my.grid(True)
+# sns.despine(ax=ax_mx, top=True, right=True, left=True)
+# sns.despine(ax=ax_my, top=True, right=True, bottom=True)
 
 # ---------------- legend outside ----------------
-x0 = (ml + S + 0.3) / W
-#handles = [Line2D([], [], marker="o", ls="", color=colors[cv]) for cv in levels]
-labels  = [rf"$c_v$ = {cv:g},  $x^*$ = {x_st.loc[cv]:.2f}" for cv in levels]
-fig.legend(handles, labels, title=r"$c_v$  ($x^*$)", loc="upper left",
-           bbox_to_anchor=(x0, 0.95), frameon=True)
+cV_labels  = [rf"$c_v={cv:g}$" for cv in levels]
+xStar_labels  = [rf"$x^*={x_st.loc[cv]:.2f}$" for cv in levels]
+cV_leg = ax_lg.legend(handles[::-1], cV_labels[::-1],
+             #title=r"$c_v$  ($x^*$)",
+             loc="center",
+             bbox_to_anchor=(0.25,0.35),
+             frameon=False, fontsize=8, title_fontsize=10)
+ax_lg.add_artist(cV_leg)
 
-# fig.savefig("tmrca_joint.pdf", bbox_inches="tight")
-plt.show()
+blank = [Line2D([], [], ls="", marker="") for _ in levels]
+
+ax_lg.legend(blank, xStar_labels[::-1], loc='center', bbox_to_anchor=(0.75, 0.35), frameon=False, fontsize=8)
+
+ax_lg.text(0,0.99, fr"$N = {N_host}$", transform=ax_lg.transAxes,
+           ha="left", va="top", fontsize = 10)
+
+ax_lg.text(0,0.85, fr"$\beta = {beta}$; $G = {G}$", transform=ax_lg.transAxes,
+           ha="left", va="top", fontsize = 10)
+# ----------------- correlation ------------------
+# corr = {cv: sub[X].corr(sub[Y])
+#         for cv, sub in df.groupby('cV')}
+# print(corr)
+
+# ax_j.text(0.03, 0.97, r"Pearson's $r$", transform=ax_j.transAxes,
+#           ha="left", va="top", fontsize=11)
+# for i, cv in enumerate(levels[::-1]):                 # same order as the legend
+#     ax_j.text(0.03, 0.925 - 0.04*i,
+#               #rf"$c_v={cv:g}$:  $r={corr[cv]:.2f}$",
+#               rf"$r={corr[cv]:.2f}$",
+#               transform=ax_j.transAxes, ha="left", va="top",
+#               fontsize=11, color=colors[cv])
+
+fig.savefig(f"figures/HostPath_jointTn_paired_Nhost{N_host}_cV{cVs}_G{G}_beta{beta}.pdf", bbox_inches="tight")
+#plt.show()
 #+end_src
 
 #+RESULTS:
+: {np.float64(0.3): (1.0, 0.6000000000000001, 0.20000000000000018), np.float64(0.6): (0.8999999999999999, 0.19999999999999996, 0.0), np.float64(0.99): (0.6000000000000001, 0.0, 0.0), np.float64(1.0): (0.29999999999999993, 0.0, 0.0)}
 
 *** Host only coalescence check
 #+begin_src python :session :results output
@@ -529,7 +577,7 @@ print(len(treeSeqs))
 
 #+RESULTS:
 : /home/p-wolper/popgen/coal-coev/slim/trees/jointTreeSeqs/HostPathogen_WF_SI_burnIn12_Nhost1000_cV0.99_beta0.1_G20
-: 96
+: 295
 
 #+begin_src python :session :results output
 tmrcas = []

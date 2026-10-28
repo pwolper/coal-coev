@@ -8,7 +8,7 @@ import seaborn as sns
 
 N, beta, G = 1000, 0.1, 20
 cVs = [0.3, 0.6, 0.8, 1]
-data_dir = Path(".")       
+data_dir = Path("../figures/WF_SI_PopulationDynamics/")       
 
 
 
@@ -42,9 +42,11 @@ def x_star(cV, beta, G):
 # ------------------------------------------------------------------ plotting
 fig, ax = plt.subplots(figsize=(10, 4), layout="constrained")
 # colors = plt.cm.viridis(np.linspace(0, 0.9, len(cVs)))
-palette = "Reds"
+#palette = "Reds"
+palette = "gist_heat_r"
 colors = sns.color_palette(palette, n_colors=len(cVs) + 1)[1:]   # light = low cV, dark = high cV
 HostCyclesN = 0.1
+cycles = 60
  
 for cV, col in zip(cVs, colors):
     fname = data_dir / f"N{N}_beta{beta}_cV{cV}_G{G}.txt"
@@ -61,10 +63,12 @@ for cV, col in zip(cVs, colors):
     ax.plot(end["t"], end['x'], lw=2, c=col, label=rf"$c_v={cV}$")
     ax.axhline(xs, ls="--", c=col, lw=2)
     #last_cycle = max(last_cycle, end["cycle"].max() + 1)
-    ax.text(1.01, xs, rf"$x^*={xs:.2f}$", c=col, va="center", fontsize=9,
+    ax.text(1.01, xs, rf"$x^*={xs:.2f}$", c=col, va="center", fontsize=8,
             transform=ax.get_yaxis_transform())
-ax.set(xlabel=r"Host generation $n$", ylabel=r"Infected fraction $x_n$",
-       xlim=(0, HostCyclesN * N),
+ax.set(xlabel=r"Host generation $n$",
+       ylabel=r"Infected fraction $x_n$",
+       #xlim=(0, HostCyclesN * N),
+       xlim=(0, cycles),
        ylim=(0, 1.05))
        #title=rf"$N={N},\ \beta={beta},\ G={G}$")
 
@@ -74,16 +78,16 @@ ax.set(xlabel=r"Host generation $n$", ylabel=r"Infected fraction $x_n$",
 #             transform=ax.get_yaxis_transform())
 # ax.text(1.02, 0.0, fr"$G = {G}$", va="center", fontsize=10,
 #             transform=ax.get_yaxis_transform())
-ax.text(0.8, 1.08, fr"$N = {N}$; $\beta = {beta}$; $G = {G}$", va='center', fontsize=10,
+ax.text(0.99, 1.08, fr"$\beta = {beta}$; $G = {G}$", va='center', ha='right', fontsize=10,
         transform=ax.get_yaxis_transform())
 
 handles, labels = ax.get_legend_handles_labels()
 fig.legend(handles[::-1], labels[::-1],
-          loc="outside right", bbox_to_anchor=(1.03, 0.23), ncol=1, frameon=True, fontsize=8)
-#ax.set_title(fr"$N = {N}$, $\beta = {beta}$, $G = {G}$", loc='left', fontsize=10)
+          loc="outside right", bbox_to_anchor=(1.03, 0.28), ncol=1, frameon=True, fontsize=8)
+ax.set_title(fr"B) $N = {N}$", loc='left', fontsize=12)
 #plt.tight_layout()
 plt.grid(True)
-plt.savefig(f"Demographies_N{N}_beta{beta}_G{G}_cycles{HostCyclesN}.pdf", bbox_inches='tight', dpi=300)
+plt.savefig(f"Demographies_N{N}_beta{beta}_G{G}_cycles{cycles}.pdf", bbox_inches='tight', dpi=300)
 plt.show()
 
 ### 

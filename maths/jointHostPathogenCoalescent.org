@@ -502,8 +502,6 @@ fig.savefig("figures/Xdeterministic_contour_R0.pdf", bbox_inches='tight', dpi=30
 
 #+end_src
 
-#+RESULTS:
-
 * Discussion
 ** Which host-pathogen systems can we apply our model to?
 *Annual crops with seed-borne pathogens*
