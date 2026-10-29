@@ -13,9 +13,23 @@
 \usepackage{xcolor}
 \usepackage{float}
 \usepackage[most]{tcolorbox}
-\usepackage[backend=biber,style=authoryear]{biblatex}
+\usepackage[backend=biber,style=numeric, maxbibnames=1, giveninits=true,
+            doi=false, url=false, isbn=false, sorting=none]{biblatex}
+\renewbibmacro{in:}{}                         % no "In:" before the journal
+\renewcommand*{\bibfont}{\fontsize{18}{21}\selectfont}
+\setlength{\bibitemsep}{1pt}
 
-\addbibresource{references.bib}
+\AtEveryBibitem{%
+  \clearfield{pages}%      % no page numbers
+  \clearfield{number}%     % no issue number
+  \clearfield{month}%\clearfield{volume}%
+  \clearfield{issue}%
+  \clearfield{eid}%
+  \clearfield{series}%
+  \clearfield{volume}%
+}
+
+\addbibresource{~/biblio/pop-gen.bib}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -29,6 +43,7 @@
 % 
 \definecolor{posterblue}{HTML}{1F4E79}
 \definecolor{posterbg}{HTML}{EAF1F8}
+%\definecolor{posterblue}{HTML}{3070B3}
  
 %Header titlebox
 \tcbset{titlebox/.style={enhanced, colframe=posterblue,
@@ -74,7 +89,7 @@
 \begin{tcolorbox}[titlebox]
 \begin{center}
   {\fontsize{65}{90}\selectfont\bfseries\color{white}%\
-    Understanding Host--Pathogen Interactions, Epidemiology and Coevolution through a joint Coalescent approach\par}
+    Understanding Host--Pathogen Epidemiology and Coevolution through joint Coalescent Genealogies\par}
   \vspace{1cm}
 
   {\fontsize{42}{55}\selectfont\color{white}%
@@ -99,28 +114,28 @@
 \begin{nofillbox}{Introduction}
  \begin{minipage}{0.39\textwidth}
      \textbf{Coevolutionary theory}\\
-     Models of reciprocal evolution between hosts and pathogen, including frequency-dependent selection and interaction matrices of host and pathogen genotypes, leading to coevolutionary cycling or arms races.\\
+     Models of reciprocal coevolution between hosts and pathogens, include frequency-dependent selection and interaction matrices of host and pathogen genotypes, leading to coevolutionary cycling or arms races \cite{tellier-2021-theor-host}.\\
      %\item Extensions include population dynamic feedbacks and recombination, as well as stochastic effects.
-     
-     While genomic signatures have been summarized with allele frequencies and correlations, there has been \textit{limited genealogical framing of host-pathogen interactions in context of coalescent trees or ancestral recombination graphs (ARGs)}\\
+     While genomic signatures of coevolution have been summarized with allele frequencies and correlations \cite{ebert-2020-host}, there has been \textit{limited genealogical framing of host-pathogen interactions in context of coalescent trees}, limiting our ability to link genomic data to models.\\
 
      \textbf{Phylodynamics}\\
-     Links pathogen genealogical trees to epidemiological models, and has been used to infer parameters of epidemic transmission from data. But crucially, phylodynamics methods assume host evolution happens on a much slower time scale than pathogen transmission. 
+     Epidemiological dynamics of rapidly evolving pathogens can be generalized as coalescent processes \cite{didelot-2025-ances-proces}. This provides a theoretical framework linking genealogical trees of sampled pathogens to underlying population dynamic processes and thus powerful methods for studying infectious disease outbreaks. Crucially, phylodynamics assumes host evolution is negligible on the timescale of pathogen transmission. 
    \end{minipage}
  \hfill
    \begin{minipage}{0.39\linewidth}
     \textbf{Why joint genealogies?}\\
-     It is less understood how coevolution shapes the joint relationship of host and pathogen genealogical trees as determined by their repspective infection and reproduction processes.
+    It is not well understood how coevolution shapes the joint relationship of host and pathogen genealogical trees as determined by their respective infection and reproduction processes, across both short epidemic and longer coevolutionary time scales.
+    More specifically, for infectious diseases the pathogen ancestral lineages are \emph{embedded} within a host genealogy, mediated by horizontal and vertical transmission.\\
 
-     More specifically, we aim to understand the how the pathogen ancestral genealogies are embedded within a host genealogy, mediated by horizontal and vertical transmission.\\
+    We present a neutral model of joint host--pathogen reproduction and transmission and obtain insights into their joint genealogies using both analytical methods and forward-in time simulations of the coalescent trees using \emph{SLiM} \cite{haller-2023-slim}.
+    
 
-     add aim to have a neutral model of how host and pathogen genealogies behave under their joint reproductive processes. (cite Dieter)
     \begin{minipage}{1\linewidth}
      \hfill
     \begin{minipage}{0.4\textwidth}
-      \vspace{50pt}
+      \vspace{20pt}
      \captionsetup{justification=raggedleft, singlelinecheck=false}
-    \captionof{figure}{Pathogen genealogical tree embedded in a host genealogy through horizontal and vertical transmission (adapted from [2]).}
+    \captionof{figure}{Pathogen genealogical tree embedded in a host genealogy through horizontal and vertical transmission (adapted from \cite{vienne-2013-cospec-vs})}
     \end{minipage}  
     \end{minipage}  
    \end{minipage}
@@ -133,19 +148,19 @@
 \end{minipage}
 \end{nofillbox}
 
-\vspace{25pt}
+\vspace{10pt}
 
 \begin{nofillbox}{A nested semi-discrete Host-Pathogen model with vertical and horizontal transmission}
   \begin{minipage}{0.42\textwidth}
     \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{../figures/nestedHostPathogen_WF_SI.png}
-    \caption{Semi-discrete host-pathogen model with vertical transmission following host reproduction and horizontal epidemiological process within host generations.}
+    %\caption{Semi-discrete host-pathogen model with vertical transmission following host reproduction and horizontal epidemiological process within host generations.}
     \end{figure}
   \end{minipage}
   \hfill
   \begin{minipage}{0.56\textwidth}
-    % We present a semi-discrete host-pathogen model\\
+    %We present a neutral semi-discrete host-pathogen model \cite{mailleret-2009-note-semi}.\\
     
     \textbf{Vertical transmission.}
     The host population reproduces in discrete and non-overlapping generations, following a Wright-Fisher process of size \(N\), with $X_{n}$ infected indivduals at the end of generation \(n\). Infected host can produce infected offspring through vertical transmission with probability \(c_v\). At the start of the next generation are \(I_{n+1}\) initally host infected offspring:
@@ -169,6 +184,9 @@
     %   x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})}
     % \end{equation}
     %where \(I_{n+1}\) is the number of infected host offspring and \(K_{n+1}\) individuals are newly infected due to the epidemiological process \(\mathcal{J}_G\) in generation \(n+1\).
+    \vspace{20pt}
+    
+    \captionof{figure}{Semi-discrete host-pathogen model with vertical transmission following host reproduction and horizontal epidemiological process within host generations.}
   \end{minipage}
 \end{nofillbox}
 
@@ -180,7 +198,8 @@
         \begin{figure}[H]
         \centering
         \includegraphics[width=1.04\linewidth]{../maths/figures/Xdeterministic_contour_R0.pdf}
-        \caption{Equilibrium fraction of infected $x^*$, persistence threshold and the reproductive number $R_0 = c_v e^{\beta G}$
+        \caption{Equilibrium fraction of infected $x^*$ and persistence threshold
+          %and the reproductive number $R_0 = c_v e^{\beta G}$
           for rates of vertical transmission \(c_v\) and epidemic transmission $\beta$ and epidemic time $G$.}
         \end{figure}
     \end{minipage}
@@ -205,8 +224,8 @@
       % from which we gain the expected coalescence time as $E[T_n] = 2/p_c$.\\
     \end{minipage}
     \end{nofillbox}
-    \begin{nofillbox}{Stochastic, individual-based simulations with \textit{SLiM 5}}
-      \begin{minipage}{0.64\linewidth}
+    \begin{nofillbox}{Stochastic, individual-based simulations with \textit{SLiM}}
+      \begin{minipage}{0.62\linewidth}
         \begin{center}
         % \begin{figure}[h]
         \begin{minipage}{\linewidth}
@@ -221,9 +240,9 @@
       \end{center}
       \end{minipage} 
      \hfill 
-      \begin{minipage}{0.34\linewidth}
-      \textbf{Simulations}\\
-      \emph{Host} and \emph{Pathogen} coalescent trees are simulated using \emph{tree-sequence recording} in a \emph{Two-Species} model!\\
+      \begin{minipage}{0.36\linewidth}
+      % \textbf{Simulations}\\
+      \emph{Host} and \emph{pathogen} coalescent trees are simulated using \emph{tree-sequence recording} in a \emph{Two-Species} model!\\
 
         % \textbf{Simulations:}\\
         % \emph{Host} and \emph{Pathogen} \\
@@ -252,29 +271,31 @@
     \hfill
     \begin{minipage}{0.48\linewidth}
 
-      \textbf{Key Results}\\
-      Under complete vertical transmission ($c_v = 1$) the genealogy of the pathogen matches that of the host.\\
+      % \textbf{Key Results}\\
+      Under complete vertical transmission ($c_v = 1$) the height of the pathogen coalescent tree $T_n$ matches that of the host.\\
 
       Low levels of horizontal transmission strongly decouple the joint coalescence times of hosts and pathogens.\\
 
       High horizontal relative to vertical transmission strongly reduces the pathogen $T_n$.
-      \vspace{10pt}
-    \captionof{figure}{Simulated Host and Pathogen coalescence times of $n=50$ infected pairs, for different vertical transmission probabilities $c_v$ and resulting $x^*$ values.}
+      \vspace{1pt}
+    \captionof{figure}{Simulated Host and Pathogen coalescence times of $n=50$ infected pairs, for different vertical transmission probabilities $c_v$ and resulting $x^*$ values, over 200 independent replicates.}
     \end{minipage}
   \end{nofillbox}
 \begin{tcolorbox}[blankest]
   \begin{nofillbox}{Key Take-Aways}
-    Neutral model for relating host and pathogen genealogies.\\
+    We present a semi-discrete model of host and pathogen reproductive processes and their infection process, suitable for discrete generation hosts with epidemic cycles, such as annual plant pathogens. \\
 
-    Semi-discrete model for discrete-generation host and epidemic cycles, such as annual plant pathogens
+    Our model is a neutral model for studying the joint host and pathogen genealogies for which we derive analytical results and simulations of the embedded coalescence processes under horizontal and vertical transmission.
   \end{nofillbox}
   \vspace{5pt}
   \begin{nofillbox}{Future work and Open Questions}
-    \textbf{Reciprocal selection and coevolution.} Frequency-dependent selection. Infection matrix. Fitness costs of infectivity and resistance.\\
+    \textbf{Reciprocal selection and coevolution.}
+    %\emph{How are the joint genealogies shaped by coevolutionary interactions?}
+    Frequency-dependent selection. Infection matrix. Fitness costs of infectivity and resistance. \\
 
     \textbf{Joint host-pathogen ARGs.} Recombining host and pathogen genotypes. Co-infection of several strains.\\
 
-    \textbf{Population structure in space or time.} Host spatial structure, migration or overlapping generations. Pathogen migration or environmental source, or vectors.\\
+    %\textbf{Population structure in space or time.} Host spatial structure, migration or overlapping generations. Pathogen migration or environmental source, or vectors.\\
   \end{nofillbox}
     \end{tcolorbox}
 \end{tcbraster}
@@ -285,29 +306,40 @@
 
 %\vfill
 
-\begin{footerbox}
-    \begin{minipage}{0.29\textwidth}
-    \textbf{\fontsize{26}{32}\selectfont Funding}\\
-    \vspace{0.4cm}
+\begin{nofillbox}
+    \hfill
+    \begin{minipage}{0.5\textwidth}
+    \textbf{\fontsize{26}{32}\selectfont References}\par
+    \vspace{-0.1cm}
+    
     {\fontsize{18}{23}\selectfont
-    This work was supported by [funding agency / grant].}
+      \setlength{\topsep}{0pt}
+      \setlength{\partopsep}{0pt}
+      \setlength{\parskip}{0pt}
+      \setlength{\bibitemsep}{2pt}
+    %\setlength{\bibhang}{1.5em}
+      \printbibliography[heading=none]}
+  %   {\fontsize{18}{23}\selectfont
+  %   1. Author et al. (2023). Article title. \textit{Journal}.
+  %   2. Author et al. (2024). Article title. \textit{Journal}.
+  % 3. Author et al. (2025). Article title. \textit{Journal}.}
     \end{minipage}
-    % \hfill
-    \begin{minipage}{0.50\textwidth}
-    \textbf{\fontsize{26}{32}\selectfont Selected references}\\
-    \vspace{0.4cm}
-    {\fontsize{18}{23}\selectfont
-    1. Author et al. (2023). Article title. \textit{Journal}.
-    2. Author et al. (2024). Article title. \textit{Journal}.
-  3. Author et al. (2025). Article title. \textit{Journal}.}
-  
+    \hfill
+    \begin{minipage}{0.23\textwidth}
+    \textbf{\fontsize{26}{32}\selectfont Funding}\par
+    {\fontsize{18}{20}\selectfont
+      This work was supported by the Federal Ministry of Education and Research (BMBF) under grant \emph{BarleyCOPA} 031B1547}
     \end{minipage}
-\hfill
+    \hfill
+    \begin{minipage}{0.11\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{./BMFTR_Logo.jpg}
+    \end{minipage}
+    \hfill
     \begin{minipage}{0.09\textwidth}
-    \vfill
     \centering
     \includegraphics[width=\linewidth]{./Universitaet_Logo_RGB.pdf}
     \end{minipage}
-\end{footerbox}
+\end{nofillbox}
 
 \end{document}
