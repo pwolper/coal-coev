@@ -16,7 +16,6 @@ Phylodynamic inference of disease dyamics relies on connecting epidemiological d
 In real world host-pathogen systems though these assumptions can often be violated due to reciprocal host-pathogen interactions, complex disease-life cycles, including varying transmission modes, vectors and environmental factors. Importantly, evolutionary time scales of host and pathogens likely play a role in all but the most explosive epidemics.
 Many diseases have the ability to pass from infected to offspring through vertical transmission, in addition to horizontal epidemic infection dynamics. As infected hosts act as vessels for pathogens, it follows that the pathogen coalescent trees are embedded into a host genealogy, determined through vertical and horizontal transmission dynamics. The behaviour of joint host-pathogen genealogical processes is not well understood, limited to approaches by [[cite:&welch-2005-integ-geneal-epidem]], as to our knowledge there is no generalized coalescent model based on the reproductive processes of hosts and pathogens, and the infection process that connects them ([[cite:&ebert-2020-host]]).
 
-*add Roscoff abstract as intoduction as well?*
 * Semi-discrete model with vertical and horizontal transmission 
 Pathogen epidemic model embedded within Host reproduction -- a model of coevolution through horizontal and vertical transmission. 
 
@@ -67,13 +66,13 @@ If we take $N$ to infinity, we get the deterministic limit of the model, and wit
 x = x^* = \frac{c_v - e^{-\beta G}}{c_v(1-e^{-\beta G})} 
 \end{equation}
 
-The value of $x^*$ for values of $c_v$, $\beta$ and $G$ are shown below. Values of $x^* < 0$ are set to 0, as biologically, we require a positive fraction $x$.
+# The value of $x^*$ for values of $c_v$, $\beta$ and $G$ are shown below. Values of $x^* < 0$ are set to 0, as biologically, we require a positive fraction $x$.
 
-#+attr_latex: :width \textwidth :placement [H]
-#+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
-[[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
+# #+attr_latex: :width \textwidth :placement [H]
+# #+caption: Behaviour of the equilibrium $x^*$ for rates of vertical transmission $c_v$ and horizontal contact rate $\beta$ and epidemic time $G$ (A-E).
+# [[./figures/x_equilibrium_vs_cv_perBeta_G.pdf]]
 
-*** TODO Boundary conditions and limiting models
+*** TODO Boundary conditions and limiting models :noexport:
 We are only interested in the cases $x^*>0$ (and smaller 1), as other solutions are not biological. Hereby, $x^* = 0$ represents the boundary disease-free equilibrium, while $x^* = 1$ is the absorbing state of total infection.
 
 We get the following limiting cases for $\beta G$ for $c_v \in [0, 1]$ as the epidemic transmission grows very large,
@@ -96,10 +95,6 @@ The cases inbetween represent the endemic disease equilibrium, where the disease
 $$R_0 = c_v e^{\beta G} > 1$$, for $$c_v > e^{-\beta G}$$
 
 $$x^* = \frac{c_V - e^{-\beta G}}{c_v(1-e^{- \beta G})} = \frac{R_0 - 1}{R_0 - c_v}$$
-*add R0 number*
-#+attr_latex:
-
-
 
 *** TODO Boundary conditions old :noexport:
 {{{color(red, Check my work on boundary condition? Is $x^*$ derived under assumptions $\beta G > 0$?)}}}
