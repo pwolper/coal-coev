@@ -233,6 +233,9 @@ import pandas as pd
 import itertools
 #+end_src
 
+#+RESULTS:
+: None
+
 ** SI process
 #+begin_src python :session :results output :exports none :eval no-export
 N = 1000 # Host population size
@@ -439,6 +442,7 @@ fig, ax = plt.subplots(figsize=(8, 4.5))
 #ax.set_facecolor("white")
 
 #palette = "YlOrRd"
+palette = "gist_heat_r" ## TODO make last label white to read
 palette = "Reds"
 cmap = sns.color_palette(palette, as_cmap=True)
 
@@ -496,6 +500,8 @@ fig.savefig("figures/Xdeterministic_contour_R0.pdf", bbox_inches='tight', dpi=30
 #plt.show()
 
 #+end_src
+
+#+RESULTS:
 
 * Discussion
 ** Which host-pathogen systems can we apply our model to?
